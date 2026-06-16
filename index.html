@@ -1,13 +1,17 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="bn">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>RAS TV – Preloader</title>
+  <title>RAS TV</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
 
-    body { background: #035c4a; }
+    html, body {
+      width: 100%; height: 100%;
+      overflow: hidden;
+      background: #035c4a;
+    }
 
     #preloader {
       position: fixed;
@@ -32,8 +36,274 @@
       transform: scale(0.8);
       animation: zoomIn 1.2s ease-out forwards 0.4s;
       font-family: 'Segoe UI', sans-serif;
+      text-align: center;
+      padding: 0 20px;
     }
 
+    .tagline {
+      font-size: 2.2vw;
+      font-weight: 700;
+      color: #bbb;
+      letter-spacing: 0.4em;
+      margin-top: 20px;
+      opacity: 0;
+      transform: translateY(20px);
+      animation: fadeUp 1.2s ease-out forwards 1.2s;
+      text-transform: uppercase;
+      font-family: 'Segoe UI', sans-serif;
+      text-align: center;
+      padding: 0 20px;
+    }
+
+    .line {
+      position: absolute;
+      background: linear-gradient(to right, transparent, #ffd700, transparent);
+      height: 1px;
+      width: 0;
+      transition: width 1.2s ease-in-out;
+    }
+    .line.left  { left: 0;  top: 50%; }
+    .line.right { right: 0; top: 50%; }
+
+    @keyframes zoomIn {
+      to { opacity: 1; transform: scale(1); }
+    }
+    @keyframes fadeUp {
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── Welcome Screen ── */
+    #welcomeScreen {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: #035c4a;
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 999998;
+      padding: 20px;
+    }
+
+    .welcome-title {
+      font-size: 3.9vw;
+      font-weight: 900;
+      color: #ffd700;
+      text-align: center;
+      font-family: 'Segoe UI', sans-serif;
+      text-shadow: 0 0 20px rgba(255,215,0,0.4);
+      opacity: 0;
+      animation: fadeUp 1s ease-out forwards 0.3s;
+      line-height: 1.4;
+    }
+
+    .welcome-sub {
+      font-size: 2vw;
+      font-weight: 600;
+      color: #ccffee;
+      text-align: center;
+      font-family: 'Segoe UI', sans-serif;
+      margin-top: 18px;
+      opacity: 0;
+      animation: fadeUp 1s ease-out forwards 0.8s;
+      line-height: 1.6;
+    }
+
+    .status-msg {
+      font-size: 1.6vw;
+      color: #aee8d8;
+      text-align: center;
+      font-family: 'Segoe UI', sans-serif;
+      margin-top: 30px;
+      opacity: 0;
+      animation: fadeUp 1s ease-out forwards 1.3s;
+      min-height: 2.2vw;
+    }
+
+    /* Spinner */
+    .spinner-wrap {
+      margin-top: 28px;
+      opacity: 0;
+      animation: fadeUp 1s ease-out forwards 1.6s;
+    }
+    .spinner {
+      width: 52px;
+      height: 52px;
+      border: 5px solid rgba(255,215,0,0.2);
+      border-top-color: #ffd700;
+      border-radius: 50%;
+      animation: spin 0.9s linear infinite;
+    }
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* Footer */
+    .footer {
+      font-size: 3.2vw;
+      font-weight: 700;
+      color: #ff9999;
+      text-align: center;
+      margin-top: 18px;
+      font-family: 'Segoe UI', sans-serif;
+      text-shadow: 0 0 20px rgba(255,215,0,0.4);
+      opacity: 0;
+      animation: fadeUp 1s ease-out forwards 0.3s;
+      line-height: 1.4;
+    }
+
+    /* Error banner */
+    .error-banner {
+      font-size: 1.4vw;
+      color: #ff9999;
+      margin-top: 16px;
+      display: none;
+      font-family: 'Segoe UI', sans-serif;
+      text-align: center;
+      animation: fadeUp 0.5s ease-out forwards;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ══ PRELOADER ══ -->
+  <div id="preloader">
+    <div class="line left"></div>
+    <div class="line right"></div>
+    <div class="brand"  id="brand">.SIUM GROUP</div>
+    <div class="tagline" id="tagline">Crafted with Excellence</div>
+  </div>
+
+  <!-- ══ WELCOME SCREEN ══ -->
+  <div id="welcomeScreen">
+    <div class="welcome-title">প্রিয় ব্যবহারকারী! RAS TV তে স্বাগতম</div>
+    <div class="welcome-sub">ফিফা ওয়ার্ল্ড কাপ দেখার জন্য বেস্ট প্লাটফর্মে<br>নিয়ে যাওয়া হচ্ছে</div>
+    <div class="status-msg" id="statusMsg">সার্ভার যাচাই করা হচ্ছে...</div>
+    <div class="spinner-wrap"><div class="spinner"></div></div>
+    <div class="error-banner" id="errorBanner"></div>
+    <div class="footer">পরিচালনায় — সাহিবুল মূসা সিয়াম</div>
+  </div>
+
+  <script>
+  (function () {
+
+    /* ── লিংক কনফিগ ── */
+    const SERVER_1 = 'https://livekhela.movielinkbd.li/';
+    const SERVER_2 = 'https://new.livekhelatv.com/';
+    const SERVER_3 = 'https://sium43.github.io/rastvfifa';
+
+    const statusMsg  = document.getElementById('statusMsg');
+    const errorBanner = document.getElementById('errorBanner');
+
+    function showError(msg) {
+      errorBanner.textContent = msg;
+      errorBanner.style.display = 'block';
+    }
+
+    async function tryFetch(url, label) {
+      statusMsg.textContent = label + ' চেক করা হচ্ছে...';
+      const controller = new AbortController();
+      const tid = setTimeout(() => controller.abort(), 3500);
+      try {
+        await fetch(url, { mode: 'no-cors', signal: controller.signal });
+        clearTimeout(tid);
+        return true;
+      } catch (_) {
+        clearTimeout(tid);
+        return false;
+      }
+    }
+
+    async function smartRedirect() {
+      /* Server 1 */
+      if (await tryFetch(SERVER_1, 'সার্ভার ১')) {
+        statusMsg.textContent = '✅ সার্ভার ১ সক্রিয়! লোড হচ্ছে...';
+        await delay(700);
+        window.location.href = SERVER_1;
+        return;
+      }
+
+      showError('⚠️ সার্ভার ১ অনুপলব্ধ, সার্ভার ২ চেষ্টা করা হচ্ছে...');
+      await delay(600);
+
+      /* Server 2 */
+      if (await tryFetch(SERVER_2, 'সার্ভার ২')) {
+        statusMsg.textContent = '✅ সার্ভার ২ সক্রিয়! লোড হচ্ছে...';
+        await delay(700);
+        window.location.href = SERVER_2;
+        return;
+      }
+
+      errorBanner.textContent = '⚠️ সার্ভার ২ অনুপলব্ধ, সার্ভার ৩ চেষ্টা করা হচ্ছে...';
+      await delay(600);
+
+      /* Server 3 (always fallback) */
+      statusMsg.textContent = '✅ সার্ভার ৩ দিয়ে সংযোগ হচ্ছে...';
+      await delay(800);
+      window.location.href = SERVER_3;
+    }
+
+    function delay(ms) { return new Promise(r => setTimeout(r, ms)); }
+
+    /* ══ PRELOADER SEQUENCE ══ */
+
+    /* Step 1 – lines expand */
+    setTimeout(() => {
+      document.querySelectorAll('.line').forEach(l => l.style.width = '40%');
+    }, 300);
+
+    /* Step 2 – fade out slide 1 */
+    setTimeout(() => {
+      ['brand','tagline'].forEach(id => {
+        const el = document.getElementById(id);
+        el.style.transition = 'opacity 0.8s ease';
+        el.style.opacity = 0;
+      });
+    }, 2200);
+
+    /* Step 3 – show slide 2 (RAS TV) */
+    setTimeout(() => {
+      const brand   = document.getElementById('brand');
+      const tagline = document.getElementById('tagline');
+
+      brand.innerHTML   = 'RAS TV';
+      tagline.innerHTML = 'Recommended by Sahibul Musa Sium';
+
+      brand.style.opacity   = 0;
+      brand.style.transform = 'scale(0.8)';
+      tagline.style.opacity   = 0;
+      tagline.style.transform = 'translateY(20px)';
+      brand.style.animation   = 'none';
+      tagline.style.animation = 'none';
+
+      brand.offsetHeight;
+      tagline.offsetHeight;
+
+      brand.style.animation   = 'zoomIn 1.2s ease-out forwards';
+      tagline.style.animation = 'fadeUp 1.2s ease-out forwards 0.4s';
+    }, 3200);
+
+    /* Step 4 – fade out preloader, show welcome screen */
+    setTimeout(() => {
+      const preloader = document.getElementById('preloader');
+      preloader.style.transition = 'opacity 1s ease';
+      preloader.style.opacity = 0;
+      preloader.style.pointerEvents = 'none';
+
+      const ws = document.getElementById('welcomeScreen');
+      ws.style.display = 'flex';
+
+      /* Start server check after welcome animates in */
+      setTimeout(smartRedirect, 2200);
+
+    }, 6200);
+
+  })();
+  </script>
+
+</body>
+</html>
     .tagline {
       font-size: 2.2vw;
       font-weight: 700;
