@@ -1,306 +1,549 @@
 <!DOCTYPE html>
 <html lang="bn">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>RAS TV</title>
-  <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>RAS LIVE TV — Auto Player</title>
+    <link rel="shortcut icon" type="image/x-icon" href="https://i.postimg.cc/mD1VCt2C/RS-Live.png">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <style>
+        /* ---------- PRELOADER STYLES ---------- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-    html, body {
-      width: 100%; height: 100%;
-      overflow: hidden;
-      background: #035c4a;
-    }
+        body {
+            background: #035c4a;
+        }
 
-    #preloader {
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      background: #035c4a;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-direction: column;
-      z-index: 999999;
-      transition: opacity 1.5s ease, transform 1.5s ease;
-    }
+        #preloader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #035c4a;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            z-index: 999999;
+            transition: opacity 1.5s ease, transform 1.5s ease;
+        }
 
-    .brand {
-      font-size: 8.4vw;
-      font-weight: 900;
-      color: #ffd700;
-      letter-spacing: 0.15em;
-      text-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
-      opacity: 0;
-      transform: scale(0.8);
-      animation: zoomIn 1.2s ease-out forwards 0.4s;
-      font-family: 'Segoe UI', sans-serif;
-      text-align: center;
-      padding: 0 20px;
-    }
+        .brand {
+            font-size: 8.4vw;
+            font-weight: 900;
+            color: #ffd700;
+            letter-spacing: 0.15em;
+            text-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
+            opacity: 0;
+            transform: scale(0.8);
+            animation: zoomIn 1.2s ease-out forwards 0.4s;
+        }
 
-    .tagline {
-      font-size: 2.2vw;
-      font-weight: 700;
-      color: #bbb;
-      letter-spacing: 0.4em;
-      margin-top: 20px;
-      opacity: 0;
-      transform: translateY(20px);
-      animation: fadeUp 1.2s ease-out forwards 1.2s;
-      text-transform: uppercase;
-      font-family: 'Segoe UI', sans-serif;
-      text-align: center;
-      padding: 0 20px;
-    }
+        .tagline {
+            font-size: 2.2vw;
+            font-weight: 700;
+            color: #bbb;
+            letter-spacing: 0.4em;
+            margin-top: 20px;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeUp 1.2s ease-out forwards 1.2s;
+            text-transform: uppercase;
+        }
 
-    .line {
-      position: absolute;
-      background: linear-gradient(to right, transparent, #ffd700, transparent);
-      height: 1px;
-      width: 0;
-      transition: width 1.2s ease-in-out;
-    }
-    .line.left  { left: 0;  top: 50%; }
-    .line.right { right: 0; top: 50%; }
+        .line {
+            position: absolute;
+            background: linear-gradient(to right, transparent, #ffd700, transparent);
+            height: 1px;
+            transition: width 1.2s ease-in-out;
+        }
 
-    @keyframes zoomIn {
-      to { opacity: 1; transform: scale(1); }
-    }
-    @keyframes fadeUp {
-      to { opacity: 1; transform: translateY(0); }
-    }
+        .line.left {
+            left: 0;
+            top: 50%;
+        }
 
-    /* ── Welcome Screen ── */
-    #welcomeScreen {
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      background: #035c4a;
-      display: none;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      z-index: 999998;
-      padding: 20px;
-    }
+        .line.right {
+            right: 0;
+            top: 50%;
+        }
 
-    .welcome-title {
-      font-size: 3.9vw;
-      font-weight: 900;
-      color: #ffd700;
-      text-align: center;
-      font-family: 'Segoe UI', sans-serif;
-      text-shadow: 0 0 20px rgba(255,215,0,0.4);
-      opacity: 0;
-      animation: fadeUp 1s ease-out forwards 0.3s;
-      line-height: 1.4;
-    }
+        @keyframes zoomIn {
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
 
-    .welcome-sub {
-      font-size: 2vw;
-      font-weight: 600;
-      color: #ccffee;
-      text-align: center;
-      font-family: 'Segoe UI', sans-serif;
-      margin-top: 18px;
-      opacity: 0;
-      animation: fadeUp 1s ease-out forwards 0.8s;
-      line-height: 1.6;
-    }
+        @keyframes fadeUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
 
-    .status-msg {
-      font-size: 1.6vw;
-      color: #aee8d8;
-      text-align: center;
-      font-family: 'Segoe UI', sans-serif;
-      margin-top: 30px;
-      opacity: 0;
-      animation: fadeUp 1s ease-out forwards 1.3s;
-      min-height: 2.2vw;
-    }
+        .loaded #preloader {
+            opacity: 0;
+            transform: scale(1.05);
+            pointer-events: none;
+        }
 
-    /* Spinner */
-    .spinner-wrap {
-      margin-top: 28px;
-      opacity: 0;
-      animation: fadeUp 1s ease-out forwards 1.6s;
-    }
-    .spinner {
-      width: 52px;
-      height: 52px;
-      border: 5px solid rgba(255,215,0,0.2);
-      border-top-color: #ffd700;
-      border-radius: 50%;
-      animation: spin 0.9s linear infinite;
-    }
-    @keyframes spin {
-      to { transform: rotate(360deg); }
-    }
+        /* ---------- MAIN CONTENT ---------- */
+        #main-content {
+            display: none;
+            background: #000;
+            overflow-x: hidden;
+            font-family: Arial, sans-serif;
+            color: #fff;
+            padding-top: 10px;
+            min-height: 100vh;
+        }
 
-    /* Footer */
-    .footer {
-      font-size: 3.2vw;
-      font-weight: 700;
-      color: #ff9999;
-      text-align: center;
-      margin-top: 18px;
-      font-family: 'Segoe UI', sans-serif;
-      text-shadow: 0 0 20px rgba(255,215,0,0.4);
-      opacity: 0;
-      animation: fadeUp 1s ease-out forwards 0.3s;
-      line-height: 1.4;
-    }
+        .tv-view .embed-responsive {
+            border: 1px solid #222;
+            border-radius: 8px;
+            background: #000;
+            overflow: hidden;
+            position: relative;
+        }
+        .embed-responsive-16by9 {
+            padding-bottom: 56.25%;
+            height: 0;
+        }
+        .embed-responsive-16by9 video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: 0 !important;
+            display: block;
+            background: #000;
+        }
 
-    /* Error banner */
-    .error-banner {
-      font-size: 1.4vw;
-      color: #ff9999;
-      margin-top: 16px;
-      display: none;
-      font-family: 'Segoe UI', sans-serif;
-      text-align: center;
-      animation: fadeUp 0.5s ease-out forwards;
-    }
-  </style>
+        video::-webkit-media-controls { display: flex !important; }
+        video::-webkit-media-controls-panel { background: linear-gradient(transparent, rgba(0,0,0,0.7)); }
+        video::-webkit-media-controls-play-button { display: block !important; }
+        video::-webkit-media-controls-volume-slider { display: block !important; }
+        video::-webkit-media-controls-mute-button { display: block !important; }
+        video::-webkit-media-controls-timeline { display: block !important; }
+        video::-webkit-media-controls-current-time-display { display: block !important; }
+        video::-webkit-media-controls-time-remaining-display { display: block !important; }
+        video::-webkit-media-controls-fullscreen-button { display: block !important; }
+
+        /* ===== লোডিং ওভারলে ===== */
+        #rasLoadingOverlay {
+            position: absolute;
+            inset: 0;
+            background: #050505;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 999;
+            transition: opacity 0.6s ease, visibility 0.6s ease;
+            border-radius: inherit;
+            pointer-events: none;
+        }
+        #rasLoadingOverlay.hidden {
+            opacity: 0;
+            visibility: hidden;
+        }
+        #rasLoadingOverlay .ras-loader { text-align: center; }
+        #rasLoadingOverlay .ras-logo {
+            font-size: 36px;
+            font-weight: 900;
+            font-style: italic;
+            letter-spacing: 2px;
+            margin-bottom: 10px;
+            animation: rasGlow 1.5s ease-in-out infinite alternate;
+        }
+        #rasLoadingOverlay .ras-logo .ras { color: #fff; }
+        #rasLoadingOverlay .ras-logo .live { color: #ff9100; text-shadow: 0 0 20px rgba(255,145,0,0.5); }
+        #rasLoadingOverlay .ras-logo .tv { color: #00d2ff; text-shadow: 0 0 20px rgba(0,210,255,0.5); }
+        @keyframes rasGlow {
+            0% { transform: scale(1); opacity: 0.8; }
+            100% { transform: scale(1.08); opacity: 1; }
+        }
+        #rasLoadingOverlay .ras-spinner {
+            width: 60px; height: 60px;
+            margin: 10px auto;
+            position: relative;
+            animation: rasSpin 1.2s cubic-bezier(0.5,0,0.5,1) infinite;
+        }
+        #rasLoadingOverlay .ras-spinner::before,
+        #rasLoadingOverlay .ras-spinner::after {
+            content: '';
+            position: absolute;
+            border-radius: 50%;
+        }
+        #rasLoadingOverlay .ras-spinner::before {
+            top: 0; left: 0; width: 100%; height: 100%;
+            border: 4px solid transparent;
+            border-top-color: #ff9100;
+            border-bottom-color: #00d2ff;
+            animation: rasSpin 1.2s cubic-bezier(0.5,0,0.5,1) infinite;
+        }
+        #rasLoadingOverlay .ras-spinner::after {
+            top: 8px; left: 8px; width: 44px; height: 44px;
+            border: 4px solid transparent;
+            border-left-color: #fff;
+            border-right-color: #ff9100;
+            animation: rasSpin 0.8s cubic-bezier(0.5,0,0.5,1) infinite reverse;
+        }
+        @keyframes rasSpin { to { transform: rotate(360deg); } }
+        #rasLoadingOverlay .ras-status {
+            color: #aaa; font-size: 14px; font-weight: 300;
+            margin-top: 10px;
+            animation: rasPulse 1.5s ease-in-out infinite;
+        }
+        #rasLoadingOverlay .ras-status span { color: #ff9100; font-weight: bold; }
+        @keyframes rasPulse {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; }
+        }
+
+        /* ===== ফুটার ===== */
+        .footer-premium {
+            background: #0a0a0a;
+            padding: 30px 0 40px 0;
+            text-align: center;
+            margin-top: 20px;
+            border-top: 2px solid #1a1a1a;
+        }
+        .footer-premium .ras-brand {
+            font-size: 28px;
+            font-weight: 700;
+            letter-spacing: 3px;
+            background: linear-gradient(90deg, #ff9100, #00d2ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 8px;
+        }
+        .footer-premium .developer {
+            font-size: 18px;
+            font-weight: 500;
+            color: #ccc;
+            letter-spacing: 2px;
+            margin-bottom: 18px;
+        }
+        .footer-premium .developer span {
+            background: linear-gradient(90deg, #ff9100, #ffcc00);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: 700;
+        }
+
+        /* ===== Others Platform Box ===== */
+        .others-platform-box {
+            display: inline-block;
+            border: 1px solid #2a2a2a;
+            border-radius: 12px;
+            padding: 12px 20px 14px;
+            margin-top: 10px;
+            background: #111;
+        }
+        .others-platform-box .box-title {
+            font-size: 11px;
+            font-weight: 600;
+            color: #888;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+        }
+        .others-platform-box .server-buttons {
+            display: flex;
+            flex-wrap: nowrap;
+            justify-content: center;
+            gap: 10px;
+        }
+        .others-platform-box .server-btn {
+            display: inline-block;
+            padding: 8px 20px;
+            border-radius: 50px;
+            font-size: 13px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+            letter-spacing: 1px;
+            background: linear-gradient(135deg, #1a1a2e, #16213e);
+            color: #fff;
+            border-color: #ff9100;
+            box-shadow: 0 0 12px rgba(255, 145, 0, 0.2);
+            white-space: nowrap;
+        }
+        .others-platform-box .server-btn:hover {
+            transform: translateY(-2px) scale(1.04);
+            box-shadow: 0 0 25px rgba(255, 145, 0, 0.5);
+            background: linear-gradient(135deg, #ff9100, #ffcc00);
+            color: #000;
+            border-color: #ffcc00;
+        }
+        .others-platform-box .server-btn.server-2 {
+            border-color: #00d2ff;
+            box-shadow: 0 0 12px rgba(0, 210, 255, 0.2);
+        }
+        .others-platform-box .server-btn.server-2:hover {
+            box-shadow: 0 0 25px rgba(0, 210, 255, 0.5);
+            background: linear-gradient(135deg, #00d2ff, #00ff88);
+            border-color: #00ff88;
+            color: #000;
+        }
+
+        .footer-premium .copyright {
+            color: #444;
+            font-size: 11px;
+            margin-top: 25px;
+            letter-spacing: 1px;
+        }
+        .footer-premium .copyright span { color: #ff9100; }
+
+        @media (max-width: 600px) {
+            .footer-premium .ras-brand { font-size: 22px; }
+            .footer-premium .developer { font-size: 15px; }
+            .others-platform-box .server-btn {
+                padding: 7px 14px;
+                font-size: 12px;
+            }
+        }
+    </style>
 </head>
 <body>
 
-  <!-- ══ PRELOADER ══ -->
-  <div id="preloader">
-    <div class="line left"></div>
-    <div class="line right"></div>
-    <div class="brand"  id="brand">.SIUM GROUP</div>
-    <div class="tagline" id="tagline">Crafted with Excellence</div>
-  </div>
+    <!-- PRELOADER -->
+    <div id="preloader">
+        <div class="line left"></div>
+        <div class="line right"></div>
+        <div class="brand" id="brand">.SIUM GROUP</div>
+        <div class="tagline" id="tagline">Crafted with Excellence</div>
+    </div>
 
-  <!-- ══ WELCOME SCREEN ══ -->
-  <div id="welcomeScreen">
-    <div class="welcome-title">প্রিয় ব্যবহারকারী! RAS TV তে স্বাগতম</div>
-    <div class="welcome-sub">ফিফা ওয়ার্ল্ড কাপ দেখার জন্য বেস্ট প্লাটফর্মে<br>নিয়ে যাওয়া হচ্ছে</div>
-    <div class="status-msg" id="statusMsg">সার্ভার যাচাই করা হচ্ছে...</div>
-    <div class="spinner-wrap"><div class="spinner"></div></div>
-    <div class="error-banner" id="errorBanner"></div>
-    <div class="footer">পরিচালনায় — সাহিবুল মূসা সিয়াম</div>
-  </div>
+    <!-- MAIN CONTENT -->
+    <div id="main-content">
+        <div class="container tv-area">
+            <div class="row">
+                <div class="col-xs-12 tv-view">
+                    <div class="embed-responsive embed-responsive-16by9">
+                        <video id="playerFrame" playsinline controls></video>
+                        <div id="rasLoadingOverlay">
+                            <div class="ras-loader">
+                                <div class="ras-logo">
+                                    <span class="ras">RAS</span>
+                                    <span class="live">LIVE</span>
+                                    <span class="tv">TV</span>
+                                </div>
+                                <div class="ras-spinner"></div>
+                                <div class="ras-status">চ্যানেল লোড হচ্ছে <span>✦</span></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-  <script>
-  (function () {
+        <footer class="footer-premium">
+            <div class="container">
+                <div class="ras-brand">RAS LIVE TV</div>
+                <div class="developer">
+                    developed by <span>SAHIBUL MUSA SIUM</span>
+                </div>
 
-    /* ── লিংক কনফিগ ── */
-    const SERVER_1 = 'https://livekhela.movielinkbd.li/';
-    const SERVER_2 = 'https://new.livekhelatv.com/';
-    const SERVER_3 = 'https://sium43.github.io/rastvfifa';
+                <div class="others-platform-box">
+                    <div class="box-title">Others Platform</div>
+                    <div class="server-buttons">
+                        <a href="https://livekhela.movielinkbd.li/" target="_blank" class="server-btn">
+                            ⚡ SERVER 1
+                        </a>
+                        <a href="https://new.livekhelatv.com/" target="_blank" class="server-btn server-2">
+                            🌐 SERVER 2
+                        </a>
+                    </div>
+                </div>
 
-    const statusMsg  = document.getElementById('statusMsg');
-    const errorBanner = document.getElementById('errorBanner');
+                <div class="copyright">
+                    © 2026 <span>TAS LIVE TV</span> | All Rights Reserved
+                </div>
+            </div>
+        </footer>
+    </div>
 
-    function showError(msg) {
-      errorBanner.textContent = msg;
-      errorBanner.style.display = 'block';
-    }
+    <!-- HLS.js -->
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 
-    async function tryFetch(url, label) {
-      statusMsg.textContent = label + ' চেক করা হচ্ছে...';
-      const controller = new AbortController();
-      const tid = setTimeout(() => controller.abort(), 3500);
-      try {
-        await fetch(url, { mode: 'no-cors', signal: controller.signal });
-        clearTimeout(tid);
-        return true;
-      } catch (_) {
-        clearTimeout(tid);
-        return false;
-      }
-    }
+    <script>
+        (function() {
+            // ===== PRELOADER =====
+            setTimeout(() => {
+                document.querySelectorAll('.line').forEach(l => l.style.width = '40%');
+            }, 300);
 
-    async function smartRedirect() {
-      /* Server 1 */
-      if (await tryFetch(SERVER_1, 'সার্ভার ১')) {
-        statusMsg.textContent = '✅ সার্ভার ১ সক্রিয়! লোড হচ্ছে...';
-        await delay(700);
-        window.location.href = SERVER_1;
-        return;
-      }
+            setTimeout(() => {
+                const brand = document.getElementById('brand');
+                const tagline = document.getElementById('tagline');
+                brand.style.transition = 'opacity 0.8s ease';
+                tagline.style.transition = 'opacity 0.8s ease';
+                brand.style.opacity = 0;
+                tagline.style.opacity = 0;
+            }, 2200);
 
-      showError('⚠️ সার্ভার ১ অনুপলব্ধ, সার্ভার ২ চেষ্টা করা হচ্ছে...');
-      await delay(600);
+            setTimeout(() => {
+                const brand = document.getElementById('brand');
+                const tagline = document.getElementById('tagline');
+                brand.innerHTML = 'RAS TV';
+                tagline.innerHTML = 'Powered by .SIUM GROUP';
+                brand.style.opacity = 0;
+                brand.style.transform = 'scale(0.8)';
+                tagline.style.opacity = 0;
+                tagline.style.transform = 'translateY(20px)';
+                brand.style.animation = 'none';
+                tagline.style.animation = 'none';
+                brand.offsetHeight;
+                tagline.offsetHeight;
+                brand.style.animation = 'zoomIn 1.2s ease-out forwards';
+                tagline.style.animation = 'fadeUp 1.2s ease-out forwards 0.4s';
+            }, 3200);
 
-      /* Server 2 */
-      if (await tryFetch(SERVER_2, 'সার্ভার ২')) {
-        statusMsg.textContent = '✅ সার্ভার ২ সক্রিয়! লোড হচ্ছে...';
-        await delay(700);
-        window.location.href = SERVER_2;
-        return;
-      }
+            setTimeout(() => {
+                document.body.classList.add('loaded');
+                document.getElementById('preloader').style.display = 'none';
+                document.getElementById('main-content').style.display = 'block';
+                initPlayer();
+            }, 7000);
 
-      errorBanner.textContent = '⚠️ সার্ভার ২ অনুপলব্ধ, সার্ভার ৩ চেষ্টা করা হচ্ছে...';
-      await delay(600);
+            // ===== PLAYER =====
+            function initPlayer() {
+                const STREAMS = [
+                    'https://d1211whpimeups.cloudfront.net/smil:rtbgo/chunklist_b4096000_slENG.m3u8',
+                    'https://d1211whpimeups.cloudfront.net/smil:rtbgo/chunklist_b2196000_sleng.m3u8',
+                    'https://1nyaler.streamhostingcdn.top/stream/94/index.m3u8'
+                ];
 
-      /* Server 3 (always fallback) */
-      statusMsg.textContent = '✅ সার্ভার ৩ দিয়ে সংযোগ হচ্ছে...';
-      await delay(800);
-      window.location.href = SERVER_3;
-    }
+                const BUFFER_TIMEOUT = 15000;
+                const video = document.getElementById('playerFrame');
+                const overlay = document.getElementById('rasLoadingOverlay');
 
-    function delay(ms) { return new Promise(r => setTimeout(r, ms)); }
+                let currentStreamIndex = 0;
+                let hls = null;
+                let isPlaying = false;
+                let bufferTimer = null;
+                let isBuffering = false;
+                let isLoading = false;
 
-    /* ══ PRELOADER SEQUENCE ══ */
+                function loadStream(index) {
+                    if (isLoading) return;
+                    isLoading = true;
+                    if (overlay) overlay.classList.remove('hidden');
+                    if (hls) { hls.destroy(); hls = null; }
 
-    /* Step 1 – lines expand */
-    setTimeout(() => {
-      document.querySelectorAll('.line').forEach(l => l.style.width = '40%');
-    }, 300);
+                    const url = STREAMS[index];
 
-    /* Step 2 – fade out slide 1 */
-    setTimeout(() => {
-      ['brand','tagline'].forEach(id => {
-        const el = document.getElementById(id);
-        el.style.transition = 'opacity 0.8s ease';
-        el.style.opacity = 0;
-      });
-    }, 2200);
+                    if (Hls.isSupported()) {
+                        hls = new Hls({
+                            enableWorker: true,
+                            lowLatencyMode: true,
+                            abrEwmaDefaultEstimate: 500000,
+                            abrEwmaSlowVoD: 3,
+                            abrEwmaFastLive: 1,
+                            abrMaxWithRealBitrate: true,
+                            maxBufferLength: 30,
+                            maxMaxBufferLength: 60,
+                        });
+                        hls.loadSource(url);
+                        hls.attachMedia(video);
 
-    /* Step 3 – show slide 2 (RAS TV) */
-    setTimeout(() => {
-      const brand   = document.getElementById('brand');
-      const tagline = document.getElementById('tagline');
+                        hls.on(Hls.Events.MANIFEST_PARSED, function() {
+                            video.play().then(() => {
+                                isPlaying = true;
+                                isLoading = false;
+                                if (overlay) overlay.classList.add('hidden');
+                                clearBufferTimer();
+                            }).catch(() => {
+                                isLoading = false;
+                                if (overlay) overlay.classList.add('hidden');
+                            });
+                        });
 
-      brand.innerHTML   = 'RAS TV';
-      tagline.innerHTML = 'Recommended by Sahibul Musa Sium';
+                        hls.on(Hls.Events.ERROR, function(event, data) {
+                            if (data.fatal) {
+                                setTimeout(() => {
+                                    if (overlay) overlay.classList.add('hidden');
+                                    isLoading = false;
+                                    switchStream();
+                                }, 5000);
+                            }
+                        });
 
-      brand.style.opacity   = 0;
-      brand.style.transform = 'scale(0.8)';
-      tagline.style.opacity   = 0;
-      tagline.style.transform = 'translateY(20px)';
-      brand.style.animation   = 'none';
-      tagline.style.animation = 'none';
+                        video.addEventListener('loadeddata', () => { if (overlay) overlay.classList.add('hidden'); isLoading = false; clearBufferTimer(); });
+                        video.addEventListener('canplay', () => { if (overlay) overlay.classList.add('hidden'); isLoading = false; clearBufferTimer(); if (isBuffering) { isBuffering = false; } });
+                        video.addEventListener('playing', () => { if (overlay) overlay.classList.add('hidden'); isPlaying = true; isLoading = false; clearBufferTimer(); if (isBuffering) { isBuffering = false; } });
 
-      brand.offsetHeight;
-      tagline.offsetHeight;
+                        video.addEventListener('waiting', () => {
+                            if (isBuffering) return;
+                            isBuffering = true;
+                            if (overlay) overlay.classList.remove('hidden');
+                            clearBufferTimer();
+                            bufferTimer = setTimeout(() => {
+                                isBuffering = false;
+                                if (overlay) overlay.classList.add('hidden');
+                                switchStream();
+                            }, BUFFER_TIMEOUT);
+                        });
 
-      brand.style.animation   = 'zoomIn 1.2s ease-out forwards';
-      tagline.style.animation = 'fadeUp 1.2s ease-out forwards 0.4s';
-    }, 3200);
+                    } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+                        video.src = url;
+                        video.load();
+                        video.play().then(() => {
+                            isPlaying = true;
+                            isLoading = false;
+                            if (overlay) overlay.classList.add('hidden');
+                            clearBufferTimer();
+                        }).catch(() => {
+                            isLoading = false;
+                            if (overlay) overlay.classList.add('hidden');
+                        });
+                    } else {
+                        alert('আপনার ব্রাউজার HLS স্ট্রিম সাপোর্ট করে না।');
+                        isLoading = false;
+                        if (overlay) overlay.classList.add('hidden');
+                    }
+                }
 
-    /* Step 4 – fade out preloader, show welcome screen */
-    setTimeout(() => {
-      const preloader = document.getElementById('preloader');
-      preloader.style.transition = 'opacity 1s ease';
-      preloader.style.opacity = 0;
-      preloader.style.pointerEvents = 'none';
+                function switchStream() {
+                    clearBufferTimer();
+                    isBuffering = false;
+                    isLoading = false;
+                    currentStreamIndex = (currentStreamIndex + 1) % STREAMS.length;
+                    video.pause();
+                    video.removeAttribute('src');
+                    video.load();
+                    setTimeout(() => loadStream(currentStreamIndex), 1000);
+                }
 
-      const ws = document.getElementById('welcomeScreen');
-      ws.style.display = 'flex';
+                function clearBufferTimer() {
+                    if (bufferTimer) { clearTimeout(bufferTimer); bufferTimer = null; }
+                }
 
-      /* Start server check after welcome animates in */
-      setTimeout(smartRedirect, 2200);
+                video.muted = false;
+                video.volume = 1;
+                loadStream(0);
 
-    }, 6200);
-
-  })();
-  </script>
+                video.addEventListener('ended', switchStream);
+                video.addEventListener('error', () => { if (!isLoading) switchStream(); });
+                video.addEventListener('dblclick', () => {
+                    if (!document.fullscreenElement) video.requestFullscreen().catch(() => {});
+                    else document.exitFullscreen().catch(() => {});
+                });
+            }
+        })();
+    </script>
 
 </body>
 </html>
