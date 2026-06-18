@@ -62,10 +62,26 @@
             height: 1px;
             transition: width 1.2s ease-in-out;
         }
-        .line.left { left: 0; top: 50%; }
-        .line.right { right: 0; top: 50%; }
-        @keyframes zoomIn { to { opacity: 1; transform: scale(1); } }
-        @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
+        .line.left {
+            left: 0;
+            top: 50%;
+        }
+        .line.right {
+            right: 0;
+            top: 50%;
+        }
+        @keyframes zoomIn {
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+        @keyframes fadeUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
         .loaded #preloader {
             opacity: 0;
             transform: scale(1.05);
@@ -133,7 +149,7 @@
             opacity: 0;
             visibility: hidden;
         }
-        #rasLoadingOverlay .ras-loader { 
+        #rasLoadingOverlay .ras-loader {
             text-align: center;
             padding: 20px;
         }
@@ -145,19 +161,33 @@
             margin-bottom: 10px;
             animation: rasGlow 1.5s ease-in-out infinite alternate;
         }
-        #rasLoadingOverlay .ras-logo .ras { color: #fff; }
-        #rasLoadingOverlay .ras-logo .live { color: #ff9100; text-shadow: 0 0 20px rgba(255,145,0,0.5); }
-        #rasLoadingOverlay .ras-logo .tv { color: #00d2ff; text-shadow: 0 0 20px rgba(0,210,255,0.5); }
+        #rasLoadingOverlay .ras-logo .ras {
+            color: #fff;
+        }
+        #rasLoadingOverlay .ras-logo .live {
+            color: #ff9100;
+            text-shadow: 0 0 20px rgba(255, 145, 0, 0.5);
+        }
+        #rasLoadingOverlay .ras-logo .tv {
+            color: #00d2ff;
+            text-shadow: 0 0 20px rgba(0, 210, 255, 0.5);
+        }
         @keyframes rasGlow {
-            0% { transform: scale(1); opacity: 0.8; }
-            100% { transform: scale(1.08); opacity: 1; }
+            0% {
+                transform: scale(1);
+                opacity: 0.8;
+            }
+            100% {
+                transform: scale(1.08);
+                opacity: 1;
+            }
         }
         #rasLoadingOverlay .ras-spinner {
             width: clamp(40px, 6vw, 70px);
             height: clamp(40px, 6vw, 70px);
             margin: 10px auto;
             position: relative;
-            animation: rasSpin 1.2s cubic-bezier(0.5,0,0.5,1) infinite;
+            animation: rasSpin 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
         }
         #rasLoadingOverlay .ras-spinner::before,
         #rasLoadingOverlay .ras-spinner::after {
@@ -166,41 +196,79 @@
             border-radius: 50%;
         }
         #rasLoadingOverlay .ras-spinner::before {
-            top: 0; left: 0; width: 100%; height: 100%;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
             border: 4px solid transparent;
             border-top-color: #ff9100;
             border-bottom-color: #00d2ff;
-            animation: rasSpin 1.2s cubic-bezier(0.5,0,0.5,1) infinite;
+            animation: rasSpin 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
         }
         #rasLoadingOverlay .ras-spinner::after {
-            top: 12%; left: 12%; width: 76%; height: 76%;
+            top: 12%;
+            left: 12%;
+            width: 76%;
+            height: 76%;
             border: 4px solid transparent;
             border-left-color: #fff;
             border-right-color: #ff9100;
-            animation: rasSpin 0.8s cubic-bezier(0.5,0,0.5,1) infinite reverse;
+            animation: rasSpin 0.8s cubic-bezier(0.5, 0, 0.5, 1) infinite reverse;
         }
-        @keyframes rasSpin { to { transform: rotate(360deg); } }
+        @keyframes rasSpin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
         #rasLoadingOverlay .ras-status {
-            color: #aaa; 
+            color: #aaa;
             font-size: clamp(12px, 1.6vw, 16px);
             font-weight: 300;
             margin-top: 10px;
             animation: rasPulse 1.5s ease-in-out infinite;
         }
-        #rasLoadingOverlay .ras-status span { color: #ff9100; font-weight: bold; }
+        #rasLoadingOverlay .ras-status span {
+            color: #ff9100;
+            font-weight: bold;
+        }
         @keyframes rasPulse {
-            0%, 100% { opacity: 0.5; }
-            50% { opacity: 1; }
+            0%,
+            100% {
+                opacity: 0.5;
+            }
+            50% {
+                opacity: 1;
+            }
         }
 
-        /* ===== CHANNEL TABLE (new layout) ===== */
-        .channel-table {
-            margin: 18px 6px 8px 6px;
+        /* ===== CHANNEL SECTIONS ===== */
+        .channel-section {
             max-width: 800px;
-            margin-left: auto;
-            margin-right: auto;
+            margin: 18px auto 8px auto;
             padding: 0 10px;
         }
+        .section-header {
+            font-size: 22px;
+            font-weight: 800;
+            letter-spacing: 2px;
+            color: #ffd700;
+            text-shadow: 0 0 20px rgba(255, 215, 0, 0.15);
+            padding: 8px 0 14px 0;
+            border-bottom: 2px solid #222;
+            margin-bottom: 18px;
+            text-align: center;
+            text-transform: uppercase;
+        }
+        .section-header .sub {
+            font-weight: 300;
+            font-size: 14px;
+            color: #888;
+            letter-spacing: 1px;
+            display: block;
+            margin-top: 2px;
+        }
+
+        /* ===== FIFA LIVE — channel rows ===== */
         .channel-row {
             background: #0e0e0e;
             border-radius: 12px;
@@ -214,7 +282,7 @@
             text-align: center;
             letter-spacing: 1px;
             color: #ffd700;
-            text-shadow: 0 0 10px rgba(255,215,0,0.2);
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.2);
             margin-bottom: 12px;
         }
         .channel-row .stream-buttons {
@@ -225,6 +293,54 @@
             overflow-x: auto;
             padding-bottom: 5px;
         }
+
+        /* ===== OTHERS — grid buttons ===== */
+        .others-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            background: #0e0e0e;
+            border-radius: 12px;
+            padding: 16px 14px;
+            border: 1px solid #222;
+        }
+        .others-grid .stream-btn {
+            width: 100%;
+            text-align: center;
+            padding: 12px 6px;
+            font-size: 13px;
+            font-weight: 700;
+            border-radius: 30px;
+            background: linear-gradient(145deg, #1e1e2f, #12121e);
+            color: #fff;
+            border: 2px solid #444;
+            transition: all 0.2s ease;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.6);
+            cursor: pointer;
+            white-space: nowrap;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            min-width: 0;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .others-grid .stream-btn.active {
+            border-color: #ff9100;
+            background: linear-gradient(145deg, #ff9100, #ff6a00);
+            color: #000;
+            box-shadow: 0 0 20px rgba(255, 145, 0, 0.5);
+            transform: scale(1.02);
+        }
+        .others-grid .stream-btn:focus {
+            outline: 3px solid #ffd700;
+            outline-offset: 3px;
+        }
+        .others-grid .stream-btn:hover {
+            transform: scale(1.04);
+            border-color: #ffd700;
+        }
+
+        /* ===== shared button ===== */
         .stream-btn {
             flex: 0 0 auto;
             padding: 10px 16px;
@@ -236,7 +352,7 @@
             color: #fff;
             border: 2px solid #444;
             transition: all 0.2s ease;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.6);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.6);
             cursor: pointer;
             white-space: nowrap;
             letter-spacing: 0.5px;
@@ -247,7 +363,7 @@
             border-color: #ff9100;
             background: linear-gradient(145deg, #ff9100, #ff6a00);
             color: #000;
-            box-shadow: 0 0 20px rgba(255,145,0,0.5);
+            box-shadow: 0 0 20px rgba(255, 145, 0, 0.5);
             transform: scale(1.02);
         }
         .stream-btn:focus {
@@ -272,12 +388,27 @@
             .channel-row .channel-name {
                 font-size: 17px;
             }
+            .others-grid {
+                gap: 8px;
+                padding: 12px 10px;
+            }
+            .others-grid .stream-btn {
+                font-size: 11px;
+                padding: 10px 4px;
+            }
+            .section-header {
+                font-size: 18px;
+            }
         }
         @media (max-width: 360px) {
             .stream-btn {
                 font-size: 12px;
                 padding: 6px 12px;
                 min-width: 50px;
+            }
+            .others-grid .stream-btn {
+                font-size: 10px;
+                padding: 8px 2px;
             }
         }
 
@@ -374,7 +505,9 @@
             margin-top: 25px;
             letter-spacing: 1px;
         }
-        .footer-premium .copyright span { color: #ff9100; }
+        .footer-premium .copyright span {
+            color: #ff9100;
+        }
 
         /* ---------- FULLSCREEN OVERRIDE ---------- */
         .tv-view .embed-responsive:-webkit-full-screen video,
@@ -393,7 +526,6 @@
             max-width: 100vw !important;
             max-height: 100vh !important;
         }
-        /* Fullscreen overlay also fills properly */
         .tv-view .embed-responsive:-webkit-full-screen #rasLoadingOverlay,
         .tv-view .embed-responsive:fullscreen #rasLoadingOverlay {
             width: 100% !important;
@@ -433,10 +565,8 @@
                 </div>
             </div>
 
-            <!-- ===== CHANNEL TABLE (Dynamic) ===== -->
-            <div class="channel-table" id="channelTableContainer">
-                <!-- JS dynamically inserts rows -->
-            </div>
+            <!-- ===== DYNAMIC CHANNEL SECTIONS ===== -->
+            <div id="channelSectionsContainer"></div>
         </div>
 
         <footer class="footer-premium">
@@ -462,8 +592,6 @@
             </div>
         </footer>
     </div>
-
-    <!-- NO HLS.js – using native video playback -->
 
     <script>
         (function() {
@@ -505,75 +633,131 @@
                 initPlayerAndUI();
             }, 7000);
 
-            // ===== PLAYER + CHANNEL UI (Native only) =====
+            // ===== PLAYER + UI =====
             function initPlayerAndUI() {
-                // ---- CHANNEL LIST (add your streams here) ----
-                const CHANNELS = [{
+                // ---- CHANNEL DATA ----
+                // FIFA LIVE section
+                const fifaChannels = [{
                     name: 'GO LIVE',
                     streams: [
-                        { label: '1080p', url: 'https://d1211whpimeups.cloudfront.net/smil:rtbgo/chunklist_b4096000_slENG.m3u8' },
+                        { label: '1080p',
+                        url: 'https://d1211whpimeups.cloudfront.net/smil:rtbgo/chunklist_b4096000_slENG.m3u8' },
                         { label: 'AUTO', url: 'https://d1211whpimeups.cloudfront.net/smil:rtbgo/chunklist.m3u8' },
-                        { label: '720p', url: 'https://d1211whpimeups.cloudfront.net/smil:rtbgo/chunklist_b2196000_sleng.m3u8' }
+                        { label: '720p',
+                        url: 'https://d1211whpimeups.cloudfront.net/smil:rtbgo/chunklist_b2196000_sleng.m3u8' }
                     ]
                 }, {
                     name: 'FOX TV',
                     streams: [
                         { label: '720p', url: 'https://d1jzu95oc8fgt3.cloudfront.net/FOX_Sports720p.m3u8' }
                     ]
+                }, {
+                    name: 'Somoy TV',
+                    streams: [
+                        { label: '1080p', url: 'http://198.195.239.50:8095/somoyTv/tracks-v1a1/mono.m3u8' }
+                    ]
+                }, {
+                    name: 'BTV',
+                    streams: [
+                        { label: '1080p', url: 'http://198.195.239.50:8095/btv/tracks-v1a1/mono.m3u8' }
+                    ]
                 }];
 
-                // ---- DOM refs ----
-                const video = document.getElementById('playerFrame');
-                const overlay = document.getElementById('rasLoadingOverlay');
-                const container = document.getElementById('channelTableContainer');
+                // OTHERS TV CHANNEL section
+                const othersChannels = [
+                    { name: 'Jamuna TV', url: 'http://198.195.239.50:8095/jamunaTv/tracks-v1a1/mono.m3u8' },
+                    { name: 'Bangla-Vision', url: 'http://198.195.239.50:8095/banglaVision/tracks-v1a1/mono.m3u8' },
+                    { name: 'Channel-i', url: 'http://198.195.239.50:8095/channelI/tracks-v1a1/mono.m3u8' },
+                    { name: 'ATN Bangla', url: 'http://198.195.239.50:8095/atnBangla/tracks-v1a1/mono.m3u8' },
+                    { name: 'Channel 24', url: 'http://198.195.239.50:8095/channel24/tracks-v1a1/mono.m3u8' },
+                    { name: 'N TV', url: 'http://198.195.239.50:8095/ntv/tracks-v1a1/mono.m3u8' },
+                    { name: 'ATN News', url: 'http://198.195.239.50:8095/atnNews/tracks-v1a1/mono.m3u8' },
+                    { name: 'T Sports', url: 'http://198.195.239.50:8095/tsports/tracks-v1a1/mono.m3u8' },
+                    { name: 'Ekattor Tv', url: 'http://198.195.239.50:8095/ekattorTv/tracks-v1a1/mono.m3u8' }
+                ];
 
-                // ---- State ----
-                let currentStreamIndex = 0; // flat index into all streams (channel + quality)
-                let allStreams = [];
-                CHANNELS.forEach(ch => {
+                // ---- Build flat STREAMS array ----
+                const STREAMS = [];
+
+                // FIFA streams
+                fifaChannels.forEach(ch => {
                     ch.streams.forEach(s => {
-                        allStreams.push({
+                        STREAMS.push({
+                            section: 'fifa',
                             channelName: ch.name,
                             label: s.label,
-                            url: s.url
+                            url: s.url,
+                            buttonText: s.label
                         });
                     });
                 });
 
+                // OTHERS streams
+                othersChannels.forEach(ch => {
+                    STREAMS.push({
+                        section: 'others',
+                        channelName: ch.name,
+                        label: '1080p',
+                        url: ch.url,
+                        buttonText: ch.name
+                    });
+                });
+
+                // ---- DOM refs ----
+                const video = document.getElementById('playerFrame');
+                const overlay = document.getElementById('rasLoadingOverlay');
+                const container = document.getElementById('channelSectionsContainer');
+
+                // ---- State ----
+                let currentStreamIndex = 0;
                 let isLoading = false;
                 let isPlaying = false;
                 let bufferTimer = null;
 
-                // ---- Build channel table ----
-                function buildTable() {
+                // ---- Render UI ----
+                function renderUI() {
                     container.innerHTML = '';
-                    CHANNELS.forEach((ch, chIdx) => {
+
+                    // ----- FIFA LIVE section -----
+                    const fifaDiv = document.createElement('div');
+                    fifaDiv.className = 'channel-section';
+                    const fifaHeader = document.createElement('div');
+                    fifaHeader.className = 'section-header';
+                    fifaHeader.innerHTML = '⚽ FIFA LIVE <span class="sub">বিশ্বকাপ উপভোগ করুন</span>';
+                    fifaDiv.appendChild(fifaHeader);
+
+                    // Group FIFA streams by channelName
+                    const fifaStreams = STREAMS.filter(s => s.section === 'fifa');
+                    const fifaGroups = {};
+                    fifaStreams.forEach(s => {
+                        if (!fifaGroups[s.channelName]) fifaGroups[s.channelName] = [];
+                        fifaGroups[s.channelName].push(s);
+                    });
+
+                    Object.keys(fifaGroups).forEach(chName => {
+                        const streams = fifaGroups[chName];
                         const row = document.createElement('div');
                         row.className = 'channel-row';
 
-                        // Channel name
                         const nameDiv = document.createElement('div');
                         nameDiv.className = 'channel-name';
-                        nameDiv.textContent = ch.name;
+                        nameDiv.textContent = chName;
                         row.appendChild(nameDiv);
 
-                        // Stream buttons container
                         const btnContainer = document.createElement('div');
                         btnContainer.className = 'stream-buttons';
 
-                        ch.streams.forEach((stream, sIdx) => {
+                        streams.forEach(s => {
+                            const idx = STREAMS.indexOf(s);
                             const btn = document.createElement('button');
-                            // Determine if this is the current active stream
-                            const globalIdx = allStreams.findIndex(item =>
-                                item.channelName === ch.name && item.label === stream.label && item.url === stream.url
-                            );
-                            btn.className = 'stream-btn' + (globalIdx === currentStreamIndex ? ' active' : '');
-                            btn.textContent = stream.label;
-                            btn.setAttribute('data-global-index', globalIdx);
-                            btn.addEventListener('click', function(e) {
-                                const idx = parseInt(this.getAttribute('data-global-index'));
-                                if (idx !== currentStreamIndex) {
-                                    switchToStream(idx);
+                            btn.className = 'stream-btn' + (idx === currentStreamIndex ? ' active' :
+                            '');
+                            btn.textContent = s.buttonText;
+                            btn.setAttribute('data-index', idx);
+                            btn.addEventListener('click', function() {
+                                const idx2 = parseInt(this.getAttribute('data-index'));
+                                if (idx2 !== currentStreamIndex) {
+                                    switchToStream(idx2);
                                 }
                             });
                             btn.setAttribute('tabindex', '0');
@@ -581,14 +765,48 @@
                         });
 
                         row.appendChild(btnContainer);
-                        container.appendChild(row);
+                        fifaDiv.appendChild(row);
                     });
+
+                    container.appendChild(fifaDiv);
+
+                    // ----- OTHERS TV CHANNEL section -----
+                    const othersDiv = document.createElement('div');
+                    othersDiv.className = 'channel-section';
+                    const othersHeader = document.createElement('div');
+                    othersHeader.className = 'section-header';
+                    othersHeader.innerHTML = '📺 OTHERS TV CHANNEL <span class="sub">বাংলাদেশের জনপ্রিয় চ্যানেল</span>';
+                    othersDiv.appendChild(othersHeader);
+
+                    const grid = document.createElement('div');
+                    grid.className = 'others-grid';
+
+                    const othersStreams = STREAMS.filter(s => s.section === 'others');
+                    othersStreams.forEach(s => {
+                        const idx = STREAMS.indexOf(s);
+                        const btn = document.createElement('button');
+                        btn.className = 'stream-btn' + (idx === currentStreamIndex ? ' active' : '');
+                        btn.textContent = s.buttonText;
+                        btn.setAttribute('data-index', idx);
+                        btn.addEventListener('click', function() {
+                            const idx2 = parseInt(this.getAttribute('data-index'));
+                            if (idx2 !== currentStreamIndex) {
+                                switchToStream(idx2);
+                            }
+                        });
+                        btn.setAttribute('tabindex', '0');
+                        grid.appendChild(btn);
+                    });
+
+                    othersDiv.appendChild(grid);
+                    container.appendChild(othersDiv);
                 }
 
-                function updateActiveButton() {
+                // ---- Update active buttons ----
+                function updateActiveButtons() {
                     const allBtns = container.querySelectorAll('.stream-btn');
                     allBtns.forEach(btn => {
-                        const idx = parseInt(btn.getAttribute('data-global-index'));
+                        const idx = parseInt(btn.getAttribute('data-index'));
                         btn.classList.toggle('active', idx === currentStreamIndex);
                     });
                 }
@@ -598,7 +816,7 @@
                     if (isLoading) return;
                     if (index === currentStreamIndex && isPlaying) return;
                     currentStreamIndex = index;
-                    updateActiveButton();
+                    updateActiveButtons();
                     loadStream(index);
                 }
 
@@ -609,7 +827,7 @@
                     if (overlay) overlay.classList.remove('hidden');
                     clearBufferTimer();
 
-                    const stream = allStreams[index];
+                    const stream = STREAMS[index];
                     if (!stream) return;
 
                     const url = stream.url;
@@ -634,26 +852,30 @@
                         console.warn('Play failed:', e);
                     });
 
-                    // Event listeners
-                    video.addEventListener('loadeddata', function onLoaded() {
+                    const onLoaded = function() {
                         if (overlay) overlay.classList.add('hidden');
                         isLoading = false;
                         clearBufferTimer();
                         video.removeEventListener('loadeddata', onLoaded);
-                    });
-                    video.addEventListener('canplay', function onCan() {
+                    };
+                    video.addEventListener('loadeddata', onLoaded);
+
+                    const onCan = function() {
                         if (overlay) overlay.classList.add('hidden');
                         isLoading = false;
                         clearBufferTimer();
                         video.removeEventListener('canplay', onCan);
-                    });
-                    video.addEventListener('playing', function onPlay() {
+                    };
+                    video.addEventListener('canplay', onCan);
+
+                    const onPlay = function() {
                         if (overlay) overlay.classList.add('hidden');
                         isPlaying = true;
                         isLoading = false;
                         clearBufferTimer();
                         video.removeEventListener('playing', onPlay);
-                    });
+                    };
+                    video.addEventListener('playing', onPlay);
 
                     video.addEventListener('waiting', function onWait() {
                         if (isLoading) return;
@@ -686,11 +908,6 @@
                         video.removeEventListener('error', onErr);
                         console.warn('Video error:', video.error);
                     });
-
-                    // No auto-switch on ended
-                    video.addEventListener('ended', function onEnd() {
-                        // do nothing
-                    });
                 }
 
                 function clearBufferTimer() {
@@ -701,7 +918,7 @@
                 }
 
                 // ---- Init ----
-                buildTable();
+                renderUI();
                 // Load first stream (index 0)
                 loadStream(0);
 
@@ -711,7 +928,7 @@
                     else document.exitFullscreen().catch(() => {});
                 });
 
-                window.__player = { video, switchToStream, allStreams };
+                window.__player = { video, switchToStream, STREAMS };
             }
         })();
     </script>
