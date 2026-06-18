@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <title>RAS LIVE TV — Android TV Player</title>
+    <title>RAS LIVE TV — Android TV Native</title>
     <link rel="shortcut icon" type="image/x-icon" href="https://i.postimg.cc/mD1VCt2C/RS-Live.png">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
     <style>
@@ -218,7 +218,6 @@
             transform: scale(1.04);
             border-color: #ffd700;
         }
-        /* android TV remote focus */
         .channel-btn:focus-visible {
             outline: 3px solid #ffd700;
             outline-offset: 4px;
@@ -357,7 +356,8 @@
             <div class="row">
                 <div class="col-xs-12 tv-view">
                     <div class="embed-responsive embed-responsive-16by9">
-                        <video id="playerFrame" playsinline controls></video>
+                        <!-- Native video element – no HLS.js -->
+                        <video id="playerFrame" playsinline controls preload="auto"></video>
                         <div id="rasLoadingOverlay">
                             <div class="ras-loader">
                                 <div class="ras-logo">
@@ -405,8 +405,7 @@
         </footer>
     </div>
 
-    <!-- HLS.js -->
-    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+    <!-- NO HLS.js – using native video playback -->
 
     <script>
         (function() {
@@ -448,14 +447,14 @@
                 initPlayerAndUI();
             }, 7000);
 
-            // ===== PLAYER + CHANNEL UI =====
+            // ===== PLAYER + CHANNEL UI (Native only) =====
             function initPlayerAndUI() {
                 // ---- CHANNEL LIST (add your streams here) ----
                 const CHANNELS = [
                     { name: 'Channel 1', url: 'https://d1211whpimeups.cloudfront.net/smil:rtbgo/chunklist_b4096000_slENG.m3u8' },
                     { name: 'Channel 2', url: 'https://d1211whpimeups.cloudfront.net/smil:rtbgo/chunklist.m3u8' },
                     { name: 'Channel 3', url: 'https://d1211whpimeups.cloudfront.net/smil:rtbgo/chunklist_b2196000_sleng.m3u8' },
-                    // add more as needed, they will appear as buttons
+                    // add more as needed
                 ];
 
                 // ---- DOM refs ----
@@ -464,7 +463,6 @@
                 const container = document.getElementById('channelButtonContainer');
 
                 let currentChannelIndex = 0;
-                let hls = null;
                 let isLoading = false;
                 let isPlaying = false;
                 let bufferTimer = null;
@@ -483,16 +481,15 @@
                                 switchToChannel(index);
                             }
                         });
-                        // For Android TV remote focus
                         btn.setAttribute('tabindex', '0');
                         container.appendChild(btn);
                     });
                 }
 
-                // ---- Switch channel ----
+                // ---- Switch channel (no auto-switch on error) ----
                 function switchToChannel(index) {
                     if (isLoading) return;
-                    if (index === currentChannelIndex && hls && isPlaying) {
+                    if (index === currentChannelIndex && isPlaying) {
                         // already playing this channel
                         return;
                     }
@@ -508,127 +505,104 @@
                     });
                 }
 
-                // ---- Load stream (no auto-switch, just try once) ----
+                // ---- Load stream using native video element ----
                 function loadStream(index) {
                     if (isLoading) return;
                     isLoading = true;
                     if (overlay) overlay.classList.remove('hidden');
                     clearBufferTimer();
 
-                    // Destroy old hls
-                    if (hls) {
-                        hls.destroy();
-                        hls = null;
-                    }
-
                     const url = CHANNELS[index].url;
 
-                    // For Android TV, we use HLS.js with optimized settings
-                    if (Hls.isSupported()) {
-                        hls = new Hls({
-                            enableWorker: true,
-                            lowLatencyMode: true,
-                            abrEwmaDefaultEstimate: 500000,
-                            abrEwmaSlowVoD: 3,
-                            abrEwmaFastLive: 1,
-                            abrMaxWithRealBitrate: true,
-                            maxBufferLength: 30,
-                            maxMaxBufferLength: 60,
-                            startPosition: -1, // live
-                        });
-                        hls.loadSource(url);
-                        hls.attachMedia(video);
+                    // Stop any ongoing playback
+                    video.pause();
+                    video.removeAttribute('src');
+                    video.load();
 
-                        hls.on(Hls.Events.MANIFEST_PARSED, function() {
-                            video.play().then(() => {
-                                isPlaying = true;
-                                isLoading = false;
-                                if (overlay) overlay.classList.add('hidden');
-                                clearBufferTimer();
-                            }).catch((e) => {
-                                // play() failed, but we still hide overlay after a moment
-                                isLoading = false;
-                                if (overlay) overlay.classList.add('hidden');
-                                console.warn('Play autoplay failed:', e);
-                            });
-                        });
+                    // Set new source
+                    video.src = url;
+                    video.preload = 'auto';
+                    video.load();
 
-                        hls.on(Hls.Events.ERROR, function(event, data) {
-                            if (data.fatal) {
-                                // fatal error: we do NOT auto-switch, just show error and let user retry
-                                isLoading = false;
-                                if (overlay) overlay.classList.add('hidden');
-                                console.error('HLS fatal error:', data);
-                            }
-                        });
-
-                        // Additional events to hide overlay
-                        video.addEventListener('loadeddata', function onLoaded() {
-                            if (overlay) overlay.classList.add('hidden');
-                            isLoading = false;
-                            clearBufferTimer();
-                            video.removeEventListener('loadeddata', onLoaded);
-                        });
-                        video.addEventListener('canplay', function onCan() {
-                            if (overlay) overlay.classList.add('hidden');
-                            isLoading = false;
-                            clearBufferTimer();
-                            video.removeEventListener('canplay', onCan);
-                        });
-                        video.addEventListener('playing', function onPlay() {
-                            if (overlay) overlay.classList.add('hidden');
-                            isPlaying = true;
-                            isLoading = false;
-                            clearBufferTimer();
-                            video.removeEventListener('playing', onPlay);
-                        });
-
-                        // Buffering: show overlay, but do NOT auto-switch
-                        video.addEventListener('waiting', function onWait() {
-                            if (isLoading) return;
-                            if (!overlay.classList.contains('hidden')) return;
-                            // show overlay during buffering
-                            overlay.classList.remove('hidden');
-                            clearBufferTimer();
-                            // Set a long buffer timeout (just to hide overlay if stuck)
-                            bufferTimer = setTimeout(() => {
-                                if (overlay) overlay.classList.add('hidden');
-                                clearBufferTimer();
-                            }, 20000); // 20 sec
-                        });
-
-                        // When data flows again, hide overlay
-                        video.addEventListener('progress', function onProg() {
-                            if (overlay && !overlay.classList.contains('hidden')) {
-                                // if we have buffered enough, hide
-                                if (video.buffered.length > 0) {
-                                    const bufferedEnd = video.buffered.end(video.buffered.length - 1);
-                                    if (bufferedEnd - video.currentTime > 2) {
-                                        overlay.classList.add('hidden');
-                                        clearBufferTimer();
-                                    }
-                                }
-                            }
-                        });
-
-                    } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
-                        // Native HLS (Safari / some Android TV)
-                        video.src = url;
-                        video.load();
-                        video.play().then(() => {
-                            isPlaying = true;
-                            isLoading = false;
-                            if (overlay) overlay.classList.add('hidden');
-                            clearBufferTimer();
-                        }).catch(() => {
-                            isLoading = false;
-                            if (overlay) overlay.classList.add('hidden');
-                        });
-                    } else {
-                        alert('আপনার ব্রাউজার HLS স্ট্রিম সাপোর্ট করে না।');
+                    // Attempt to play
+                    video.play().then(() => {
+                        isPlaying = true;
                         isLoading = false;
                         if (overlay) overlay.classList.add('hidden');
-                    }
+                        clearBufferTimer();
+                    }).catch((e) => {
+                        // Play failed – but we still hide overlay after a moment
+                        isPlaying = false;
+                        isLoading = false;
+                        if (overlay) overlay.classList.add('hidden');
+                        console.warn('Play failed:', e);
+                    });
+
+                    // ---- Event listeners for native player ----
+                    // When enough data is loaded, hide overlay
+                    video.addEventListener('loadeddata', function onLoaded() {
+                        if (overlay) overlay.classList.add('hidden');
+                        isLoading = false;
+                        clearBufferTimer();
+                        video.removeEventListener('loadeddata', onLoaded);
+                    });
+
+                    video.addEventListener('canplay', function onCan() {
+                        if (overlay) overlay.classList.add('hidden');
+                        isLoading = false;
+                        clearBufferTimer();
+                        video.removeEventListener('canplay', onCan);
+                    });
+
+                    video.addEventListener('playing', function onPlay() {
+                        if (overlay) overlay.classList.add('hidden');
+                        isPlaying = true;
+                        isLoading = false;
+                        clearBufferTimer();
+                        video.removeEventListener('playing', onPlay);
+                    });
+
+                    // Buffering: show overlay, but do NOT auto-switch
+                    video.addEventListener('waiting', function onWait() {
+                        if (isLoading) return;
+                        if (!overlay.classList.contains('hidden')) return;
+                        overlay.classList.remove('hidden');
+                        clearBufferTimer();
+                        // Hide after a long timeout if stuck (20s)
+                        bufferTimer = setTimeout(() => {
+                            if (overlay) overlay.classList.add('hidden');
+                            clearBufferTimer();
+                        }, 20000);
+                    });
+
+                    // When data flows again, hide overlay if buffered enough
+                    video.addEventListener('progress', function onProg() {
+                        if (overlay && !overlay.classList.contains('hidden')) {
+                            if (video.buffered.length > 0) {
+                                const bufferedEnd = video.buffered.end(video.buffered.length - 1);
+                                if (bufferedEnd - video.currentTime > 2) {
+                                    overlay.classList.add('hidden');
+                                    clearBufferTimer();
+                                }
+                            }
+                        }
+                    });
+
+                    // Error: just hide overlay, no auto-switch
+                    video.addEventListener('error', function onErr() {
+                        if (overlay) overlay.classList.add('hidden');
+                        isLoading = false;
+                        isPlaying = false;
+                        clearBufferTimer();
+                        video.removeEventListener('error', onErr);
+                        // Optionally log error
+                        console.warn('Video error:', video.error);
+                    });
+
+                    // Ended: do nothing (no auto-switch)
+                    video.addEventListener('ended', function onEnd() {
+                        // Keep current channel, user can click another
+                    });
                 }
 
                 function clearBufferTimer() {
@@ -640,28 +614,17 @@
 
                 // ---- Init ----
                 buildButtons();
-                // load default first channel
+                // Load the first channel
                 loadStream(0);
 
-                // ---- No auto-switch on error/end ----
-                video.addEventListener('error', function(e) {
-                    // just log, do not switch
-                    console.warn('Video error:', e);
-                    if (overlay) overlay.classList.add('hidden');
-                    isLoading = false;
-                });
-                video.addEventListener('ended', function() {
-                    // do nothing, no auto-switch
-                });
-
-                // Double-click fullscreen (Android TV remote may not have double-click)
+                // Double-click fullscreen
                 video.addEventListener('dblclick', () => {
                     if (!document.fullscreenElement) video.requestFullscreen().catch(() => {});
                     else document.exitFullscreen().catch(() => {});
                 });
 
-                // Expose to window for debugging
-                window.__player = { video, hls, switchToChannel, CHANNELS };
+                // Expose for debugging
+                window.__player = { video, switchToChannel, CHANNELS };
             }
         })();
     </script>
