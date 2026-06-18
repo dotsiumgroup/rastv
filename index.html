@@ -3,21 +3,22 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <title>RAS LIVE TV — Auto Player</title>
+    <title>RAS LIVE TV — Android TV Player</title>
     <link rel="shortcut icon" type="image/x-icon" href="https://i.postimg.cc/mD1VCt2C/RS-Live.png">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
     <style>
-        /* ---------- PRELOADER STYLES ---------- */
+        /* ---------- RESET & BASE ---------- */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
-
         body {
             background: #035c4a;
+            font-family: Arial, sans-serif;
+            color: #fff;
         }
-
+        /* ---------- PRELOADER ---------- */
         #preloader {
             position: fixed;
             top: 0;
@@ -32,7 +33,6 @@
             z-index: 999999;
             transition: opacity 1.5s ease, transform 1.5s ease;
         }
-
         .brand {
             font-size: 8.4vw;
             font-weight: 900;
@@ -43,7 +43,6 @@
             transform: scale(0.8);
             animation: zoomIn 1.2s ease-out forwards 0.4s;
         }
-
         .tagline {
             font-size: 2.2vw;
             font-weight: 700;
@@ -55,38 +54,16 @@
             animation: fadeUp 1.2s ease-out forwards 1.2s;
             text-transform: uppercase;
         }
-
         .line {
             position: absolute;
             background: linear-gradient(to right, transparent, #ffd700, transparent);
             height: 1px;
             transition: width 1.2s ease-in-out;
         }
-
-        .line.left {
-            left: 0;
-            top: 50%;
-        }
-
-        .line.right {
-            right: 0;
-            top: 50%;
-        }
-
-        @keyframes zoomIn {
-            to {
-                opacity: 1;
-                transform: scale(1);
-            }
-        }
-
-        @keyframes fadeUp {
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
+        .line.left { left: 0; top: 50%; }
+        .line.right { right: 0; top: 50%; }
+        @keyframes zoomIn { to { opacity: 1; transform: scale(1); } }
+        @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
         .loaded #preloader {
             opacity: 0;
             transform: scale(1.05);
@@ -98,12 +75,9 @@
             display: none;
             background: #000;
             overflow-x: hidden;
-            font-family: Arial, sans-serif;
-            color: #fff;
             padding-top: 10px;
             min-height: 100vh;
         }
-
         .tv-view .embed-responsive {
             border: 1px solid #222;
             border-radius: 8px;
@@ -126,16 +100,6 @@
             background: #000;
         }
 
-        video::-webkit-media-controls { display: flex !important; }
-        video::-webkit-media-controls-panel { background: linear-gradient(transparent, rgba(0,0,0,0.7)); }
-        video::-webkit-media-controls-play-button { display: block !important; }
-        video::-webkit-media-controls-volume-slider { display: block !important; }
-        video::-webkit-media-controls-mute-button { display: block !important; }
-        video::-webkit-media-controls-timeline { display: block !important; }
-        video::-webkit-media-controls-current-time-display { display: block !important; }
-        video::-webkit-media-controls-time-remaining-display { display: block !important; }
-        video::-webkit-media-controls-fullscreen-button { display: block !important; }
-
         /* ===== লোডিং ওভারলে ===== */
         #rasLoadingOverlay {
             position: absolute;
@@ -146,7 +110,7 @@
             justify-content: center;
             align-items: center;
             z-index: 999;
-            transition: opacity 0.6s ease, visibility 0.6s ease;
+            transition: opacity 0.4s ease, visibility 0.4s ease;
             border-radius: inherit;
             pointer-events: none;
         }
@@ -208,6 +172,58 @@
             50% { opacity: 1; }
         }
 
+        /* ===== CHANNEL BUTTONS (Android TV friendly) ===== */
+        .channel-bar {
+            margin: 18px 0 8px 0;
+            padding: 0 6px;
+        }
+        .channel-bar .btn-group {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+        }
+        .channel-btn {
+            flex: 1 0 calc(33.333% - 10px);
+            max-width: calc(33.333% - 10px);
+            min-width: 80px;
+            padding: 12px 6px;
+            border-radius: 30px;
+            font-size: 15px;
+            font-weight: 700;
+            text-align: center;
+            background: #1a1a2e;
+            color: #fff;
+            border: 2px solid #444;
+            transition: all 0.2s ease;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.6);
+            cursor: pointer;
+            white-space: nowrap;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            background: linear-gradient(145deg, #1e1e2f, #12121e);
+        }
+        .channel-btn.active {
+            border-color: #ff9100;
+            background: linear-gradient(145deg, #ff9100, #ff6a00);
+            color: #000;
+            box-shadow: 0 0 20px rgba(255,145,0,0.5);
+            transform: scale(1.02);
+        }
+        .channel-btn:focus {
+            outline: 3px solid #ffd700;
+            outline-offset: 3px;
+        }
+        .channel-btn:hover {
+            transform: scale(1.04);
+            border-color: #ffd700;
+        }
+        /* android TV remote focus */
+        .channel-btn:focus-visible {
+            outline: 3px solid #ffd700;
+            outline-offset: 4px;
+        }
+
         /* ===== ফুটার ===== */
         .footer-premium {
             background: #0a0a0a;
@@ -240,8 +256,6 @@
             background-clip: text;
             font-weight: 700;
         }
-
-        /* ===== Others Platform Box ===== */
         .others-platform-box {
             display: inline-block;
             border: 1px solid #2a2a2a;
@@ -297,7 +311,6 @@
             border-color: #00ff88;
             color: #000;
         }
-
         .footer-premium .copyright {
             color: #444;
             font-size: 11px;
@@ -307,11 +320,23 @@
         .footer-premium .copyright span { color: #ff9100; }
 
         @media (max-width: 600px) {
+            .channel-btn {
+                flex: 1 0 calc(50% - 10px);
+                max-width: calc(50% - 10px);
+                font-size: 13px;
+                padding: 10px 4px;
+            }
             .footer-premium .ras-brand { font-size: 22px; }
             .footer-premium .developer { font-size: 15px; }
             .others-platform-box .server-btn {
                 padding: 7px 14px;
                 font-size: 12px;
+            }
+        }
+        @media (max-width: 400px) {
+            .channel-btn {
+                flex: 1 0 calc(100% - 6px);
+                max-width: calc(100% - 6px);
             }
         }
     </style>
@@ -347,6 +372,13 @@
                     </div>
                 </div>
             </div>
+
+            <!-- ===== CHANNEL BUTTONS (Dynamic) ===== -->
+            <div class="channel-bar">
+                <div class="btn-group" id="channelButtonContainer">
+                    <!-- JS dynamically inserts buttons -->
+                </div>
+            </div>
         </div>
 
         <footer class="footer-premium">
@@ -355,7 +387,6 @@
                 <div class="developer">
                     developed by <span>SAHIBUL MUSA SIUM</span>
                 </div>
-
                 <div class="others-platform-box">
                     <div class="box-title">Others Platform</div>
                     <div class="server-buttons">
@@ -367,7 +398,6 @@
                         </a>
                     </div>
                 </div>
-
                 <div class="copyright">
                     <span>RAS LIVE TV  | .SIUM GROUP</span><br> © 2026 All Rights Reserved
                 </div>
@@ -415,36 +445,85 @@
                 document.body.classList.add('loaded');
                 document.getElementById('preloader').style.display = 'none';
                 document.getElementById('main-content').style.display = 'block';
-                initPlayer();
+                initPlayerAndUI();
             }, 7000);
 
-            // ===== PLAYER =====
-            function initPlayer() {
-                const STREAMS = [
-                    'https://d1211whpimeups.cloudfront.net/smil:rtbgo/chunklist_b4096000_slENG.m3u8',
-                    'https://d1211whpimeups.cloudfront.net/smil:rtbgo/chunklist.m3u8',
-                    'https://d1211whpimeups.cloudfront.net/smil:rtbgo/chunklist_b2196000_sleng.m3u8',
-              ];
+            // ===== PLAYER + CHANNEL UI =====
+            function initPlayerAndUI() {
+                // ---- CHANNEL LIST (add your streams here) ----
+                const CHANNELS = [
+                    { name: 'Channel 1', url: 'https://d1211whpimeups.cloudfront.net/smil:rtbgo/chunklist_b4096000_slENG.m3u8' },
+                    { name: 'Channel 2', url: 'https://d1211whpimeups.cloudfront.net/smil:rtbgo/chunklist.m3u8' },
+                    { name: 'Channel 3', url: 'https://d1211whpimeups.cloudfront.net/smil:rtbgo/chunklist_b2196000_sleng.m3u8' },
+                    // add more as needed, they will appear as buttons
+                ];
 
-                const BUFFER_TIMEOUT = 15000;
+                // ---- DOM refs ----
                 const video = document.getElementById('playerFrame');
                 const overlay = document.getElementById('rasLoadingOverlay');
+                const container = document.getElementById('channelButtonContainer');
 
-                let currentStreamIndex = 0;
+                let currentChannelIndex = 0;
                 let hls = null;
+                let isLoading = false;
                 let isPlaying = false;
                 let bufferTimer = null;
-                let isBuffering = false;
-                let isLoading = false;
 
+                // ---- Build channel buttons ----
+                function buildButtons() {
+                    container.innerHTML = '';
+                    CHANNELS.forEach((ch, idx) => {
+                        const btn = document.createElement('button');
+                        btn.className = 'channel-btn' + (idx === currentChannelIndex ? ' active' : '');
+                        btn.textContent = ch.name;
+                        btn.setAttribute('data-index', idx);
+                        btn.addEventListener('click', function(e) {
+                            const index = parseInt(this.getAttribute('data-index'));
+                            if (index !== currentChannelIndex) {
+                                switchToChannel(index);
+                            }
+                        });
+                        // For Android TV remote focus
+                        btn.setAttribute('tabindex', '0');
+                        container.appendChild(btn);
+                    });
+                }
+
+                // ---- Switch channel ----
+                function switchToChannel(index) {
+                    if (isLoading) return;
+                    if (index === currentChannelIndex && hls && isPlaying) {
+                        // already playing this channel
+                        return;
+                    }
+                    currentChannelIndex = index;
+                    updateActiveButton();
+                    loadStream(index);
+                }
+
+                function updateActiveButton() {
+                    const btns = container.querySelectorAll('.channel-btn');
+                    btns.forEach((btn, i) => {
+                        btn.classList.toggle('active', i === currentChannelIndex);
+                    });
+                }
+
+                // ---- Load stream (no auto-switch, just try once) ----
                 function loadStream(index) {
                     if (isLoading) return;
                     isLoading = true;
                     if (overlay) overlay.classList.remove('hidden');
-                    if (hls) { hls.destroy(); hls = null; }
+                    clearBufferTimer();
 
-                    const url = STREAMS[index];
+                    // Destroy old hls
+                    if (hls) {
+                        hls.destroy();
+                        hls = null;
+                    }
 
+                    const url = CHANNELS[index].url;
+
+                    // For Android TV, we use HLS.js with optimized settings
                     if (Hls.isSupported()) {
                         hls = new Hls({
                             enableWorker: true,
@@ -455,6 +534,7 @@
                             abrMaxWithRealBitrate: true,
                             maxBufferLength: 30,
                             maxMaxBufferLength: 60,
+                            startPosition: -1, // live
                         });
                         hls.loadSource(url);
                         hls.attachMedia(video);
@@ -465,39 +545,74 @@
                                 isLoading = false;
                                 if (overlay) overlay.classList.add('hidden');
                                 clearBufferTimer();
-                            }).catch(() => {
+                            }).catch((e) => {
+                                // play() failed, but we still hide overlay after a moment
                                 isLoading = false;
                                 if (overlay) overlay.classList.add('hidden');
+                                console.warn('Play autoplay failed:', e);
                             });
                         });
 
                         hls.on(Hls.Events.ERROR, function(event, data) {
                             if (data.fatal) {
-                                setTimeout(() => {
-                                    if (overlay) overlay.classList.add('hidden');
-                                    isLoading = false;
-                                    switchStream();
-                                }, 5000);
+                                // fatal error: we do NOT auto-switch, just show error and let user retry
+                                isLoading = false;
+                                if (overlay) overlay.classList.add('hidden');
+                                console.error('HLS fatal error:', data);
                             }
                         });
 
-                        video.addEventListener('loadeddata', () => { if (overlay) overlay.classList.add('hidden'); isLoading = false; clearBufferTimer(); });
-                        video.addEventListener('canplay', () => { if (overlay) overlay.classList.add('hidden'); isLoading = false; clearBufferTimer(); if (isBuffering) { isBuffering = false; } });
-                        video.addEventListener('playing', () => { if (overlay) overlay.classList.add('hidden'); isPlaying = true; isLoading = false; clearBufferTimer(); if (isBuffering) { isBuffering = false; } });
-
-                        video.addEventListener('waiting', () => {
-                            if (isBuffering) return;
-                            isBuffering = true;
-                            if (overlay) overlay.classList.remove('hidden');
+                        // Additional events to hide overlay
+                        video.addEventListener('loadeddata', function onLoaded() {
+                            if (overlay) overlay.classList.add('hidden');
+                            isLoading = false;
                             clearBufferTimer();
+                            video.removeEventListener('loadeddata', onLoaded);
+                        });
+                        video.addEventListener('canplay', function onCan() {
+                            if (overlay) overlay.classList.add('hidden');
+                            isLoading = false;
+                            clearBufferTimer();
+                            video.removeEventListener('canplay', onCan);
+                        });
+                        video.addEventListener('playing', function onPlay() {
+                            if (overlay) overlay.classList.add('hidden');
+                            isPlaying = true;
+                            isLoading = false;
+                            clearBufferTimer();
+                            video.removeEventListener('playing', onPlay);
+                        });
+
+                        // Buffering: show overlay, but do NOT auto-switch
+                        video.addEventListener('waiting', function onWait() {
+                            if (isLoading) return;
+                            if (!overlay.classList.contains('hidden')) return;
+                            // show overlay during buffering
+                            overlay.classList.remove('hidden');
+                            clearBufferTimer();
+                            // Set a long buffer timeout (just to hide overlay if stuck)
                             bufferTimer = setTimeout(() => {
-                                isBuffering = false;
                                 if (overlay) overlay.classList.add('hidden');
-                                switchStream();
-                            }, BUFFER_TIMEOUT);
+                                clearBufferTimer();
+                            }, 20000); // 20 sec
+                        });
+
+                        // When data flows again, hide overlay
+                        video.addEventListener('progress', function onProg() {
+                            if (overlay && !overlay.classList.contains('hidden')) {
+                                // if we have buffered enough, hide
+                                if (video.buffered.length > 0) {
+                                    const bufferedEnd = video.buffered.end(video.buffered.length - 1);
+                                    if (bufferedEnd - video.currentTime > 2) {
+                                        overlay.classList.add('hidden');
+                                        clearBufferTimer();
+                                    }
+                                }
+                            }
                         });
 
                     } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+                        // Native HLS (Safari / some Android TV)
                         video.src = url;
                         video.load();
                         video.play().then(() => {
@@ -516,31 +631,37 @@
                     }
                 }
 
-                function switchStream() {
-                    clearBufferTimer();
-                    isBuffering = false;
-                    isLoading = false;
-                    currentStreamIndex = (currentStreamIndex + 1) % STREAMS.length;
-                    video.pause();
-                    video.removeAttribute('src');
-                    video.load();
-                    setTimeout(() => loadStream(currentStreamIndex), 1000);
-                }
-
                 function clearBufferTimer() {
-                    if (bufferTimer) { clearTimeout(bufferTimer); bufferTimer = null; }
+                    if (bufferTimer) {
+                        clearTimeout(bufferTimer);
+                        bufferTimer = null;
+                    }
                 }
 
-                video.muted = false;
-                video.volume = 1;
+                // ---- Init ----
+                buildButtons();
+                // load default first channel
                 loadStream(0);
 
-                video.addEventListener('ended', switchStream);
-                video.addEventListener('error', () => { if (!isLoading) switchStream(); });
+                // ---- No auto-switch on error/end ----
+                video.addEventListener('error', function(e) {
+                    // just log, do not switch
+                    console.warn('Video error:', e);
+                    if (overlay) overlay.classList.add('hidden');
+                    isLoading = false;
+                });
+                video.addEventListener('ended', function() {
+                    // do nothing, no auto-switch
+                });
+
+                // Double-click fullscreen (Android TV remote may not have double-click)
                 video.addEventListener('dblclick', () => {
                     if (!document.fullscreenElement) video.requestFullscreen().catch(() => {});
                     else document.exitFullscreen().catch(() => {});
                 });
+
+                // Expose to window for debugging
+                window.__player = { video, hls, switchToChannel, CHANNELS };
             }
         })();
     </script>
