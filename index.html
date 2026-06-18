@@ -6,6 +6,10 @@
     <title>RAS LIVE TV — Android TV & Mobile</title>
     <link rel="shortcut icon" type="image/x-icon" href="https://i.postimg.cc/mD1VCt2C/RS-Live.png">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+
+    <!-- hls.js CDN (শুধু মোবাইল মোডে ব্যবহার হবে) -->
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+
     <style>
         /* ---------- RESET & BASE ---------- */
         * {
@@ -193,9 +197,93 @@
             50% { opacity: 1; }
         }
 
-        /* ===== CHANNEL TABLE (new layout) ===== */
+        /* ===== সুইচ কন্টেইনার (ভিডিও ফ্রেমের উপরে) ===== */
+        #modeSwitchContainer {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 8px 10px 6px 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 2px;
+            background: transparent;
+            color: #fff;
+            user-select: none;
+        }
+        #modeSwitchContainer .switch-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        #modeSwitchContainer .mode-text {
+            font-size: 10px;
+            opacity: 0.85;
+            white-space: nowrap;
+            color: #ddd;
+            font-weight: 400;
+        }
+        #modeSwitchContainer .tv-label,
+        #modeSwitchContainer .phone-label {
+            font-size: 9px;
+            opacity: 0.7;
+            font-weight: 600;
+        }
+        #modeSwitchContainer .tv-label { margin-right: 2px; }
+        #modeSwitchContainer .phone-label { margin-left: 2px; }
+
+        /* ===== হেল্প টেক্সট (নিচে ছোট ফন্টে) ===== */
+        #modeHelpText {
+            font-size: 8px;
+            opacity: 0.5;
+            color: #aaa;
+            letter-spacing: 0.3px;
+            margin-top: 1px;
+            text-align: right;
+            width: 100%;
+        }
+
+        /* ----- টগল সুইচ ----- */
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 34px;
+            height: 18px;
+            flex-shrink: 0;
+        }
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-color: #555;
+            transition: .3s;
+            border-radius: 18px;
+        }
+        .slider:before {
+            content: "";
+            position: absolute;
+            height: 12px;
+            width: 12px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: .3s;
+            border-radius: 50%;
+        }
+        input:checked + .slider {
+            background-color: #ff9100;
+        }
+        input:checked + .slider:before {
+            transform: translateX(16px);
+        }
+
+        /* ===== CHANNEL TABLE ===== */
         .channel-table {
-            margin: 18px 6px 8px 6px;
+            margin: 12px 6px 8px 6px;
             max-width: 800px;
             margin-left: auto;
             margin-right: auto;
@@ -258,11 +346,6 @@
             transform: scale(1.04);
             border-color: #ffd700;
         }
-        .stream-btn:focus-visible {
-            outline: 3px solid #ffd700;
-            outline-offset: 4px;
-        }
-
         @media (max-width: 480px) {
             .stream-btn {
                 font-size: 13px;
@@ -393,7 +476,6 @@
             max-width: 100vw !important;
             max-height: 100vh !important;
         }
-        /* Fullscreen overlay also fills properly */
         .tv-view .embed-responsive:-webkit-full-screen #rasLoadingOverlay,
         .tv-view .embed-responsive:fullscreen #rasLoadingOverlay {
             width: 100% !important;
@@ -416,8 +498,26 @@
         <div class="container tv-area">
             <div class="row">
                 <div class="col-xs-12 tv-view">
+
+                    <!-- ===== মোড সুইচ (ফ্রেমের উপরে, বাইরে) ===== -->
+                    <div id="modeSwitchContainer">
+                        <div class="switch-row">
+                            <span id="modeStatusText" class="mode-text">ধরে নিচ্ছি আপনি টিভি তে ভিডিও চালাচ্ছেন</span>
+                            <span class="tv-label">TV</span>
+                            <label class="switch">
+                                <input type="checkbox" id="modeToggle">
+                                <span class="slider round"></span>
+                            </label>
+                            <span class="phone-label">PHONE</span>
+                        </div>
+                        <div id="modeHelpText">দ্রুত ভিডিও লোড করতে ডিভাইস অনুযায়ী উপরের বাটন সিলেক্ট করুন</div>
+                    </div>
+
+                    <!-- ভিডিও ফ্রেম -->
                     <div class="embed-responsive embed-responsive-16by9">
                         <video id="playerFrame" playsinline controls preload="auto"></video>
+
+                        <!-- লোডিং ওভারলে -->
                         <div id="rasLoadingOverlay">
                             <div class="ras-loader">
                                 <div class="ras-logo">
@@ -430,10 +530,11 @@
                             </div>
                         </div>
                     </div>
+
                 </div>
             </div>
 
-            <!-- ===== CHANNEL TABLE (Dynamic) ===== -->
+            <!-- ===== CHANNEL TABLE ===== -->
             <div class="channel-table" id="channelTableContainer">
                 <!-- JS dynamically inserts rows -->
             </div>
@@ -463,178 +564,195 @@
         </footer>
     </div>
 
-    <!-- NO HLS.js – using native video playback -->
-
     <script>
         (function() {
-            // ===== PRELOADER =====
-            setTimeout(() => {
-                document.querySelectorAll('.line').forEach(l => l.style.width = '40%');
-            }, 300);
+            // ===== গ্লোবাল ভেরিয়েবল =====
+            let hlsInstance = null;
+            let allStreams = [];
+            let currentStreamIndex = 0;
+            let isLoading = false;
+            let isPlaying = false;
+            let bufferTimer = null;
 
-            setTimeout(() => {
-                const brand = document.getElementById('brand');
-                const tagline = document.getElementById('tagline');
-                brand.style.transition = 'opacity 0.8s ease';
-                tagline.style.transition = 'opacity 0.8s ease';
-                brand.style.opacity = 0;
-                tagline.style.opacity = 0;
-            }, 2200);
+            const video = document.getElementById('playerFrame');
+            const overlay = document.getElementById('rasLoadingOverlay');
+            const container = document.getElementById('channelTableContainer');
+            const modeToggle = document.getElementById('modeToggle');
+            const modeStatusText = document.getElementById('modeStatusText');
 
-            setTimeout(() => {
-                const brand = document.getElementById('brand');
-                const tagline = document.getElementById('tagline');
-                brand.innerHTML = 'RAS TV';
-                tagline.innerHTML = 'Powered by .SIUM GROUP';
-                brand.style.opacity = 0;
-                brand.style.transform = 'scale(0.8)';
-                tagline.style.opacity = 0;
-                tagline.style.transform = 'translateY(20px)';
-                brand.style.animation = 'none';
-                tagline.style.animation = 'none';
-                brand.offsetHeight;
-                tagline.offsetHeight;
-                brand.style.animation = 'zoomIn 1.2s ease-out forwards';
-                tagline.style.animation = 'fadeUp 1.2s ease-out forwards 0.4s';
-            }, 3200);
+            // ===== মোড ফাংশন =====
+            function getMode() {
+                return localStorage.getItem('rasPlayerMode') || 'tv';
+            }
 
-            setTimeout(() => {
-                document.body.classList.add('loaded');
-                document.getElementById('preloader').style.display = 'none';
-                document.getElementById('main-content').style.display = 'block';
-                initPlayerAndUI();
-            }, 7000);
+            function setMode(mode) {
+                localStorage.setItem('rasPlayerMode', mode);
+                updateModeUI(mode);
+            }
 
-            // ===== PLAYER + CHANNEL UI (Native only) =====
-            function initPlayerAndUI() {
-                // ---- CHANNEL LIST (add your streams here) ----
-                const CHANNELS = [{
-                    name: 'GO LIVE',
-                    streams: [
-                        { label: '1080p', url: 'https://d1211whpimeups.cloudfront.net/smil:rtbgo/chunklist_b4096000_slENG.m3u8' },
-                        { label: 'AUTO', url: 'https://d1211whpimeups.cloudfront.net/smil:rtbgo/chunklist.m3u8' },
-                        { label: '720p', url: 'https://d1211whpimeups.cloudfront.net/smil:rtbgo/chunklist_b2196000_sleng.m3u8' }
-                    ]
-                }, {
-                    name: 'FOX TV',
-                    streams: [
-                        { label: '720p', url: 'https://d1jzu95oc8fgt3.cloudfront.net/FOX_Sports720p.m3u8' }
-                    ]
-                }];
+            function updateModeUI(mode) {
+                const isPhone = (mode === 'phone');
+                modeToggle.checked = isPhone;
+                if (isPhone) {
+                    modeStatusText.textContent = 'ধরে নিচ্ছি আপনি মোবাইলে ভিডিও চালাচ্ছেন';
+                } else {
+                    modeStatusText.textContent = 'ধরে নিচ্ছি আপনি টিভি তে ভিডিও চালাচ্ছেন';
+                }
+            }
 
-                // ---- DOM refs ----
-                const video = document.getElementById('playerFrame');
-                const overlay = document.getElementById('rasLoadingOverlay');
-                const container = document.getElementById('channelTableContainer');
+            // ===== চ্যানেল লিস্ট (আপনার পছন্দমতো পরিবর্তন করুন) =====
+            const CHANNELS = [{
+                name: 'GO LIVE',
+                streams: [
+                    { label: '1080p', url: 'https://d1211whpimeups.cloudfront.net/smil:rtbgo/chunklist_b4096000_slENG.m3u8' },
+                    { label: 'AUTO', url: 'https://d1211whpimeups.cloudfront.net/smil:rtbgo/chunklist.m3u8' },
+                    { label: '720p', url: 'https://d1211whpimeups.cloudfront.net/smil:rtbgo/chunklist_b2196000_sleng.m3u8' }
+                ]
+            }, {
+                name: 'FOX TV',
+                streams: [
+                    
+                ] 
+                
+            }];
 
-                // ---- State ----
-                let currentStreamIndex = 0; // flat index into all streams (channel + quality)
-                let allStreams = [];
-                CHANNELS.forEach(ch => {
-                    ch.streams.forEach(s => {
-                        allStreams.push({
-                            channelName: ch.name,
-                            label: s.label,
-                            url: s.url
-                        });
+            // ===== allStreams ফ্ল্যাট অ্যারেতে রূপান্তর =====
+            CHANNELS.forEach(ch => {
+                ch.streams.forEach(s => {
+                    allStreams.push({
+                        channelName: ch.name,
+                        label: s.label,
+                        url: s.url
                     });
                 });
+            });
 
-                let isLoading = false;
-                let isPlaying = false;
-                let bufferTimer = null;
+            // ===== বাফার টাইমার ক্লিয়ার =====
+            function clearBufferTimer() {
+                if (bufferTimer) {
+                    clearTimeout(bufferTimer);
+                    bufferTimer = null;
+                }
+            }
 
-                // ---- Build channel table ----
-                function buildTable() {
-                    container.innerHTML = '';
-                    CHANNELS.forEach((ch, chIdx) => {
-                        const row = document.createElement('div');
-                        row.className = 'channel-row';
+            // ===== স্ট্রিম লোড করা =====
+            function loadStream(index) {
+                if (isLoading) return;
+                isLoading = true;
+                if (overlay) overlay.classList.remove('hidden');
+                clearBufferTimer();
 
-                        // Channel name
-                        const nameDiv = document.createElement('div');
-                        nameDiv.className = 'channel-name';
-                        nameDiv.textContent = ch.name;
-                        row.appendChild(nameDiv);
+                const stream = allStreams[index];
+                if (!stream) {
+                    isLoading = false;
+                    if (overlay) overlay.classList.add('hidden');
+                    return;
+                }
 
-                        // Stream buttons container
-                        const btnContainer = document.createElement('div');
-                        btnContainer.className = 'stream-buttons';
+                const url = stream.url;
+                const mode = getMode();
 
-                        ch.streams.forEach((stream, sIdx) => {
-                            const btn = document.createElement('button');
-                            // Determine if this is the current active stream
-                            const globalIdx = allStreams.findIndex(item =>
-                                item.channelName === ch.name && item.label === stream.label && item.url === stream.url
-                            );
-                            btn.className = 'stream-btn' + (globalIdx === currentStreamIndex ? ' active' : '');
-                            btn.textContent = stream.label;
-                            btn.setAttribute('data-global-index', globalIdx);
-                            btn.addEventListener('click', function(e) {
-                                const idx = parseInt(this.getAttribute('data-global-index'));
-                                if (idx !== currentStreamIndex) {
-                                    switchToStream(idx);
-                                }
-                            });
-                            btn.setAttribute('tabindex', '0');
-                            btnContainer.appendChild(btn);
+                // বর্তমান প্লেব্যাক বন্ধ
+                video.pause();
+
+                // hls ইনস্ট্যান্স থাকলে ধ্বংস করি
+                if (hlsInstance) {
+                    hlsInstance.destroy();
+                    hlsInstance = null;
+                }
+
+                // সোর্স রিমুভ
+                video.removeAttribute('src');
+                video.load();
+
+                // ===== PHONE মোড (hls.js) =====
+                if (mode === 'phone') {
+                    if (typeof Hls !== 'undefined' && Hls.isSupported()) {
+                        hlsInstance = new Hls({
+                            enableWorker: true,
+                            lowLatencyMode: true,
+                        });
+                        hlsInstance.attachMedia(video);
+
+                        hlsInstance.on(Hls.Events.MEDIA_ATTACHED, () => {
+                            hlsInstance.loadSource(url);
                         });
 
-                        row.appendChild(btnContainer);
-                        container.appendChild(row);
-                    });
-                }
+                        hlsInstance.on(Hls.Events.MANIFEST_PARSED, () => {
+                            video.play()
+                                .then(() => {
+                                    isPlaying = true;
+                                    isLoading = false;
+                                    if (overlay) overlay.classList.add('hidden');
+                                    clearBufferTimer();
+                                })
+                                .catch(e => {
+                                    isPlaying = false;
+                                    isLoading = false;
+                                    if (overlay) overlay.classList.add('hidden');
+                                    clearBufferTimer();
+                                    console.warn('hls play error:', e);
+                                });
+                        });
 
-                function updateActiveButton() {
-                    const allBtns = container.querySelectorAll('.stream-btn');
-                    allBtns.forEach(btn => {
-                        const idx = parseInt(btn.getAttribute('data-global-index'));
-                        btn.classList.toggle('active', idx === currentStreamIndex);
-                    });
-                }
-
-                // ---- Switch stream ----
-                function switchToStream(index) {
-                    if (isLoading) return;
-                    if (index === currentStreamIndex && isPlaying) return;
-                    currentStreamIndex = index;
-                    updateActiveButton();
-                    loadStream(index);
-                }
-
-                // ---- Load stream ----
-                function loadStream(index) {
-                    if (isLoading) return;
-                    isLoading = true;
-                    if (overlay) overlay.classList.remove('hidden');
-                    clearBufferTimer();
-
-                    const stream = allStreams[index];
-                    if (!stream) return;
-
-                    const url = stream.url;
-
-                    video.pause();
-                    video.removeAttribute('src');
-                    video.load();
-
+                        hlsInstance.on(Hls.Events.ERROR, (event, data) => {
+                            if (data.fatal) {
+                                // ক্রিটিকাল এরর হলে hls রিস্টার্ট বা নেটিভে ফলব্যাক
+                                console.warn('hls fatal error, trying native fallback');
+                                if (hlsInstance) {
+                                    hlsInstance.destroy();
+                                    hlsInstance = null;
+                                }
+                                // নেটিভে ফলব্যাক
+                                video.src = url;
+                                video.load();
+                                video.play().then(() => {
+                                    isPlaying = true;
+                                    isLoading = false;
+                                    if (overlay) overlay.classList.add('hidden');
+                                }).catch(() => {
+                                    isPlaying = false;
+                                    isLoading = false;
+                                    if (overlay) overlay.classList.add('hidden');
+                                });
+                            } else {
+                                isLoading = false;
+                                if (overlay) overlay.classList.add('hidden');
+                            }
+                        });
+                    } else {
+                        // hls.js সাপোর্ট নেই, নেটিভ ব্যবহার
+                        video.src = url;
+                        video.load();
+                        video.play().then(() => {
+                            isPlaying = true;
+                            isLoading = false;
+                            if (overlay) overlay.classList.add('hidden');
+                        }).catch(e => {
+                            isPlaying = false;
+                            isLoading = false;
+                            if (overlay) overlay.classList.add('hidden');
+                        });
+                    }
+                } else {
+                    // ===== TV মোড (native) =====
                     video.src = url;
-                    video.preload = 'auto';
                     video.load();
-
                     video.play().then(() => {
                         isPlaying = true;
                         isLoading = false;
                         if (overlay) overlay.classList.add('hidden');
                         clearBufferTimer();
-                    }).catch((e) => {
+                    }).catch(e => {
                         isPlaying = false;
                         isLoading = false;
                         if (overlay) overlay.classList.add('hidden');
-                        console.warn('Play failed:', e);
+                        clearBufferTimer();
                     });
+                }
 
-                    // Event listeners
+                // ===== সাধারণ ইভেন্ট লিসেনার (বাফারিং, ইত্যাদি) =====
+                function attachCommonListeners() {
                     video.addEventListener('loadeddata', function onLoaded() {
                         if (overlay) overlay.classList.add('hidden');
                         isLoading = false;
@@ -686,35 +804,139 @@
                         video.removeEventListener('error', onErr);
                         console.warn('Video error:', video.error);
                     });
+                }
+                attachCommonListeners();
+            }
 
-                    // No auto-switch on ended
-                    video.addEventListener('ended', function onEnd() {
-                        // do nothing
+            // ===== স্ট্রিম সুইচ (একই বাটনে ক্লিক করলে রিলোড) =====
+            function switchToStream(index) {
+                if (isLoading) return;
+                // যদি একই ইনডেক্স হয়, তবে রিলোড করব (পুনরায় লোড)
+                if (index === currentStreamIndex) {
+                    loadStream(index);
+                    return;
+                }
+                currentStreamIndex = index;
+                updateActiveButton();
+                loadStream(index);
+            }
+
+            // ===== অ্যাকটিভ বাটন আপডেট =====
+            function updateActiveButton() {
+                const allBtns = container.querySelectorAll('.stream-btn');
+                allBtns.forEach(btn => {
+                    const idx = parseInt(btn.getAttribute('data-global-index'));
+                    btn.classList.toggle('active', idx === currentStreamIndex);
+                });
+            }
+
+            // ===== চ্যানেল টেবিল তৈরি =====
+            function buildTable() {
+                container.innerHTML = '';
+                CHANNELS.forEach((ch, chIdx) => {
+                    const row = document.createElement('div');
+                    row.className = 'channel-row';
+
+                    const nameDiv = document.createElement('div');
+                    nameDiv.className = 'channel-name';
+                    nameDiv.textContent = ch.name;
+                    row.appendChild(nameDiv);
+
+                    const btnContainer = document.createElement('div');
+                    btnContainer.className = 'stream-buttons';
+
+                    ch.streams.forEach((stream, sIdx) => {
+                        const btn = document.createElement('button');
+                        const globalIdx = allStreams.findIndex(item =>
+                            item.channelName === ch.name && item.label === stream.label && item.url === stream.url
+                        );
+                        btn.className = 'stream-btn' + (globalIdx === currentStreamIndex ? ' active' : '');
+                        btn.textContent = stream.label;
+                        btn.setAttribute('data-global-index', globalIdx);
+                        btn.addEventListener('click', function(e) {
+                            const idx = parseInt(this.getAttribute('data-global-index'));
+                            switchToStream(idx);
+                        });
+                        btn.setAttribute('tabindex', '0');
+                        btnContainer.appendChild(btn);
                     });
-                }
 
-                function clearBufferTimer() {
-                    if (bufferTimer) {
-                        clearTimeout(bufferTimer);
-                        bufferTimer = null;
-                    }
-                }
+                    row.appendChild(btnContainer);
+                    container.appendChild(row);
+                });
+            }
 
-                // ---- Init ----
+            // ===== সুইচ ইভেন্ট =====
+            modeToggle.addEventListener('change', function(e) {
+                const mode = this.checked ? 'phone' : 'tv';
+                setMode(mode);
+                // বর্তমান স্ট্রিম পুনরায় লোড
+                if (allStreams.length) {
+                    loadStream(currentStreamIndex);
+                }
+            });
+
+            // ===== ইনিশিয়ালাইজেশন =====
+            function initPlayerAndUI() {
+                // মোড UI সেট করা
+                const initialMode = getMode();
+                updateModeUI(initialMode);
+
                 buildTable();
-                // Load first stream (index 0)
+                // প্রথম স্ট্রিম লোড (ইনডেক্স 0)
+                currentStreamIndex = 0;
                 loadStream(0);
 
-                // Double-click fullscreen
+                // ডাবল ক্লিক ফুলস্ক্রিন
                 video.addEventListener('dblclick', () => {
                     if (!document.fullscreenElement) video.requestFullscreen().catch(() => {});
                     else document.exitFullscreen().catch(() => {});
                 });
 
-                window.__player = { video, switchToStream, allStreams };
+                // ডিবাগিং এর জন্য গ্লোবাল (ঐচ্ছিক)
+                window.__player = { video, switchToStream, allStreams, hls: hlsInstance };
             }
+
+            // ===== PRELOADER টাইমিং =====
+            setTimeout(() => {
+                document.querySelectorAll('.line').forEach(l => l.style.width = '40%');
+            }, 300);
+
+            setTimeout(() => {
+                const brand = document.getElementById('brand');
+                const tagline = document.getElementById('tagline');
+                brand.style.transition = 'opacity 0.8s ease';
+                tagline.style.transition = 'opacity 0.8s ease';
+                brand.style.opacity = 0;
+                tagline.style.opacity = 0;
+            }, 2200);
+
+            setTimeout(() => {
+                const brand = document.getElementById('brand');
+                const tagline = document.getElementById('tagline');
+                brand.innerHTML = 'RAS TV';
+                tagline.innerHTML = 'Powered by .SIUM GROUP';
+                brand.style.opacity = 0;
+                brand.style.transform = 'scale(0.8)';
+                tagline.style.opacity = 0;
+                tagline.style.transform = 'translateY(20px)';
+                brand.style.animation = 'none';
+                tagline.style.animation = 'none';
+                brand.offsetHeight;
+                tagline.offsetHeight;
+                brand.style.animation = 'zoomIn 1.2s ease-out forwards';
+                tagline.style.animation = 'fadeUp 1.2s ease-out forwards 0.4s';
+            }, 3200);
+
+            setTimeout(() => {
+                document.body.classList.add('loaded');
+                document.getElementById('preloader').style.display = 'none';
+                document.getElementById('main-content').style.display = 'block';
+                initPlayerAndUI();
+            }, 7000);
+
         })();
     </script>
 
 </body>
-</html>
+    </html>
