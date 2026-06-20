@@ -8,7 +8,8 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
 
     <!-- hls.js CDN (শুধু মোবাইল মোডে ব্যবহার হবে) -->
-    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest">
+    </script>
 
     <style>
         /* ---------- RESET & BASE ---------- */
@@ -24,6 +25,7 @@
             overflow-x: hidden;
             -webkit-overflow-scrolling: touch;
         }
+
         /* ---------- PRELOADER ---------- */
         #preloader {
             position: fixed;
@@ -66,10 +68,26 @@
             height: 1px;
             transition: width 1.2s ease-in-out;
         }
-        .line.left { left: 0; top: 50%; }
-        .line.right { right: 0; top: 50%; }
-        @keyframes zoomIn { to { opacity: 1; transform: scale(1); } }
-        @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
+        .line.left {
+            left: 0;
+            top: 50%;
+        }
+        .line.right {
+            right: 0;
+            top: 50%;
+        }
+        @keyframes zoomIn {
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+        @keyframes fadeUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
         .loaded #preloader {
             opacity: 0;
             transform: scale(1.05);
@@ -137,7 +155,7 @@
             opacity: 0;
             visibility: hidden;
         }
-        #rasLoadingOverlay .ras-loader { 
+        #rasLoadingOverlay .ras-loader {
             text-align: center;
             padding: 20px;
         }
@@ -149,19 +167,33 @@
             margin-bottom: 10px;
             animation: rasGlow 1.5s ease-in-out infinite alternate;
         }
-        #rasLoadingOverlay .ras-logo .ras { color: #fff; }
-        #rasLoadingOverlay .ras-logo .live { color: #ff9100; text-shadow: 0 0 20px rgba(255,145,0,0.5); }
-        #rasLoadingOverlay .ras-logo .tv { color: #00d2ff; text-shadow: 0 0 20px rgba(0,210,255,0.5); }
+        #rasLoadingOverlay .ras-logo .ras {
+            color: #fff;
+        }
+        #rasLoadingOverlay .ras-logo .live {
+            color: #ff9100;
+            text-shadow: 0 0 20px rgba(255, 145, 0, 0.5);
+        }
+        #rasLoadingOverlay .ras-logo .tv {
+            color: #00d2ff;
+            text-shadow: 0 0 20px rgba(0, 210, 255, 0.5);
+        }
         @keyframes rasGlow {
-            0% { transform: scale(1); opacity: 0.8; }
-            100% { transform: scale(1.08); opacity: 1; }
+            0% {
+                transform: scale(1);
+                opacity: 0.8;
+            }
+            100% {
+                transform: scale(1.08);
+                opacity: 1;
+            }
         }
         #rasLoadingOverlay .ras-spinner {
             width: clamp(40px, 6vw, 70px);
             height: clamp(40px, 6vw, 70px);
             margin: 10px auto;
             position: relative;
-            animation: rasSpin 1.2s cubic-bezier(0.5,0,0.5,1) infinite;
+            animation: rasSpin 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
         }
         #rasLoadingOverlay .ras-spinner::before,
         #rasLoadingOverlay .ras-spinner::after {
@@ -170,31 +202,49 @@
             border-radius: 50%;
         }
         #rasLoadingOverlay .ras-spinner::before {
-            top: 0; left: 0; width: 100%; height: 100%;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
             border: 4px solid transparent;
             border-top-color: #ff9100;
             border-bottom-color: #00d2ff;
-            animation: rasSpin 1.2s cubic-bezier(0.5,0,0.5,1) infinite;
+            animation: rasSpin 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
         }
         #rasLoadingOverlay .ras-spinner::after {
-            top: 12%; left: 12%; width: 76%; height: 76%;
+            top: 12%;
+            left: 12%;
+            width: 76%;
+            height: 76%;
             border: 4px solid transparent;
             border-left-color: #fff;
             border-right-color: #ff9100;
-            animation: rasSpin 0.8s cubic-bezier(0.5,0,0.5,1) infinite reverse;
+            animation: rasSpin 0.8s cubic-bezier(0.5, 0, 0.5, 1) infinite reverse;
         }
-        @keyframes rasSpin { to { transform: rotate(360deg); } }
+        @keyframes rasSpin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
         #rasLoadingOverlay .ras-status {
-            color: #aaa; 
+            color: #aaa;
             font-size: clamp(12px, 1.6vw, 16px);
             font-weight: 300;
             margin-top: 10px;
             animation: rasPulse 1.5s ease-in-out infinite;
         }
-        #rasLoadingOverlay .ras-status span { color: #ff9100; font-weight: bold; }
+        #rasLoadingOverlay .ras-status span {
+            color: #ff9100;
+            font-weight: bold;
+        }
         @keyframes rasPulse {
-            0%, 100% { opacity: 0.5; }
-            50% { opacity: 1; }
+            0%,
+            100% {
+                opacity: 0.5;
+            }
+            50% {
+                opacity: 1;
+            }
         }
 
         /* ===== সুইচ কন্টেইনার (ভিডিও ফ্রেমের উপরে) ===== */
@@ -228,8 +278,12 @@
             opacity: 0.7;
             font-weight: 600;
         }
-        #modeSwitchContainer .tv-label { margin-right: 2px; }
-        #modeSwitchContainer .phone-label { margin-left: 2px; }
+        #modeSwitchContainer .tv-label {
+            margin-right: 2px;
+        }
+        #modeSwitchContainer .phone-label {
+            margin-left: 2px;
+        }
 
         /* ===== হেল্প টেক্সট (নিচে ছোট ফন্টে) ===== */
         #modeHelpText {
@@ -258,7 +312,10 @@
         .slider {
             position: absolute;
             cursor: pointer;
-            top: 0; left: 0; right: 0; bottom: 0;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
             background-color: #555;
             transition: .3s;
             border-radius: 18px;
@@ -274,93 +331,159 @@
             transition: .3s;
             border-radius: 50%;
         }
-        input:checked + .slider {
+        input:checked+.slider {
             background-color: #ff9100;
         }
-        input:checked + .slider:before {
+        input:checked+.slider:before {
             transform: translateX(16px);
         }
 
-        /* ===== CHANNEL TABLE ===== */
+        /* ===== CHANNEL TABLE - নতুন ডিজাইন ===== */
         .channel-table {
             margin: 12px 6px 8px 6px;
             max-width: 800px;
             margin-left: auto;
             margin-right: auto;
-            padding: 0 10px;
+            padding: 0 6px;
         }
-        .channel-row {
-            background: #0e0e0e;
-            border-radius: 12px;
-            padding: 14px 12px 16px 12px;
-            margin-bottom: 16px;
-            border: 1px solid #222;
+
+        /* ---- প্রতিটি বক্স ---- */
+        .channel-box {
+            background: linear-gradient(145deg, #0e0e1a, #1a1a2e);
+            border-radius: 16px;
+            padding: 18px 14px 20px 14px;
+            margin-bottom: 20px;
+            border: 1px solid #2a2a44;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.7);
+            transition: border-color 0.3s ease;
         }
-        .channel-row .channel-name {
-            font-size: 20px;
-            font-weight: 700;
-            text-align: center;
+        .channel-box:hover {
+            border-color: #ff9100;
+        }
+
+        .channel-box .box-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 14px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid rgba(255, 145, 0, 0.25);
+        }
+        .channel-box .box-title {
+            font-size: clamp(16px, 2.8vw, 22px);
+            font-weight: 800;
             letter-spacing: 1px;
             color: #ffd700;
-            text-shadow: 0 0 10px rgba(255,215,0,0.2);
-            margin-bottom: 12px;
-        }
-        .channel-row .stream-buttons {
+            text-shadow: 0 0 20px rgba(255, 215, 0, 0.15);
             display: flex;
-            flex-wrap: nowrap;
-            justify-content: center;
+            align-items: center;
             gap: 10px;
-            overflow-x: auto;
-            padding-bottom: 5px;
         }
-        .stream-btn {
-            flex: 0 0 auto;
-            padding: 10px 16px;
+        .channel-box .box-title .badge-count {
+            font-size: 11px;
+            background: rgba(255, 145, 0, 0.2);
+            color: #ff9100;
+            padding: 0 10px;
             border-radius: 30px;
-            font-size: 14px;
-            font-weight: 700;
-            text-align: center;
-            background: linear-gradient(145deg, #1e1e2f, #12121e);
-            color: #fff;
-            border: 2px solid #444;
-            transition: all 0.2s ease;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.6);
-            cursor: pointer;
-            white-space: nowrap;
+            font-weight: 600;
             letter-spacing: 0.5px;
+        }
+        .channel-box .box-icon {
+            font-size: 20px;
+            opacity: 0.6;
+        }
+
+        /* ---- বাটন গ্রিড: ৩ কলাম ---- */
+        .stream-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+        }
+
+        /* ---- প্রতিটি বাটন ---- */
+        .stream-btn {
+            background: linear-gradient(145deg, #1c1c30, #12121e);
+            border: 2px solid #333355;
+            border-radius: 12px;
+            padding: 10px 4px;
+            text-align: center;
+            font-size: clamp(11px, 1.4vw, 14px);
+            font-weight: 700;
+            color: #ddd;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.5);
+            white-space: normal;
+            word-break: break-word;
+            line-height: 1.3;
+            min-height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            letter-spacing: 0.3px;
             text-transform: uppercase;
-            min-width: 70px;
+            user-select: none;
+        }
+        .stream-btn .sub-label {
+            display: block;
+            font-size: 9px;
+            font-weight: 400;
+            opacity: 0.6;
+            margin-top: 2px;
+            text-transform: none;
+            letter-spacing: 0.2px;
         }
         .stream-btn.active {
             border-color: #ff9100;
-            background: linear-gradient(145deg, #ff9100, #ff6a00);
+            background: linear-gradient(145deg, #ff9100, #e07c00);
             color: #000;
-            box-shadow: 0 0 20px rgba(255,145,0,0.5);
-            transform: scale(1.02);
+            box-shadow: 0 0 28px rgba(255, 145, 0, 0.5);
+            transform: scale(1.03);
         }
         .stream-btn:focus {
             outline: 3px solid #ffd700;
-            outline-offset: 3px;
+            outline-offset: 2px;
         }
         .stream-btn:hover {
             transform: scale(1.04);
             border-color: #ffd700;
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.2);
         }
-        @media (max-width: 480px) {
-            .stream-btn {
-                font-size: 13px;
-                padding: 8px 14px;
-                min-width: 60px;
+        .stream-btn:active {
+            transform: scale(0.97);
+        }
+
+        /* ---- ছোট স্ক্রিনে বাটন অ্যাডজাস্ট ---- */
+        @media (max-width: 520px) {
+            .stream-grid {
+                gap: 7px;
             }
-            .channel-row .channel-name {
-                font-size: 17px;
+            .stream-btn {
+                font-size: 10px;
+                padding: 8px 3px;
+                min-height: 40px;
+                border-radius: 10px;
+            }
+            .stream-btn .sub-label {
+                font-size: 7px;
+            }
+            .channel-box {
+                padding: 14px 10px 16px 10px;
             }
         }
-        @media (max-width: 360px) {
+        @media (max-width: 380px) {
+            .stream-grid {
+                gap: 5px;
+            }
             .stream-btn {
-                font-size: 12px;
-                padding: 6px 12px;
-                min-width: 50px;
+                font-size: 9px;
+                padding: 6px 2px;
+                min-height: 34px;
+                border-radius: 8px;
+                border-width: 1.5px;
+            }
+            .stream-btn .sub-label {
+                font-size: 6px;
             }
         }
 
@@ -457,7 +580,9 @@
             margin-top: 25px;
             letter-spacing: 1px;
         }
-        .footer-premium .copyright span { color: #ff9100; }
+        .footer-premium .copyright span {
+            color: #ff9100;
+        }
 
         /* ---------- FULLSCREEN OVERRIDE ---------- */
         .tv-view .embed-responsive:-webkit-full-screen video,
@@ -534,9 +659,9 @@
                 </div>
             </div>
 
-            <!-- ===== CHANNEL TABLE ===== -->
+            <!-- ===== CHANNEL TABLE (নতুন ডিজাইন) ===== -->
             <div class="channel-table" id="channelTableContainer">
-                <!-- JS dynamically inserts rows -->
+                <!-- JS dynamically inserts boxes -->
             </div>
         </div>
 
@@ -558,7 +683,7 @@
                     </div>
                 </div>
                 <div class="copyright">
-                    <span>RAS LIVE TV  | .SIUM GROUP</span><br> © 2026 All Rights Reserved
+                    <span>RAS LIVE TV | .SIUM GROUP</span><br> © 2026 All Rights Reserved
                 </div>
             </div>
         </footer>
@@ -566,6 +691,8 @@
 
     <script>
         (function() {
+            'use strict';
+
             // ===== গ্লোবাল ভেরিয়েবল =====
             let hlsInstance = null;
             let allStreams = [];
@@ -573,6 +700,7 @@
             let isLoading = false;
             let isPlaying = false;
             let bufferTimer = null;
+            let fallbackAttempted = false; // ট্র্যাক করি ফ্যালব্যাক ট্রাই করা হয়েছে কিনা
 
             const video = document.getElementById('playerFrame');
             const overlay = document.getElementById('rasLoadingOverlay');
@@ -600,20 +728,82 @@
                 }
             }
 
-            // ===== চ্যানেল লিস্ট (আপনার পছন্দমতো পরিবর্তন করুন) =====
+            // ===== চ্যানেল ডেটা =====
             const CHANNELS = [{
-                name: 'FIFA LIVE',
-                streams: [
-                    { label: 'MATCH TV<br><small>1080p</small>', url: 'https://bl.video.matchtv.ru/media/playlist/free_d46d0cf1712c0542ec7fd4f0808f600a_hd/17_89756005/1080/e6bef86de8a133cd7b27deb040758a00/4796141934.m3u8' },
-                    { label: 'ANDRO TV<br><small>720p</small>', url: 'https://andro.226503.xyz/checklist/androstreamlivebiraz1.m3u8' },
-                    { label: '720p', url: 'https://https://andro.226503.xyz/checklist/androstreamlivebiraz1.m3u8.cloudfront.net/smil:rtbgo/chunklist_b2196000_sleng.m3u8' }
-                ]
+                name: 'FIFA LIVE TV',
+                icon: '⚽',
+                streams: [{
+                    label: 'MATCH TV',
+                    sub: '1080p',
+                    urls: [
+                        'https://bl.video.matchtv.ru/media/playlist/free_d46d0cf1712c0542ec7fd4f0808f600a_hd/17_89756005/1080/e6bef86de8a133cd7b27deb040758a00/4796141934.m3u8',
+                        'http://cdntv.online/low/9mlxywika2/48.m3u8'
+                    ]
+                }, {
+                    label: 'MASUN Sports',
+                    sub: '720p',
+                    urls: ['https://andro.226503.xyz/checklist/androstreamlivebiraz1.m3u8']
+                }, {
+                    label: 'Tigo Sport',
+                    sub: '720p',
+                    urls: [
+                        'https://cdn.livekhelatv.com/mks/lktv/lat-tigo-sports-hd/original/livekhela.m3u8'
+                    ]
+                    }, {
+                  label: 'VSBET',
+                    sub: '1080p',
+                    urls: ['https://live05.msdht.app/live/24561735.m3u8']
+              
+                }, {
+                    label: 'FOX Sports',
+                    sub: '540p',
+                    urls: ['http://84.17.50.102/fox/index.m3u8']
+                }, {
+                    label: 'Somoy TV',
+                    sub: '720p',
+                    urls: [
+                        'https://live.thebosstv.com:30443/dwlive/Somoy-TV/chunks.m3u8',
+                        'http://198.195.239.50:8095/somoyTv/tracks-v1a1/mono.m3u8'
+                    ]
+            
+                    
+                    }]
             }, {
-                name: 'OTHERS TV',
-                streams: [
-                              
-                ] 
-                
+                name: 'HD Bangladeshi News Channel',
+                icon: '📰',
+                streams: [{
+                    label: 'Jamuna Tv',
+                    sub: 'HD',
+                    urls: ['http://198.195.239.50:8095/jamunaTv/tracks-v1a1/mono.m3u8']
+                }, {
+                    label: 'Bangla-Vision',
+                    sub: 'HD',
+                    urls: ['http://198.195.239.50:8095/banglaVision/tracks-v1a1/mono.m3u8']
+                }, {
+                    label: 'Channel-i',
+                    sub: 'HD',
+                    urls: ['http://198.195.239.50:8095/channelI/tracks-v1a1/mono.m3u8']
+                }, {
+                    label: 'ATN Bangla',
+                    sub: 'HD',
+                    urls: ['http://198.195.239.50:8095/atnBangla/tracks-v1a1/mono.m3u8']
+                }, {
+                    label: 'Channel 24',
+                    sub: 'HD',
+                    urls: ['http://198.195.239.50:8095/channel24/tracks-v1a1/mono.m3u8']
+                }, {
+                    label: 'N-TV',
+                    sub: 'HD',
+                    urls: ['http://198.195.239.50:8095/ntv/tracks-v1a1/mono.m3u8']
+                }, {
+                    label: 'ATN News',
+                    sub: 'HD',
+                    urls: ['http://198.195.239.50:8095/atnNews/tracks-v1a1/mono.m3u8']
+                }, {
+                    label: 'Ekattor Tv',
+                    sub: 'HD',
+                    urls: ['http://198.195.239.50:8095/ekattorTv/tracks-v1a1/mono.m3u8']
+                }]
             }];
 
             // ===== allStreams ফ্ল্যাট অ্যারেতে রূপান্তর =====
@@ -622,7 +812,8 @@
                     allStreams.push({
                         channelName: ch.name,
                         label: s.label,
-                        url: s.url
+                        sub: s.sub || '',
+                        urls: s.urls || []
                     });
                 });
             });
@@ -635,21 +826,35 @@
                 }
             }
 
-            // ===== স্ট্রিম লোড করা =====
-            function loadStream(index) {
+            // ===== স্ট্রিম লোড করা (ফ্যালব্যাক সাপোর্ট সহ) =====
+            function loadStream(index, tryFallback) {
                 if (isLoading) return;
                 isLoading = true;
                 if (overlay) overlay.classList.remove('hidden');
                 clearBufferTimer();
 
                 const stream = allStreams[index];
-                if (!stream) {
+                if (!stream || !stream.urls || stream.urls.length === 0) {
                     isLoading = false;
                     if (overlay) overlay.classList.add('hidden');
                     return;
                 }
 
-                const url = stream.url;
+                // কোন URL ব্যবহার করব?
+                let urlIndex = (tryFallback === true) ? 1 : 0;
+                // যদি tryFallback true হয় কিন্তু দ্বিতীয় URL না থাকে, তাহলে প্রথমটাই ব্যবহার করি
+                if (tryFallback && stream.urls.length < 2) {
+                    urlIndex = 0;
+                }
+                // যদি urlIndex ০ হয় কিন্তু সেটা আগে ব্যর্থ হয়েছে এবং দ্বিতীয়টা আছে, তাহলে দ্বিতীয়টা ব্যবহার করি
+                // (এটা handleError থেকে কল করলে tryFallback=true পাবো)
+                const url = stream.urls[urlIndex] || stream.urls[0];
+                if (!url) {
+                    isLoading = false;
+                    if (overlay) overlay.classList.add('hidden');
+                    return;
+                }
+
                 const mode = getMode();
 
                 // বর্তমান প্লেব্যাক বন্ধ
@@ -685,6 +890,7 @@
                                     isLoading = false;
                                     if (overlay) overlay.classList.add('hidden');
                                     clearBufferTimer();
+                                    fallbackAttempted = false;
                                 })
                                 .catch(e => {
                                     isPlaying = false;
@@ -692,30 +898,22 @@
                                     if (overlay) overlay.classList.add('hidden');
                                     clearBufferTimer();
                                     console.warn('hls play error:', e);
+                                    // প্লে না হলে ফ্যালব্যাক চেষ্টা
+                                    handlePlayError(index);
                                 });
                         });
 
                         hlsInstance.on(Hls.Events.ERROR, (event, data) => {
                             if (data.fatal) {
-                                // ক্রিটিকাল এরর হলে hls রিস্টার্ট বা নেটিভে ফলব্যাক
-                                console.warn('hls fatal error, trying native fallback');
+                                console.warn('hls fatal error, trying fallback');
                                 if (hlsInstance) {
                                     hlsInstance.destroy();
                                     hlsInstance = null;
                                 }
-                                // নেটিভে ফলব্যাক
-                                video.src = url;
-                                video.load();
-                                video.play().then(() => {
-                                    isPlaying = true;
-                                    isLoading = false;
-                                    if (overlay) overlay.classList.add('hidden');
-                                }).catch(() => {
-                                    isPlaying = false;
-                                    isLoading = false;
-                                    if (overlay) overlay.classList.add('hidden');
-                                });
+                                // ফ্যালব্যাক চেষ্টা
+                                handlePlayError(index);
                             } else {
+                                // নন-ফ্যাটাল এরর
                                 isLoading = false;
                                 if (overlay) overlay.classList.add('hidden');
                             }
@@ -728,10 +926,14 @@
                             isPlaying = true;
                             isLoading = false;
                             if (overlay) overlay.classList.add('hidden');
+                            clearBufferTimer();
+                            fallbackAttempted = false;
                         }).catch(e => {
                             isPlaying = false;
                             isLoading = false;
                             if (overlay) overlay.classList.add('hidden');
+                            clearBufferTimer();
+                            handlePlayError(index);
                         });
                     }
                 } else {
@@ -743,37 +945,56 @@
                         isLoading = false;
                         if (overlay) overlay.classList.add('hidden');
                         clearBufferTimer();
+                        fallbackAttempted = false;
                     }).catch(e => {
                         isPlaying = false;
                         isLoading = false;
                         if (overlay) overlay.classList.add('hidden');
                         clearBufferTimer();
+                        handlePlayError(index);
                     });
                 }
 
-                // ===== সাধারণ ইভেন্ট লিসেনার (বাফারিং, ইত্যাদি) =====
+                // ===== সাধারণ ইভেন্ট লিসেনার =====
                 function attachCommonListeners() {
-                    video.addEventListener('loadeddata', function onLoaded() {
+                    // যাতে একাধিকবার না লাগে
+                    video.removeEventListener('loadeddata', onLoaded);
+                    video.removeEventListener('canplay', onCan);
+                    video.removeEventListener('playing', onPlay);
+                    video.removeEventListener('waiting', onWait);
+                    video.removeEventListener('progress', onProg);
+                    video.removeEventListener('error', onErr);
+
+                    video.addEventListener('loadeddata', onLoaded);
+                    video.addEventListener('canplay', onCan);
+                    video.addEventListener('playing', onPlay);
+                    video.addEventListener('waiting', onWait);
+                    video.addEventListener('progress', onProg);
+                    video.addEventListener('error', onErr);
+
+                    function onLoaded() {
                         if (overlay) overlay.classList.add('hidden');
                         isLoading = false;
                         clearBufferTimer();
-                        video.removeEventListener('loadeddata', onLoaded);
-                    });
-                    video.addEventListener('canplay', function onCan() {
+                        fallbackAttempted = false;
+                    }
+
+                    function onCan() {
                         if (overlay) overlay.classList.add('hidden');
                         isLoading = false;
                         clearBufferTimer();
-                        video.removeEventListener('canplay', onCan);
-                    });
-                    video.addEventListener('playing', function onPlay() {
+                        fallbackAttempted = false;
+                    }
+
+                    function onPlay() {
                         if (overlay) overlay.classList.add('hidden');
                         isPlaying = true;
                         isLoading = false;
                         clearBufferTimer();
-                        video.removeEventListener('playing', onPlay);
-                    });
+                        fallbackAttempted = false;
+                    }
 
-                    video.addEventListener('waiting', function onWait() {
+                    function onWait() {
                         if (isLoading) return;
                         if (!overlay.classList.contains('hidden')) return;
                         overlay.classList.remove('hidden');
@@ -782,9 +1003,9 @@
                             if (overlay) overlay.classList.add('hidden');
                             clearBufferTimer();
                         }, 20000);
-                    });
+                    }
 
-                    video.addEventListener('progress', function onProg() {
+                    function onProg() {
                         if (overlay && !overlay.classList.contains('hidden')) {
                             if (video.buffered.length > 0) {
                                 const bufferedEnd = video.buffered.end(video.buffered.length - 1);
@@ -794,25 +1015,48 @@
                                 }
                             }
                         }
-                    });
+                    }
 
-                    video.addEventListener('error', function onErr() {
+                    function onErr() {
                         if (overlay) overlay.classList.add('hidden');
                         isLoading = false;
                         isPlaying = false;
                         clearBufferTimer();
-                        video.removeEventListener('error', onErr);
                         console.warn('Video error:', video.error);
-                    });
+                        // নেটিভ এরর হলে ফ্যালব্যাক চেষ্টা
+                        handlePlayError(index);
+                        // ইভেন্ট রিমুভ করে দিই যাতে বারবার না ট্রিগার হয়
+                        video.removeEventListener('error', onErr);
+                    }
                 }
                 attachCommonListeners();
             }
 
-            // ===== স্ট্রিম সুইচ (একই বাটনে ক্লিক করলে রিলোড) =====
+            // ===== প্লে এরর হ্যান্ডলার – ফ্যালব্যাক ট্রাই করে =====
+            function handlePlayError(index) {
+                const stream = allStreams[index];
+                if (!stream) return;
+                // যদি ফ্যালব্যাক আগে ট্রাই না করা হয় এবং দ্বিতীয় URL থাকে
+                if (!fallbackAttempted && stream.urls && stream.urls.length > 1) {
+                    fallbackAttempted = true;
+                    console.log('Trying fallback URL for:', stream.label);
+                    // আবার লোড করি ফ্যালব্যাক দিয়ে
+                    loadStream(index, true);
+                } else {
+                    // ফ্যালব্যাক নেই বা ইতিমধ্যে ট্রাই করা
+                    if (overlay) overlay.classList.add('hidden');
+                    isLoading = false;
+                    console.warn('No fallback available or already tried for:', stream.label);
+                }
+            }
+
+            // ===== স্ট্রিম সুইচ =====
             function switchToStream(index) {
                 if (isLoading) return;
-                // যদি একই ইনডেক্স হয়, তবে রিলোড করব (পুনরায় লোড)
+                // রিসেট ফ্যালব্যাক ফ্ল্যাগ
+                fallbackAttempted = false;
                 if (index === currentStreamIndex) {
+                    // একই স্ট্রিম রিলোড
                     loadStream(index);
                     return;
                 }
@@ -830,39 +1074,66 @@
                 });
             }
 
-            // ===== চ্যানেল টেবিল তৈরি =====
+            // ===== চ্যানেল বক্স + বাটন তৈরি =====
             function buildTable() {
                 container.innerHTML = '';
+
                 CHANNELS.forEach((ch, chIdx) => {
-                    const row = document.createElement('div');
-                    row.className = 'channel-row';
+                    const box = document.createElement('div');
+                    box.className = 'channel-box';
 
-                    const nameDiv = document.createElement('div');
-                    nameDiv.className = 'channel-name';
-                    nameDiv.textContent = ch.name;
-                    row.appendChild(nameDiv);
+                    // হেডার
+                    const header = document.createElement('div');
+                    header.className = 'box-header';
+                    header.innerHTML = `
+                        <div class="box-title">
+                            <span>${ch.icon || ''}</span>
+                            ${ch.name}
+                            <span class="badge-count">${ch.streams.length}</span>
+                        </div>
+                        <span class="box-icon">▾</span>
+                    `;
+                    box.appendChild(header);
 
-                    const btnContainer = document.createElement('div');
-                    btnContainer.className = 'stream-buttons';
+                    // গ্রিড
+                    const grid = document.createElement('div');
+                    grid.className = 'stream-grid';
 
                     ch.streams.forEach((stream, sIdx) => {
-                        const btn = document.createElement('button');
+                        // global index খুঁজি
                         const globalIdx = allStreams.findIndex(item =>
-                            item.channelName === ch.name && item.label === stream.label && item.url === stream.url
+                            item.channelName === ch.name &&
+                            item.label === stream.label &&
+                            item.sub === (stream.sub || '')
                         );
-                        btn.className = 'stream-btn' + (globalIdx === currentStreamIndex ? ' active' : '');
-                        btn.textContent = stream.label;
+
+                        const btn = document.createElement('button');
+                        btn.className = 'stream-btn' + (globalIdx === currentStreamIndex ? ' active' :
+                        '');
                         btn.setAttribute('data-global-index', globalIdx);
+
+                        // লেবেল + সাব-লেবেল
+                        const labelSpan = document.createElement('span');
+                        labelSpan.textContent = stream.label;
+                        if (stream.sub) {
+                            const subSpan = document.createElement('span');
+                            subSpan.className = 'sub-label';
+                            subSpan.textContent = stream.sub;
+                            labelSpan.appendChild(subSpan);
+                        }
+                        btn.appendChild(labelSpan);
+
                         btn.addEventListener('click', function(e) {
                             const idx = parseInt(this.getAttribute('data-global-index'));
                             switchToStream(idx);
                         });
                         btn.setAttribute('tabindex', '0');
-                        btnContainer.appendChild(btn);
+
+                        grid.appendChild(btn);
                     });
 
-                    row.appendChild(btnContainer);
-                    container.appendChild(row);
+                    box.appendChild(grid);
+                    container.appendChild(box);
                 });
             }
 
@@ -870,21 +1141,22 @@
             modeToggle.addEventListener('change', function(e) {
                 const mode = this.checked ? 'phone' : 'tv';
                 setMode(mode);
-                // বর্তমান স্ট্রিম পুনরায় লোড
                 if (allStreams.length) {
+                    fallbackAttempted = false;
                     loadStream(currentStreamIndex);
                 }
             });
 
             // ===== ইনিশিয়ালাইজেশন =====
             function initPlayerAndUI() {
-                // মোড UI সেট করা
                 const initialMode = getMode();
                 updateModeUI(initialMode);
 
                 buildTable();
-                // প্রথম স্ট্রিম লোড (ইনডেক্স 0)
+
+                // ডিফল্ট স্ট্রিম: MATCH TV (ইনডেক্স ০)
                 currentStreamIndex = 0;
+                fallbackAttempted = false;
                 loadStream(0);
 
                 // ডাবল ক্লিক ফুলস্ক্রিন
@@ -893,7 +1165,6 @@
                     else document.exitFullscreen().catch(() => {});
                 });
 
-                // ডিবাগিং এর জন্য গ্লোবাল (ঐচ্ছিক)
                 window.__player = { video, switchToStream, allStreams, hls: hlsInstance };
             }
 
