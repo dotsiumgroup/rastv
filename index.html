@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
     <title>RAS LIVE TV — Android TV & Mobile</title>
-    <link rel="shortcut icon" type="image/x-icon" href="https://i.postimg.cc/mD1VCt2C/RS-Live.png">
+    <link rel="shortcut icon" type="image/x-icon" href="https://i.postimg.cc/W133vv3S/file-00000000da6472098c023a1c13aaad41.png">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
 
     <!-- hls.js CDN (শুধু মোবাইল মোডে ব্যবহার হবে) -->
@@ -134,26 +134,111 @@
             display: block;
             background: #000;
         }
-
-        /* ===== লোডিং ওভারলে - Full Frame Size ===== */
-        #rasLoadingOverlay {
+        .embed-responsive-16by9 .overlay-abs {
             position: absolute;
             inset: 0;
-            background: #050505;
+            width: 100%;
+            height: 100%;
+            border-radius: inherit;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            z-index: 999;
-            transition: opacity 0.4s ease, visibility 0.4s ease;
-            border-radius: inherit;
+            z-index: 10;
+            transition: opacity 0.5s ease, visibility 0.5s ease;
             pointer-events: none;
-            width: 100%;
-            height: 100%;
+        }
+        .embed-responsive-16by9 .overlay-abs.active {
+            pointer-events: auto;
+        }
+
+        /* ===== BANNER OVERLAY (প্রাথমিক) ===== */
+        #rasBannerOverlay {
+            background: radial-gradient(ellipse at center, #0a1a1a 0%, #000000 100%);
+            z-index: 20;
+            pointer-events: auto;
+            border-radius: inherit;
+            padding: 20px;
+            text-align: center;
+        }
+        #rasBannerOverlay .banner-icon {
+            font-size: clamp(48px, 10vw, 80px);
+            margin-bottom: 10px;
+            animation: bannerFloat 2.8s ease-in-out infinite;
+        }
+        @keyframes bannerFloat {
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-12px);
+            }
+        }
+        #rasBannerOverlay .banner-title {
+            font-size: clamp(20px, 4vw, 36px);
+            font-weight: 800;
+            color: #fff;
+            letter-spacing: 1px;
+            text-shadow: 0 0 30px rgba(255, 215, 0, 0.2);
+        }
+        #rasBannerOverlay .banner-title .highlight {
+            color: #ffd700;
+        }
+        #rasBannerOverlay .banner-subtitle {
+            font-size: clamp(14px, 2.2vw, 22px);
+            font-weight: 500;
+            color: #ccc;
+            margin-top: 6px;
+            letter-spacing: 0.5px;
+        }
+        #rasBannerOverlay .banner-arrow {
+            font-size: clamp(24px, 4vw, 40px);
+            margin-top: 16px;
+            opacity: 0.7;
+            animation: bannerBounce 1.8s ease-in-out infinite;
+        }
+        @keyframes bannerBounce {
+            0%,
+            100% {
+                transform: translateY(0);
+                opacity: 0.5;
+            }
+            50% {
+                transform: translateY(10px);
+                opacity: 1;
+            }
+        }
+        #rasBannerOverlay .banner-ras {
+            position: absolute;
+            bottom: 18px;
+            right: 24px;
+            font-size: 11px;
+            font-weight: 300;
+            color: rgba(255, 255, 255, 0.15);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+        #rasBannerOverlay.hidden {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+
+        /* ===== LOADING / ERROR OVERLAY ===== */
+        #rasLoadingOverlay {
+            background: #050505;
+            z-index: 15;
+            pointer-events: none;
+            border-radius: inherit;
+        }
+        #rasLoadingOverlay.active {
+            pointer-events: auto;
         }
         #rasLoadingOverlay.hidden {
             opacity: 0;
             visibility: hidden;
+            pointer-events: none;
         }
         #rasLoadingOverlay .ras-loader {
             text-align: center;
@@ -245,6 +330,36 @@
             50% {
                 opacity: 1;
             }
+        }
+
+        /* ---- ERROR state inside loading overlay ---- */
+        #rasLoadingOverlay .error-icon {
+            font-size: clamp(44px, 8vw, 64px);
+            margin-bottom: 8px;
+        }
+        #rasLoadingOverlay .error-title {
+            font-size: clamp(18px, 3vw, 28px);
+            font-weight: 800;
+            color: #ff4444;
+            letter-spacing: 1px;
+        }
+        #rasLoadingOverlay .error-sub {
+            font-size: clamp(13px, 1.8vw, 18px);
+            color: #bbb;
+            margin-top: 4px;
+            font-weight: 400;
+        }
+        #rasLoadingOverlay .error-hint {
+            font-size: clamp(11px, 1.4vw, 15px);
+            color: #888;
+            margin-top: 14px;
+            font-weight: 300;
+            border-top: 1px solid rgba(255, 255, 255, 0.06);
+            padding-top: 14px;
+            letter-spacing: 0.3px;
+        }
+        #rasLoadingOverlay .error-hint span {
+            color: #ffd700;
         }
 
         /* ===== সুইচ কন্টেইনার (ভিডিও ফ্রেমের উপরে) ===== */
@@ -601,8 +716,8 @@
             max-width: 100vw !important;
             max-height: 100vh !important;
         }
-        .tv-view .embed-responsive:-webkit-full-screen #rasLoadingOverlay,
-        .tv-view .embed-responsive:fullscreen #rasLoadingOverlay {
+        .tv-view .embed-responsive:-webkit-full-screen .overlay-abs,
+        .tv-view .embed-responsive:fullscreen .overlay-abs {
             width: 100% !important;
             height: 100% !important;
         }
@@ -642,9 +757,21 @@
                     <div class="embed-responsive embed-responsive-16by9">
                         <video id="playerFrame" playsinline controls preload="auto"></video>
 
-                        <!-- লোডিং ওভারলে -->
-                        <div id="rasLoadingOverlay">
-                            <div class="ras-loader">
+                        <!-- ===== BANNER OVERLAY (প্রাথমিক) ===== -->
+                        <div id="rasBannerOverlay" class="overlay-abs active">
+                            <div class="banner-icon">📺</div>
+                            <div class="banner-title">
+                                <span class="highlight">ভিডিও চালু করতে</span>
+                            </div>
+                            <div class="banner-subtitle">নিচের যেকোনো চ্যানেল সিলেক্ট করুন</div>
+                            <div class="banner-arrow">⬇</div>
+                            <div class="banner-ras">RAS LIVE TV</div>
+                        </div>
+
+                        <!-- ===== LOADING / ERROR OVERLAY ===== -->
+                        <div id="rasLoadingOverlay" class="overlay-abs hidden">
+                            <div class="ras-loader" id="rasLoaderContent">
+                                <!-- JS dynamically switches between loading and error -->
                                 <div class="ras-logo">
                                     <span class="ras">RAS</span>
                                     <span class="live">LIVE</span>
@@ -696,14 +823,17 @@
             // ===== গ্লোবাল ভেরিয়েবল =====
             let hlsInstance = null;
             let allStreams = [];
-            let currentStreamIndex = 0;
+            let currentStreamIndex = -1; // -1 means no channel selected
             let isLoading = false;
             let isPlaying = false;
             let bufferTimer = null;
-            let fallbackAttempted = false; // ট্র্যাক করি ফ্যালব্যাক ট্রাই করা হয়েছে কিনা
+            let fallbackAttempted = false;
 
+            // DOM রেফারেন্স
             const video = document.getElementById('playerFrame');
-            const overlay = document.getElementById('rasLoadingOverlay');
+            const bannerOverlay = document.getElementById('rasBannerOverlay');
+            const loadingOverlay = document.getElementById('rasLoadingOverlay');
+            const loaderContent = document.getElementById('rasLoaderContent');
             const container = document.getElementById('channelTableContainer');
             const modeToggle = document.getElementById('modeToggle');
             const modeStatusText = document.getElementById('modeStatusText');
@@ -743,18 +873,7 @@
                     label: 'MASUN Sports',
                     sub: '720p',
                     urls: ['https://andro.226503.xyz/checklist/androstreamlivebiraz1.m3u8']
-                }, {
-                    label: 'Tigo Sport',
-                    sub: '720p',
-                    urls: [
-                        'https://cdn.livekhelatv.com/mks/lktv/lat-tigo-sports-hd/original/livekhela.m3u8'
-                    ]
                     }, {
-                  label: 'VSBET',
-                    sub: '1080p',
-                    urls: ['https://live05.msdht.app/live/24561735.m3u8']
-              
-                }, {
                     label: 'FOX Sports',
                     sub: '540p',
                     urls: ['http://84.17.50.102/fox/index.m3u8']
@@ -765,9 +884,18 @@
                         'https://live.thebosstv.com:30443/dwlive/Somoy-TV/chunks.m3u8',
                         'http://198.195.239.50:8095/somoyTv/tracks-v1a1/mono.m3u8'
                     ]
-            
-                    
-                    }]
+                }, {
+                    label: 'Tigo Sport',
+                    sub: '720p',
+                    urls: [
+                        'https://cdn.livekhelatv.com/mks/lktv/lat-tigo-sports-hd/original/livekhela.m3u8'
+                    ]
+                }, {
+                    label: 'VSBET',
+                    sub: '1080p',
+                    urls: ['https://live05.msdht.app/live/24561735.m3u8']
+                
+                }]
             }, {
                 name: 'HD Bangladeshi News Channel',
                 icon: '📰',
@@ -818,6 +946,61 @@
                 });
             });
 
+            // ===== ওভারলে কন্ট্রোল =====
+            function showBanner() {
+                bannerOverlay.classList.remove('hidden');
+                bannerOverlay.classList.add('active');
+                loadingOverlay.classList.add('hidden');
+                loadingOverlay.classList.remove('active');
+                // লোডার কন্টেন্ট রিসেট
+                setLoaderToLoading();
+            }
+
+            function hideBanner() {
+                bannerOverlay.classList.add('hidden');
+                bannerOverlay.classList.remove('active');
+            }
+
+            function showLoading() {
+                loadingOverlay.classList.remove('hidden');
+                loadingOverlay.classList.add('active');
+                setLoaderToLoading();
+            }
+
+            function showError(message) {
+                loadingOverlay.classList.remove('hidden');
+                loadingOverlay.classList.add('active');
+                setLoaderToError(message || 'এই চ্যানেলটি বন্ধ আছে');
+            }
+
+            function hideOverlays() {
+                loadingOverlay.classList.add('hidden');
+                loadingOverlay.classList.remove('active');
+                bannerOverlay.classList.add('hidden');
+                bannerOverlay.classList.remove('active');
+            }
+
+            function setLoaderToLoading() {
+                loaderContent.innerHTML = `
+                    <div class="ras-logo">
+                        <span class="ras">RAS</span>
+                        <span class="live">LIVE</span>
+                        <span class="tv">TV</span>
+                    </div>
+                    <div class="ras-spinner"></div>
+                    <div class="ras-status">চ্যানেল লোড হচ্ছে <span>✦</span></div>
+                `;
+            }
+
+            function setLoaderToError(msg) {
+                loaderContent.innerHTML = `
+                    <div class="error-icon">⚠️</div>
+                    <div class="error-title">${msg}</div>
+                    <div class="error-sub">ভিন্ন চ্যানেল ক্লিক করুন</div>
+                    <div class="error-hint">অথবা <span>পুনরায় চেষ্টা</span> করুন</div>
+                `;
+            }
+
             // ===== বাফার টাইমার ক্লিয়ার =====
             function clearBufferTimer() {
                 if (bufferTimer) {
@@ -830,28 +1013,23 @@
             function loadStream(index, tryFallback) {
                 if (isLoading) return;
                 isLoading = true;
-                if (overlay) overlay.classList.remove('hidden');
-                clearBufferTimer();
 
                 const stream = allStreams[index];
                 if (!stream || !stream.urls || stream.urls.length === 0) {
                     isLoading = false;
-                    if (overlay) overlay.classList.add('hidden');
+                    showError('স্ট্রিম পাওয়া যায়নি');
                     return;
                 }
 
                 // কোন URL ব্যবহার করব?
                 let urlIndex = (tryFallback === true) ? 1 : 0;
-                // যদি tryFallback true হয় কিন্তু দ্বিতীয় URL না থাকে, তাহলে প্রথমটাই ব্যবহার করি
                 if (tryFallback && stream.urls.length < 2) {
                     urlIndex = 0;
                 }
-                // যদি urlIndex ০ হয় কিন্তু সেটা আগে ব্যর্থ হয়েছে এবং দ্বিতীয়টা আছে, তাহলে দ্বিতীয়টা ব্যবহার করি
-                // (এটা handleError থেকে কল করলে tryFallback=true পাবো)
                 const url = stream.urls[urlIndex] || stream.urls[0];
                 if (!url) {
                     isLoading = false;
-                    if (overlay) overlay.classList.add('hidden');
+                    showError('স্ট্রিম URL নেই');
                     return;
                 }
 
@@ -888,17 +1066,14 @@
                                 .then(() => {
                                     isPlaying = true;
                                     isLoading = false;
-                                    if (overlay) overlay.classList.add('hidden');
+                                    hideOverlays();
                                     clearBufferTimer();
                                     fallbackAttempted = false;
                                 })
                                 .catch(e => {
                                     isPlaying = false;
                                     isLoading = false;
-                                    if (overlay) overlay.classList.add('hidden');
-                                    clearBufferTimer();
                                     console.warn('hls play error:', e);
-                                    // প্লে না হলে ফ্যালব্যাক চেষ্টা
                                     handlePlayError(index);
                                 });
                         });
@@ -910,12 +1085,10 @@
                                     hlsInstance.destroy();
                                     hlsInstance = null;
                                 }
-                                // ফ্যালব্যাক চেষ্টা
                                 handlePlayError(index);
                             } else {
-                                // নন-ফ্যাটাল এরর
                                 isLoading = false;
-                                if (overlay) overlay.classList.add('hidden');
+                                // নন-ফ্যাটাল এরর — লোডিং ওভারলে রেখে দিই
                             }
                         });
                     } else {
@@ -925,13 +1098,12 @@
                         video.play().then(() => {
                             isPlaying = true;
                             isLoading = false;
-                            if (overlay) overlay.classList.add('hidden');
+                            hideOverlays();
                             clearBufferTimer();
                             fallbackAttempted = false;
                         }).catch(e => {
                             isPlaying = false;
                             isLoading = false;
-                            if (overlay) overlay.classList.add('hidden');
                             clearBufferTimer();
                             handlePlayError(index);
                         });
@@ -943,13 +1115,12 @@
                     video.play().then(() => {
                         isPlaying = true;
                         isLoading = false;
-                        if (overlay) overlay.classList.add('hidden');
+                        hideOverlays();
                         clearBufferTimer();
                         fallbackAttempted = false;
                     }).catch(e => {
                         isPlaying = false;
                         isLoading = false;
-                        if (overlay) overlay.classList.add('hidden');
                         clearBufferTimer();
                         handlePlayError(index);
                     });
@@ -957,7 +1128,6 @@
 
                 // ===== সাধারণ ইভেন্ট লিসেনার =====
                 function attachCommonListeners() {
-                    // যাতে একাধিকবার না লাগে
                     video.removeEventListener('loadeddata', onLoaded);
                     video.removeEventListener('canplay', onCan);
                     video.removeEventListener('playing', onPlay);
@@ -973,21 +1143,21 @@
                     video.addEventListener('error', onErr);
 
                     function onLoaded() {
-                        if (overlay) overlay.classList.add('hidden');
+                        hideOverlays();
                         isLoading = false;
                         clearBufferTimer();
                         fallbackAttempted = false;
                     }
 
                     function onCan() {
-                        if (overlay) overlay.classList.add('hidden');
+                        hideOverlays();
                         isLoading = false;
                         clearBufferTimer();
                         fallbackAttempted = false;
                     }
 
                     function onPlay() {
-                        if (overlay) overlay.classList.add('hidden');
+                        hideOverlays();
                         isPlaying = true;
                         isLoading = false;
                         clearBufferTimer();
@@ -996,21 +1166,25 @@
 
                     function onWait() {
                         if (isLoading) return;
-                        if (!overlay.classList.contains('hidden')) return;
-                        overlay.classList.remove('hidden');
+                        // লোডিং দেখান যদি বাফার হয়
+                        if (loadingOverlay.classList.contains('hidden')) {
+                            showLoading();
+                        }
                         clearBufferTimer();
                         bufferTimer = setTimeout(() => {
-                            if (overlay) overlay.classList.add('hidden');
+                            if (!isPlaying && isLoading === false) {
+                                // বাফার অনেকক্ষণ ধরে — এটা এরর না, শুধু লোডিং ওভারলে রাখি
+                            }
                             clearBufferTimer();
                         }, 20000);
                     }
 
                     function onProg() {
-                        if (overlay && !overlay.classList.contains('hidden')) {
+                        if (loadingOverlay && !loadingOverlay.classList.contains('hidden')) {
                             if (video.buffered.length > 0) {
                                 const bufferedEnd = video.buffered.end(video.buffered.length - 1);
                                 if (bufferedEnd - video.currentTime > 2) {
-                                    overlay.classList.add('hidden');
+                                    hideOverlays();
                                     clearBufferTimer();
                                 }
                             }
@@ -1025,7 +1199,6 @@
                         console.warn('Video error:', video.error);
                         // নেটিভ এরর হলে ফ্যালব্যাক চেষ্টা
                         handlePlayError(index);
-                        // ইভেন্ট রিমুভ করে দিই যাতে বারবার না ট্রিগার হয়
                         video.removeEventListener('error', onErr);
                     }
                 }
@@ -1035,17 +1208,20 @@
             // ===== প্লে এরর হ্যান্ডলার – ফ্যালব্যাক ট্রাই করে =====
             function handlePlayError(index) {
                 const stream = allStreams[index];
-                if (!stream) return;
+                if (!stream) {
+                    isLoading = false;
+                    showError('চ্যানেল খুঁজে পাওয়া যায়নি');
+                    return;
+                }
                 // যদি ফ্যালব্যাক আগে ট্রাই না করা হয় এবং দ্বিতীয় URL থাকে
                 if (!fallbackAttempted && stream.urls && stream.urls.length > 1) {
                     fallbackAttempted = true;
                     console.log('Trying fallback URL for:', stream.label);
-                    // আবার লোড করি ফ্যালব্যাক দিয়ে
                     loadStream(index, true);
                 } else {
                     // ফ্যালব্যাক নেই বা ইতিমধ্যে ট্রাই করা
-                    if (overlay) overlay.classList.add('hidden');
                     isLoading = false;
+                    showError('এই চ্যানেলটি বন্ধ আছে');
                     console.warn('No fallback available or already tried for:', stream.label);
                 }
             }
@@ -1053,15 +1229,23 @@
             // ===== স্ট্রিম সুইচ =====
             function switchToStream(index) {
                 if (isLoading) return;
+
                 // রিসেট ফ্যালব্যাক ফ্ল্যাগ
                 fallbackAttempted = false;
-                if (index === currentStreamIndex) {
-                    // একই স্ট্রিম রিলোড
-                    loadStream(index);
-                    return;
-                }
+
+                // বর্তমান ইনডেক্স আপডেট
                 currentStreamIndex = index;
+
+                // ব্যনার ওভারলে লুকান
+                hideBanner();
+
+                // লোডিং দেখান
+                showLoading();
+
+                // অ্যাকটিভ বাটন আপডেট
                 updateActiveButton();
+
+                // স্ট্রিম লোড
                 loadStream(index);
             }
 
@@ -1082,7 +1266,6 @@
                     const box = document.createElement('div');
                     box.className = 'channel-box';
 
-                    // হেডার
                     const header = document.createElement('div');
                     header.className = 'box-header';
                     header.innerHTML = `
@@ -1095,12 +1278,10 @@
                     `;
                     box.appendChild(header);
 
-                    // গ্রিড
                     const grid = document.createElement('div');
                     grid.className = 'stream-grid';
 
                     ch.streams.forEach((stream, sIdx) => {
-                        // global index খুঁজি
                         const globalIdx = allStreams.findIndex(item =>
                             item.channelName === ch.name &&
                             item.label === stream.label &&
@@ -1109,10 +1290,9 @@
 
                         const btn = document.createElement('button');
                         btn.className = 'stream-btn' + (globalIdx === currentStreamIndex ? ' active' :
-                        '');
+                            '');
                         btn.setAttribute('data-global-index', globalIdx);
 
-                        // লেবেল + সাব-লেবেল
                         const labelSpan = document.createElement('span');
                         labelSpan.textContent = stream.label;
                         if (stream.sub) {
@@ -1125,6 +1305,14 @@
 
                         btn.addEventListener('click', function(e) {
                             const idx = parseInt(this.getAttribute('data-global-index'));
+                            // যদি ইতিমধ্যে লোড হচ্ছে, ফিরে যান
+                            if (isLoading) return;
+                            // যদি একই চ্যানেল সিলেক্ট করা হয়, রিলোড
+                            if (idx === currentStreamIndex) {
+                                // রিলোড
+                                switchToStream(idx);
+                                return;
+                            }
                             switchToStream(idx);
                         });
                         btn.setAttribute('tabindex', '0');
@@ -1141,8 +1329,10 @@
             modeToggle.addEventListener('change', function(e) {
                 const mode = this.checked ? 'phone' : 'tv';
                 setMode(mode);
-                if (allStreams.length) {
+                if (currentStreamIndex >= 0) {
                     fallbackAttempted = false;
+                    // রিলোড কারেন্ট স্ট্রিম
+                    showLoading();
                     loadStream(currentStreamIndex);
                 }
             });
@@ -1154,10 +1344,9 @@
 
                 buildTable();
 
-                // ডিফল্ট স্ট্রিম: MATCH TV (ইনডেক্স ০)
-                currentStreamIndex = 0;
-                fallbackAttempted = false;
-                loadStream(0);
+                // কোনো স্ট্রিম অটো লোড হবে না — ব্যনার দেখানো হবে
+                currentStreamIndex = -1;
+                showBanner();
 
                 // ডাবল ক্লিক ফুলস্ক্রিন
                 video.addEventListener('dblclick', () => {
@@ -1210,4 +1399,4 @@
     </script>
 
 </body>
-    </html>
+</html>
