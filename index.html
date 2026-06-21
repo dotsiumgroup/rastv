@@ -6,13 +6,9 @@
     <title>RAS TV</title>
     <link rel="shortcut icon" type="image/x-icon" href="https://i.postimg.cc/W133vv3S/file-00000000da6472098c023a1c13aaad41.png">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-
-    <!-- hls.js CDN (শুধু মোবাইল মোডে ব্যবহার হবে) -->
     <script src="https://cdn.jsdelivr.net/npm/hls.js@latest">
     </script>
-
     <style>
-        /* ---------- RESET & BASE ---------- */
         * {
             margin: 0;
             padding: 0;
@@ -25,8 +21,6 @@
             overflow-x: hidden;
             -webkit-overflow-scrolling: touch;
         }
-
-        /* ---------- PRELOADER ---------- */
         #preloader {
             position: fixed;
             top: 0;
@@ -93,8 +87,6 @@
             transform: scale(1.05);
             pointer-events: none;
         }
-
-        /* ---------- MAIN CONTENT ---------- */
         #main-content {
             display: none;
             background: #000;
@@ -103,8 +95,6 @@
             min-height: 100vh;
             -webkit-overflow-scrolling: touch;
         }
-
-        /* ---------- TV VIEW - Fixed Size ---------- */
         .tv-view {
             max-width: 800px;
             margin: 0 auto;
@@ -151,8 +141,6 @@
         .embed-responsive-16by9 .overlay-abs.active {
             pointer-events: auto;
         }
-
-        /* ===== BANNER OVERLAY (প্রাথমিক) ===== */
         #rasBannerOverlay {
             background: radial-gradient(ellipse at center, #0a1a1a 0%, #000000 100%);
             z-index: 20;
@@ -224,8 +212,6 @@
             visibility: hidden;
             pointer-events: none;
         }
-
-        /* ===== LOADING / ERROR OVERLAY ===== */
         #rasLoadingOverlay {
             background: #050505;
             z-index: 15;
@@ -331,8 +317,6 @@
                 opacity: 1;
             }
         }
-
-        /* ---- ERROR state inside loading overlay ---- */
         #rasLoadingOverlay .error-icon {
             font-size: clamp(44px, 8vw, 64px);
             margin-bottom: 8px;
@@ -361,8 +345,6 @@
         #rasLoadingOverlay .error-hint span {
             color: #ffd700;
         }
-
-        /* ===== সুইচ কন্টেইনার (ভিডিও ফ্রেমের উপরে) ===== */
         #modeSwitchContainer {
             max-width: 800px;
             margin: 0 auto;
@@ -399,8 +381,6 @@
         #modeSwitchContainer .phone-label {
             margin-left: 2px;
         }
-
-        /* ===== হেল্প টেক্সট (নিচে ছোট ফন্টে) ===== */
         #modeHelpText {
             font-size: 8px;
             opacity: 0.5;
@@ -410,8 +390,6 @@
             text-align: right;
             width: 100%;
         }
-
-        /* ----- টগল সুইচ ----- */
         .switch {
             position: relative;
             display: inline-block;
@@ -452,8 +430,6 @@
         input:checked+.slider:before {
             transform: translateX(16px);
         }
-
-        /* ===== CHANNEL TABLE - নতুন ডিজাইন ===== */
         .channel-table {
             margin: 12px 6px 8px 6px;
             max-width: 800px;
@@ -461,8 +437,6 @@
             margin-right: auto;
             padding: 0 6px;
         }
-
-        /* ---- প্রতিটি বক্স ---- */
         .channel-box {
             background: linear-gradient(145deg, #0e0e1a, #1a1a2e);
             border-radius: 16px;
@@ -475,7 +449,6 @@
         .channel-box:hover {
             border-color: #ff9100;
         }
-
         .channel-box .box-header {
             display: flex;
             align-items: center;
@@ -507,15 +480,11 @@
             font-size: 20px;
             opacity: 0.6;
         }
-
-        /* ---- বাটন গ্রিড: ৩ কলাম ---- */
         .stream-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 10px;
         }
-
-        /* ---- প্রতিটি বাটন ---- */
         .stream-btn {
             background: linear-gradient(145deg, #1c1c30, #12121e);
             border: 2px solid #333355;
@@ -567,8 +536,6 @@
         .stream-btn:active {
             transform: scale(0.97);
         }
-
-        /* ---- ছোট স্ক্রিনে বাটন অ্যাডজাস্ট ---- */
         @media (max-width: 520px) {
             .stream-grid {
                 gap: 7px;
@@ -601,8 +568,6 @@
                 font-size: 6px;
             }
         }
-
-        /* ===== ফুটার ===== */
         .footer-premium {
             background: #0a0a0a;
             padding: 30px 0 40px 0;
@@ -698,8 +663,6 @@
         .footer-premium .copyright span {
             color: #ff9100;
         }
-
-        /* ---------- FULLSCREEN OVERRIDE ---------- */
         .tv-view .embed-responsive:-webkit-full-screen video,
         .tv-view .embed-responsive:fullscreen video {
             width: 100vw !important;
@@ -725,7 +688,6 @@
 </head>
 <body>
 
-    <!-- PRELOADER -->
     <div id="preloader">
         <div class="line left"></div>
         <div class="line right"></div>
@@ -733,13 +695,11 @@
         <div class="tagline" id="tagline">Crafted with Excellence</div>
     </div>
 
-    <!-- MAIN CONTENT -->
     <div id="main-content">
         <div class="container tv-area">
             <div class="row">
                 <div class="col-xs-12 tv-view">
 
-                    <!-- ===== মোড সুইচ (ফ্রেমের উপরে, বাইরে) ===== -->
                     <div id="modeSwitchContainer">
                         <div class="switch-row">
                             <span id="modeStatusText" class="mode-text">ধরে নিচ্ছি আপনি টিভি তে ভিডিও চালাচ্ছেন</span>
@@ -753,11 +713,9 @@
                         <div id="modeHelpText">দ্রুত ভিডিও লোড করতে ডিভাইস অনুযায়ী উপরের বাটন সিলেক্ট করুন</div>
                     </div>
 
-                    <!-- ভিডিও ফ্রেম -->
                     <div class="embed-responsive embed-responsive-16by9">
                         <video id="playerFrame" playsinline controls preload="auto"></video>
 
-                        <!-- ===== BANNER OVERLAY (প্রাথমিক) ===== -->
                         <div id="rasBannerOverlay" class="overlay-abs active">
                             <div class="banner-icon">📺</div>
                             <div class="banner-title">
@@ -768,10 +726,8 @@
                             <div class="banner-ras">RAS LIVE TV</div>
                         </div>
 
-                        <!-- ===== LOADING / ERROR OVERLAY ===== -->
                         <div id="rasLoadingOverlay" class="overlay-abs hidden">
                             <div class="ras-loader" id="rasLoaderContent">
-                                <!-- JS dynamically switches between loading and error -->
                                 <div class="ras-logo">
                                     <span class="ras">RAS</span>
                                     <span class="live">LIVE</span>
@@ -786,9 +742,7 @@
                 </div>
             </div>
 
-            <!-- ===== CHANNEL TABLE (নতুন ডিজাইন) ===== -->
             <div class="channel-table" id="channelTableContainer">
-                <!-- JS dynamically inserts boxes -->
             </div>
         </div>
 
@@ -820,16 +774,14 @@
         (function() {
             'use strict';
 
-            // ===== গ্লোবাল ভেরিয়েবল =====
             let hlsInstance = null;
             let allStreams = [];
-            let currentStreamIndex = -1; // -1 means no channel selected
+            let currentStreamIndex = -1;
             let isLoading = false;
             let isPlaying = false;
             let bufferTimer = null;
             let fallbackAttempted = false;
 
-            // DOM রেফারেন্স
             const video = document.getElementById('playerFrame');
             const bannerOverlay = document.getElementById('rasBannerOverlay');
             const loadingOverlay = document.getElementById('rasLoadingOverlay');
@@ -838,7 +790,6 @@
             const modeToggle = document.getElementById('modeToggle');
             const modeStatusText = document.getElementById('modeStatusText');
 
-            // ===== মোড ফাংশন =====
             function getMode() {
                 return localStorage.getItem('rasPlayerMode') || 'tv';
             }
@@ -858,7 +809,7 @@
                 }
             }
 
-            // ===== চ্যানেল ডেটা =====
+            // ===== CHANNELS DATA — REMOVED: HD Bangladeshi News Channel, Tigo Sport, VSBET =====
             const CHANNELS = [{
                 name: 'FIFA LIVE TV',
                 icon: '⚽',
@@ -873,7 +824,7 @@
                     label: 'MASUN Sports',
                     sub: '720p',
                     urls: ['https://andro.226503.xyz/checklist/androstreamlivebiraz1.m3u8']
-                    }, {
+                }, {
                     label: 'FOX Sports',
                     sub: '540p',
                     urls: ['http://84.17.50.102/fox/index.m3u8']
@@ -884,11 +835,17 @@
                         'https://live.thebosstv.com:30443/dwlive/Somoy-TV/chunks.m3u8',
                         'http://198.195.239.50:8095/somoyTv/tracks-v1a1/mono.m3u8'
                     ]
-                
-                
+                    }, {
+                    label: 'TOFFEE Live',
+                    sub: '720p',
+                    urls: [
+                        'https://prod-cdn01-live.toffeelive.com/live/FIFA-2026-3/0/master_2000.m3u8'
+                    ]
+                }]
             }];
+            
 
-            // ===== allStreams ফ্ল্যাট অ্যারেতে রূপান্তর =====
+            // ===== Build flat allStreams =====
             CHANNELS.forEach(ch => {
                 ch.streams.forEach(s => {
                     allStreams.push({
@@ -900,13 +857,11 @@
                 });
             });
 
-            // ===== ওভারলে কন্ট্রোল =====
             function showBanner() {
                 bannerOverlay.classList.remove('hidden');
                 bannerOverlay.classList.add('active');
                 loadingOverlay.classList.add('hidden');
                 loadingOverlay.classList.remove('active');
-                // লোডার কন্টেন্ট রিসেট
                 setLoaderToLoading();
             }
 
@@ -955,7 +910,6 @@
                 `;
             }
 
-            // ===== বাফার টাইমার ক্লিয়ার =====
             function clearBufferTimer() {
                 if (bufferTimer) {
                     clearTimeout(bufferTimer);
@@ -963,7 +917,6 @@
                 }
             }
 
-            // ===== স্ট্রিম লোড করা (ফ্যালব্যাক সাপোর্ট সহ) =====
             function loadStream(index, tryFallback) {
                 if (isLoading) return;
                 isLoading = true;
@@ -975,7 +928,6 @@
                     return;
                 }
 
-                // কোন URL ব্যবহার করব?
                 let urlIndex = (tryFallback === true) ? 1 : 0;
                 if (tryFallback && stream.urls.length < 2) {
                     urlIndex = 0;
@@ -989,20 +941,16 @@
 
                 const mode = getMode();
 
-                // বর্তমান প্লেব্যাক বন্ধ
                 video.pause();
 
-                // hls ইনস্ট্যান্স থাকলে ধ্বংস করি
                 if (hlsInstance) {
                     hlsInstance.destroy();
                     hlsInstance = null;
                 }
 
-                // সোর্স রিমুভ
                 video.removeAttribute('src');
                 video.load();
 
-                // ===== PHONE মোড (hls.js) =====
                 if (mode === 'phone') {
                     if (typeof Hls !== 'undefined' && Hls.isSupported()) {
                         hlsInstance = new Hls({
@@ -1042,11 +990,9 @@
                                 handlePlayError(index);
                             } else {
                                 isLoading = false;
-                                // নন-ফ্যাটাল এরর — লোডিং ওভারলে রেখে দিই
                             }
                         });
                     } else {
-                        // hls.js সাপোর্ট নেই, নেটিভ ব্যবহার
                         video.src = url;
                         video.load();
                         video.play().then(() => {
@@ -1063,7 +1009,6 @@
                         });
                     }
                 } else {
-                    // ===== TV মোড (native) =====
                     video.src = url;
                     video.load();
                     video.play().then(() => {
@@ -1080,7 +1025,6 @@
                     });
                 }
 
-                // ===== সাধারণ ইভেন্ট লিসেনার =====
                 function attachCommonListeners() {
                     video.removeEventListener('loadeddata', onLoaded);
                     video.removeEventListener('canplay', onCan);
@@ -1120,15 +1064,12 @@
 
                     function onWait() {
                         if (isLoading) return;
-                        // লোডিং দেখান যদি বাফার হয়
                         if (loadingOverlay.classList.contains('hidden')) {
                             showLoading();
                         }
                         clearBufferTimer();
                         bufferTimer = setTimeout(() => {
-                            if (!isPlaying && isLoading === false) {
-                                // বাফার অনেকক্ষণ ধরে — এটা এরর না, শুধু লোডিং ওভারলে রাখি
-                            }
+                            if (!isPlaying && isLoading === false) {}
                             clearBufferTimer();
                         }, 20000);
                     }
@@ -1151,7 +1092,6 @@
                         isPlaying = false;
                         clearBufferTimer();
                         console.warn('Video error:', video.error);
-                        // নেটিভ এরর হলে ফ্যালব্যাক চেষ্টা
                         handlePlayError(index);
                         video.removeEventListener('error', onErr);
                     }
@@ -1159,7 +1099,6 @@
                 attachCommonListeners();
             }
 
-            // ===== প্লে এরর হ্যান্ডলার – ফ্যালব্যাক ট্রাই করে =====
             function handlePlayError(index) {
                 const stream = allStreams[index];
                 if (!stream) {
@@ -1167,43 +1106,27 @@
                     showError('চ্যানেল খুঁজে পাওয়া যায়নি');
                     return;
                 }
-                // যদি ফ্যালব্যাক আগে ট্রাই না করা হয় এবং দ্বিতীয় URL থাকে
                 if (!fallbackAttempted && stream.urls && stream.urls.length > 1) {
                     fallbackAttempted = true;
                     console.log('Trying fallback URL for:', stream.label);
                     loadStream(index, true);
                 } else {
-                    // ফ্যালব্যাক নেই বা ইতিমধ্যে ট্রাই করা
                     isLoading = false;
                     showError('এই চ্যানেলটি বন্ধ আছে');
                     console.warn('No fallback available or already tried for:', stream.label);
                 }
             }
 
-            // ===== স্ট্রিম সুইচ =====
             function switchToStream(index) {
                 if (isLoading) return;
-
-                // রিসেট ফ্যালব্যাক ফ্ল্যাগ
                 fallbackAttempted = false;
-
-                // বর্তমান ইনডেক্স আপডেট
                 currentStreamIndex = index;
-
-                // ব্যনার ওভারলে লুকান
                 hideBanner();
-
-                // লোডিং দেখান
                 showLoading();
-
-                // অ্যাকটিভ বাটন আপডেট
                 updateActiveButton();
-
-                // স্ট্রিম লোড
                 loadStream(index);
             }
 
-            // ===== অ্যাকটিভ বাটন আপডেট =====
             function updateActiveButton() {
                 const allBtns = container.querySelectorAll('.stream-btn');
                 allBtns.forEach(btn => {
@@ -1212,7 +1135,6 @@
                 });
             }
 
-            // ===== চ্যানেল বক্স + বাটন তৈরি =====
             function buildTable() {
                 container.innerHTML = '';
 
@@ -1259,11 +1181,8 @@
 
                         btn.addEventListener('click', function(e) {
                             const idx = parseInt(this.getAttribute('data-global-index'));
-                            // যদি ইতিমধ্যে লোড হচ্ছে, ফিরে যান
                             if (isLoading) return;
-                            // যদি একই চ্যানেল সিলেক্ট করা হয়, রিলোড
                             if (idx === currentStreamIndex) {
-                                // রিলোড
                                 switchToStream(idx);
                                 return;
                             }
@@ -1279,30 +1198,23 @@
                 });
             }
 
-            // ===== সুইচ ইভেন্ট =====
             modeToggle.addEventListener('change', function(e) {
                 const mode = this.checked ? 'phone' : 'tv';
                 setMode(mode);
                 if (currentStreamIndex >= 0) {
                     fallbackAttempted = false;
-                    // রিলোড কারেন্ট স্ট্রিম
                     showLoading();
                     loadStream(currentStreamIndex);
                 }
             });
 
-            // ===== ইনিশিয়ালাইজেশন =====
             function initPlayerAndUI() {
                 const initialMode = getMode();
                 updateModeUI(initialMode);
-
                 buildTable();
-
-                // কোনো স্ট্রিম অটো লোড হবে না — ব্যনার দেখানো হবে
                 currentStreamIndex = -1;
                 showBanner();
 
-                // ডাবল ক্লিক ফুলস্ক্রিন
                 video.addEventListener('dblclick', () => {
                     if (!document.fullscreenElement) video.requestFullscreen().catch(() => {});
                     else document.exitFullscreen().catch(() => {});
@@ -1311,7 +1223,6 @@
                 window.__player = { video, switchToStream, allStreams, hls: hlsInstance };
             }
 
-            // ===== PRELOADER টাইমিং =====
             setTimeout(() => {
                 document.querySelectorAll('.line').forEach(l => l.style.width = '40%');
             }, 300);
