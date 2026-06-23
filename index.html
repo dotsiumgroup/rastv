@@ -989,6 +989,7 @@
             let isPlaying = false;
             let bufferTimer = null;
             let fallbackAttempted = false;
+            let loadCounter = 0; // 🆕 জন্য কাউন্টার প্রতি লোডের
 
             // প্রতিটি স্ট্রিমের জন্য টাইমার ও স্ট্যাটাস
             const streamTimers = {};
@@ -1021,7 +1022,7 @@
                     'ধরে নিচ্ছি আপনি টিভি তে ভিডিও চালাচ্ছেন';
             }
 
-            // ===== চ্যানেল ডেটা (আপডেটেড) =====
+            // ===== চ্যানেল ডেটা =====
             const CHANNELS = [{
                 name: 'FIFA LIVE TV',
                 icon: '⚽',
@@ -1046,14 +1047,20 @@
                         'https://live.thebosstv.com:30443/dwlive/Somoy-TV/chunks.m3u8',
                         'http://198.195.239.50:8095/somoyTv/tracks-v1a1/mono.m3u8'
                     ]
-               }, {
+                    }, {
+                    label: 'FIFA LIVE',
+                    sub: 'Auto+HD',
+                    icon: '🏆',
+                    urls: ['https://cp11.adabmedia.com/hls2/sport.m3u8',
+                ]
+                }, {
                     label: 'TOFFEE',
                     sub: 'Auto+HD',
                     icon: '🏆',
                     urls: ['https://prod-cdn01-live.toffeelive.com/live/FIFA-2026-4/1/master_1800.m3u8',
-                           
-                           'https://toffee-proxy.shahriar-diu64.workers.dev/https://prod-cdn01-live.toffeelive.com/live/FIFA-2026-4/0/master_2000.m3u8',
-               ]
+
+                        'https://toffee-proxy.shahriar-diu64.workers.dev/https://prod-cdn01-live.toffeelive.com/live/FIFA-2026-4/0/master_2000.m3u8'
+                    ]
                 }, {
                     label: 'GO LIVE',
                     sub: 'Auto',
@@ -1076,49 +1083,56 @@
                     icon: '📺',
                     urls: ['https://owrcovcrpy.gpcdn.net/bpk-tv/1701/output/index.m3u8',
 
-'http://198.195.239.50:8095/jamunaTv/tracks-v1a1/mono.m3u8']
+                        'http://198.195.239.50:8095/jamunaTv/tracks-v1a1/mono.m3u8'
+                    ]
                 }, {
                     label: 'Bangla-Vision',
                     sub: 'HD',
                     icon: '📺',
                     urls: ['https://owrcovcrpy.gpcdn.net/bpk-tv/1715/output/index.m3u8',
-                           
-                           'http://198.195.239.50:8095/banglaVision/tracks-v1a1/mono.m3u8']
+
+                        'http://198.195.239.50:8095/banglaVision/tracks-v1a1/mono.m3u8'
+                    ]
                 }, {
                     label: 'Channel-i',
                     sub: 'HD',
                     icon: '📺',
                     urls: ['https://owrcovcrpy.gpcdn.net/bpk-tv/1723/output/index.m3u8',
 
-'http://198.195.239.50:8095/channelI/tracks-v1a1/mono.m3u8']
+                        'http://198.195.239.50:8095/channelI/tracks-v1a1/mono.m3u8'
+                    ]
                 }, {
                     label: 'ATN Bangla',
                     sub: 'HD',
                     icon: '📺',
                     urls: ['https://owrcovcrpy.gpcdn.net/bpk-tv/1722/output/index.m3u8',
-        
-                       'http://198.195.239.50:8095/atnBangla/tracks-v1a1/mono.m3u8']
+
+                        'http://198.195.239.50:8095/atnBangla/tracks-v1a1/mono.m3u8'
+                    ]
                 }, {
                     label: 'Channel 24',
                     sub: 'HD',
                     icon: '📺',
                     urls: ['https://owrcovcrpy.gpcdn.net/bpk-tv/1703/output/index.m3u8',
 
-'http://198.195.239.50:8095/channel24/tracks-v1a1/mono.m3u8']
+                        'http://198.195.239.50:8095/channel24/tracks-v1a1/mono.m3u8'
+                    ]
                 }, {
                     label: 'N-TV',
                     sub: 'HD',
                     icon: '📺',
                     urls: ['https://owrcovcrpy.gpcdn.net/bpk-tv/1716/output/index.m3u8',
 
-'http://198.195.239.50:8095/ntv/tracks-v1a1/mono.m3u8']
+                        'http://198.195.239.50:8095/ntv/tracks-v1a1/mono.m3u8'
+                    ]
                 }, {
                     label: 'ATN News',
                     sub: 'HD',
                     icon: '📺',
                     urls: ['https://owrcovcrpy.gpcdn.net/bpk-tv/1706/output/index.m3u8',
 
-'http://198.195.239.50:8095/atnNews/tracks-v1a1/mono.m3u8']
+                        'http://198.195.239.50:8095/atnNews/tracks-v1a1/mono.m3u8'
+                    ]
                 }, {
                     label: 'CANNEL 1',
                     sub: 'HD',
@@ -1130,28 +1144,29 @@
                     icon: '📺',
                     urls: ['https://owrcovcrpy.gpcdn.net/bpk-tv/1705/output/index.m3u8',
 
-'http://198.195.239.50:8095/ekattorTv/tracks-v1a1/mono.m3u8']
-       }, {
+                        'http://198.195.239.50:8095/ekattorTv/tracks-v1a1/mono.m3u8'
+                    ]
+                }, {
                     label: 'DBC NEWS',
                     sub: 'HD',
                     icon: '📺',
                     urls: ['https://owrcovcrpy.gpcdn.net/bpk-tv/1728/output/index.m3u8']
-   }, {
+                }, {
                     label: 'NEWS 24',
                     sub: 'HD',
                     icon: '📺',
                     urls: ['https://owrcovcrpy.gpcdn.net/bpk-tv/1708/output/index.m3u8']
-         }, {
+                }, {
                     label: 'Depto Tv',
                     sub: 'HD',
                     icon: '📺',
                     urls: ['https://owrcovcrpy.gpcdn.net/bpk-tv/1711/output/index.m3u8']
-         }, {
+                }, {
                     label: 'Shangshad',
                     sub: 'HD',
                     icon: '📺',
                     urls: ['https://owrcovcrpy.gpcdn.net/bpk-tv/1709/output/index.m3u8']
-           }, {
+                }, {
                     label: 'Independence',
                     sub: 'HD',
                     icon: '📺',
@@ -1207,23 +1222,23 @@
 
             function setLoaderToLoading() {
                 loaderContent.innerHTML = `
-                    <div class="ras-logo">
-                        <span class="ras">RAS</span>
-                        <span class="live">LIVE</span>
-                        <span class="tv">TV</span>
-                    </div>
-                    <div class="ras-spinner"></div>
-                    <div class="ras-status">চ্যানেল লোড হচ্ছে <span>✦</span></div>
-                `;
+                        <div class="ras-logo">
+                            <span class="ras">RAS</span>
+                            <span class="live">LIVE</span>
+                            <span class="tv">TV</span>
+                        </div>
+                        <div class="ras-spinner"></div>
+                        <div class="ras-status">চ্যানেল লোড হচ্ছে <span>✦</span></div>
+                    `;
             }
 
             function setLoaderToError(msg) {
                 loaderContent.innerHTML = `
-                    <div class="error-icon">⚠️</div>
-                    <div class="error-title">${msg}</div>
-                    <div class="error-sub">ভিন্ন চ্যানেল ক্লিক করুন</div>
-                    <div class="error-hint">অথবা <span>পুনরায় চেষ্টা</span> করুন</div>
-                `;
+                        <div class="error-icon">⚠️</div>
+                        <div class="error-title">${msg}</div>
+                        <div class="error-sub">ভিন্ন চ্যানেল ক্লিক করুন</div>
+                        <div class="error-hint">অথবা <span>পুনরায় চেষ্টা</span> করুন</div>
+                    `;
             }
 
             function clearBufferTimer() {
@@ -1231,7 +1246,7 @@
                     bufferTimer = null; }
             }
 
-            // ===== স্ট্যাটাস চেক (প্রতি স্ট্রিম আলাদা) =====
+            // ===== স্ট্যাটাস চেক =====
             async function checkUrlWithFallback(url, timeoutMs = 6000) {
                 try {
                     const controller = new AbortController();
@@ -1283,50 +1298,67 @@
                 const dot = btn.querySelector('.status-dot');
                 if (!dot) return;
 
-                // যদি showChecking সত্য হয় তাহলে checking দেখাবো (শুধু প্রথম লোডের জন্য)
                 if (showChecking) {
                     dot.className = 'status-dot checking';
                     dot.innerHTML = '<span class="dot-label">⏳</span>';
                 }
 
-                // চেক করি
                 const status = await checkStreamStatus(stream);
-
-                // স্ট্যাটাস সংরক্ষণ
                 streamStatus[index] = status;
 
-                // ডট আপডেট
                 dot.className = `status-dot ${status}`;
                 dot.innerHTML = status === 'on' ?
                     '<span class="dot-label">●</span>' :
                     '<span class="dot-label">●</span>';
 
-                // টাইমার রিসেট
                 if (streamTimers[index]) {
                     clearTimeout(streamTimers[index]);
                     delete streamTimers[index];
                 }
 
-                // পরবর্তী চেকের জন্য টাইমার সেট
                 const interval = (status === 'on') ? 10000 : 5000;
                 streamTimers[index] = setTimeout(() => {
-                    // ব্যাকগ্রাউন্ড চেক — ডট পরিবর্তন না করে শুধু চেক
                     checkAndUpdateSingle(index, false);
                 }, interval);
             }
 
-            // ===== সব স্ট্রিমের জন্য প্রথম চেক (প্যারালাল) =====
             function startInitialChecks() {
                 allStreams.forEach((stream, idx) => {
-                    // প্রতিটি স্ট্রিমের জন্য আলাদা চেক শুরু
                     checkAndUpdateSingle(idx, true);
                 });
             }
 
+            // ===== 🛠️ কোর ফিক্স: লোড বাতিল + নতুন চ্যানেল লোড =====
+            function cancelCurrentLoad() {
+                // HLS ধ্বংস
+                if (hlsInstance) {
+                    try { hlsInstance.destroy(); } catch (_) {}
+                    hlsInstance = null;
+                }
+                // ভিডিও রিসেট
+                try {
+                    video.pause();
+                    video.removeAttribute('src');
+                    video.load();
+                } catch (_) {}
+                // টাইমার ক্লিয়ার
+                clearBufferTimer();
+                // লোড কাউন্টার বাড়ান — পুরনো কলব্যাক ইগনোর করতে
+                loadCounter++;
+                // স্টেট রিসেট
+                isLoading = false;
+                fallbackAttempted = false;
+                // পুরনো ইভেন্ট লিসেনার সরানো (নতুন attachCommon এ নতুন করে যুক্ত হবে)
+                // আমরা রেফারেন্স রাখিনি, তাই সরাসরি removeEventListener সম্ভব নয়।
+                // কিন্তু loadCounter দিয়ে আমরা পুরনো কলব্যাক চিনতে পারব।
+            }
+
             // ===== স্ট্রিম লোড =====
             function loadStream(index, tryFallback) {
-                if (isLoading) return;
-                isLoading = true;
+                // যদি আগের লোড চলছে, তাহলে বাতিল করো
+                if (isLoading) {
+                    cancelCurrentLoad();
+                }
 
                 const stream = allStreams[index];
                 if (!stream || !stream.urls || stream.urls.length === 0) {
@@ -1338,14 +1370,24 @@
                 let urlIndex = (tryFallback === true) ? 1 : 0;
                 if (tryFallback && stream.urls.length < 2) urlIndex = 0;
                 const url = stream.urls[urlIndex] || stream.urls[0];
-                if (!url) { isLoading = false;
-                    showError('স্ট্রিম URL নেই'); return; }
+                if (!url) {
+                    isLoading = false;
+                    showError('স্ট্রিম URL নেই');
+                    return;
+                }
 
+                // লোড কাউন্টার বাড়ান — এই লোডের আইডি
+                const thisLoadId = ++loadCounter;
+                isLoading = true;
+                fallbackAttempted = !!tryFallback;
                 const mode = getMode();
 
+                // ভিডিও রিসেট
                 video.pause();
-                if (hlsInstance) { hlsInstance.destroy();
-                    hlsInstance = null; }
+                if (hlsInstance) {
+                    try { hlsInstance.destroy(); } catch (_) {}
+                    hlsInstance = null;
+                }
                 video.removeAttribute('src');
                 video.load();
 
@@ -1354,27 +1396,34 @@
                     if (typeof Hls !== 'undefined' && Hls.isSupported()) {
                         hlsInstance = new Hls({ enableWorker: true, lowLatencyMode: true });
                         hlsInstance.attachMedia(video);
-                        hlsInstance.on(Hls.Events.MEDIA_ATTACHED, () => { hlsInstance.loadSource(url); });
+                        hlsInstance.on(Hls.Events.MEDIA_ATTACHED, () => {
+                            if (loadCounter !== thisLoadId) return; // বাতিল
+                            hlsInstance.loadSource(url);
+                        });
                         hlsInstance.on(Hls.Events.MANIFEST_PARSED, () => {
+                            if (loadCounter !== thisLoadId) return;
                             video.play().then(() => {
+                                if (loadCounter !== thisLoadId) return;
                                 isPlaying = true;
                                 isLoading = false;
                                 hideOverlays();
                                 clearBufferTimer();
                                 fallbackAttempted = false;
                             }).catch(e => {
+                                if (loadCounter !== thisLoadId) return;
                                 isPlaying = false;
                                 isLoading = false;
                                 console.warn('hls play error:', e);
-                                handlePlayError(index);
+                                handlePlayError(index, thisLoadId);
                             });
                         });
                         hlsInstance.on(Hls.Events.ERROR, (event, data) => {
+                            if (loadCounter !== thisLoadId) return;
                             if (data.fatal) {
                                 console.warn('hls fatal, fallback');
-                                if (hlsInstance) { hlsInstance.destroy();
-                                    hlsInstance = null; }
-                                handlePlayError(index);
+                                if (hlsInstance) { try { hlsInstance.destroy(); } catch (
+                                    _) {} hlsInstance = null; }
+                                handlePlayError(index, thisLoadId);
                             } else {
                                 isLoading = false;
                             }
@@ -1383,16 +1432,18 @@
                         video.src = url;
                         video.load();
                         video.play().then(() => {
+                            if (loadCounter !== thisLoadId) return;
                             isPlaying = true;
                             isLoading = false;
                             hideOverlays();
                             clearBufferTimer();
                             fallbackAttempted = false;
                         }).catch(e => {
+                            if (loadCounter !== thisLoadId) return;
                             isPlaying = false;
                             isLoading = false;
                             clearBufferTimer();
-                            handlePlayError(index);
+                            handlePlayError(index, thisLoadId);
                         });
                     }
                 } else {
@@ -1400,21 +1451,24 @@
                     video.src = url;
                     video.load();
                     video.play().then(() => {
+                        if (loadCounter !== thisLoadId) return;
                         isPlaying = true;
                         isLoading = false;
                         hideOverlays();
                         clearBufferTimer();
                         fallbackAttempted = false;
                     }).catch(e => {
+                        if (loadCounter !== thisLoadId) return;
                         isPlaying = false;
                         isLoading = false;
                         clearBufferTimer();
-                        handlePlayError(index);
+                        handlePlayError(index, thisLoadId);
                     });
                 }
 
                 // ===== ইভেন্ট =====
                 function attachCommon() {
+                    // আগের সব ইভেন্ট সরান (নিরাপদ)
                     video.removeEventListener('loadeddata', onLoaded);
                     video.removeEventListener('canplay', onCan);
                     video.removeEventListener('playing', onPlay);
@@ -1429,48 +1483,62 @@
                     video.addEventListener('progress', onProg);
                     video.addEventListener('error', onErr);
 
-                    function onLoaded() { hideOverlays();
+                    function onLoaded() {
+                        if (loadCounter !== thisLoadId) return;
+                        hideOverlays();
                         isLoading = false;
                         clearBufferTimer();
-                        fallbackAttempted = false; }
+                        fallbackAttempted = false;
+                    }
 
-                    function onCan() { hideOverlays();
+                    function onCan() {
+                        if (loadCounter !== thisLoadId) return;
+                        hideOverlays();
                         isLoading = false;
                         clearBufferTimer();
-                        fallbackAttempted = false; }
+                        fallbackAttempted = false;
+                    }
 
-                    function onPlay() { hideOverlays();
+                    function onPlay() {
+                        if (loadCounter !== thisLoadId) return;
+                        hideOverlays();
                         isPlaying = true;
                         isLoading = false;
                         clearBufferTimer();
-                        fallbackAttempted = false; }
+                        fallbackAttempted = false;
+                    }
 
                     function onWait() {
+                        if (loadCounter !== thisLoadId) return;
                         if (isLoading) return;
                         if (loadingOverlay.classList.contains('hidden')) showLoading();
                         clearBufferTimer();
                         bufferTimer = setTimeout(() => {
-                            if (!isPlaying && isLoading === false) {}
+                            if (loadCounter !== thisLoadId) return;
                             clearBufferTimer();
                         }, 20000);
                     }
 
                     function onProg() {
+                        if (loadCounter !== thisLoadId) return;
                         if (loadingOverlay && !loadingOverlay.classList.contains('hidden')) {
                             if (video.buffered.length > 0) {
                                 const end = video.buffered.end(video.buffered.length - 1);
-                                if (end - video.currentTime > 2) { hideOverlays();
-                                    clearBufferTimer(); }
+                                if (end - video.currentTime > 2) {
+                                    hideOverlays();
+                                    clearBufferTimer();
+                                }
                             }
                         }
                     }
 
                     function onErr() {
+                        if (loadCounter !== thisLoadId) return;
                         isLoading = false;
                         isPlaying = false;
                         clearBufferTimer();
                         console.warn('Video error:', video.error);
-                        handlePlayError(index);
+                        handlePlayError(index, thisLoadId);
                         video.removeEventListener('error', onErr);
                     }
                 }
@@ -1478,10 +1546,14 @@
             }
 
             // ===== এরর হ্যান্ডলার =====
-            function handlePlayError(index) {
+            function handlePlayError(index, loadId) {
+                if (loadCounter !== loadId) return; // পুরনো কলব্যাক ইগনোর
                 const stream = allStreams[index];
-                if (!stream) { isLoading = false;
-                    showError('চ্যানেল পাওয়া যায়নি'); return; }
+                if (!stream) {
+                    isLoading = false;
+                    showError('চ্যানেল পাওয়া যায়নি');
+                    return;
+                }
                 if (!fallbackAttempted && stream.urls && stream.urls.length > 1) {
                     fallbackAttempted = true;
                     console.log('Fallback for:', stream.label);
@@ -1495,7 +1567,11 @@
 
             // ===== সুইচ =====
             function switchToStream(index) {
-                if (isLoading) return;
+                // আগের লোড চললে বাতিল
+                if (isLoading) {
+                    cancelCurrentLoad();
+                }
+
                 fallbackAttempted = false;
                 currentStreamIndex = index;
                 hideBanner();
@@ -1523,13 +1599,13 @@
                     const header = document.createElement('div');
                     header.className = 'box-header';
                     header.innerHTML = `
-                        <div class="box-title">
-                            <span class="box-icon-big">${ch.icon || ''}</span>
-                            ${ch.name}
-                            <span class="badge-count">${ch.streams.length}</span>
-                        </div>
-                        <span class="box-icon">▾</span>
-                    `;
+                            <div class="box-title">
+                                <span class="box-icon-big">${ch.icon || ''}</span>
+                                ${ch.name}
+                                <span class="badge-count">${ch.streams.length}</span>
+                            </div>
+                            <span class="box-icon">▾</span>
+                        `;
                     box.appendChild(header);
 
                     const grid = document.createElement('div');
@@ -1547,13 +1623,11 @@
                             '');
                         btn.setAttribute('data-global-index', globalIdx);
 
-                        // স্ট্যাটাস ডট (প্রথমে checking)
                         const dot = document.createElement('span');
                         dot.className = 'status-dot checking';
                         dot.innerHTML = '<span class="dot-label">⏳</span>';
                         btn.appendChild(dot);
 
-                        // আইকন
                         const iconSpan = document.createElement('span');
                         iconSpan.className = 'btn-icon';
                         iconSpan.textContent = stream.icon || '📺';
@@ -1570,9 +1644,10 @@
                         btn.appendChild(iconSpan);
                         btn.appendChild(labelSpan);
 
+                        // ✅ ক্লিক হ্যান্ডলার — isLoading চেক সরানো হয়েছে
                         btn.addEventListener('click', function(e) {
                             const idx = parseInt(this.getAttribute('data-global-index'));
-                            if (isLoading) return;
+                            // সেটা যদি কারেন্টও হয়, তবুও রিলোড করো
                             if (idx === currentStreamIndex) {
                                 switchToStream(idx);
                                 return;
@@ -1588,7 +1663,6 @@
                     container.appendChild(box);
                 });
 
-                // সব স্ট্রিমের জন্য আলাদা চেক শুরু
                 startInitialChecks();
             }
 
@@ -1597,6 +1671,8 @@
                 const mode = this.checked ? 'phone' : 'tv';
                 setMode(mode);
                 if (currentStreamIndex >= 0) {
+                    // লোড চললে বাতিল
+                    if (isLoading) cancelCurrentLoad();
                     fallbackAttempted = false;
                     showLoading();
                     loadStream(currentStreamIndex);
