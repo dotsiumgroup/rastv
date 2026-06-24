@@ -536,6 +536,42 @@
             margin: 0 2px;
         }
 
+        /* ফুলস্ক্রিনে কন্ট্রোল দেখাবে */
+        .video-col:fullscreen .video-controls,
+        .video-col:-webkit-full-screen .video-controls,
+        .video-col:-moz-full-screen .video-controls {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            border-radius: 0;
+            border: none;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(6px);
+            box-shadow: none;
+        }
+        .video-col:fullscreen .embed-responsive {
+            border-radius: 0;
+            box-shadow: none;
+        }
+        .video-col:-webkit-full-screen .embed-responsive {
+            border-radius: 0;
+            box-shadow: none;
+        }
+        .video-col:-moz-full-screen .embed-responsive {
+            border-radius: 0;
+            box-shadow: none;
+        }
+        .video-col:fullscreen .embed-responsive-16by9 {
+            padding-bottom: 100vh !important;
+        }
+        .video-col:-webkit-full-screen .embed-responsive-16by9 {
+            padding-bottom: 100vh !important;
+        }
+        .video-col:-moz-full-screen .embed-responsive-16by9 {
+            padding-bottom: 100vh !important;
+        }
+
         /* রেস্পন্সিভ কন্ট্রোল */
         @media (max-width: 600px) {
             .video-controls {
@@ -1090,7 +1126,7 @@
                     <div class="tv-layout-grid" id="layoutGrid">
 
                         <!-- === ভিডিও কলাম === -->
-                        <div class="video-col">
+                        <div class="video-col" id="videoCol">
                             <div class="embed-responsive embed-responsive-16by9">
                                 <video id="playerFrame" playsinline
                                 controlsList="nodownload noremoteplayback"
@@ -1230,6 +1266,7 @@
             const loaderContent = document.getElementById('rasLoaderContent');
             const fifaCol = document.getElementById('fifaCol');
             const newsCol = document.getElementById('newsCol');
+            const videoCol = document.getElementById('videoCol');
 
             // ===== কন্ট্রোল এলিমেন্ট =====
             const playBtn = document.getElementById('playBtn');
@@ -1649,19 +1686,36 @@
                 volumeSlider.value = video.muted ? 0 : video.volume;
             }
 
+            // ===== ফুলস্ক্রিন ফাংশন (সঠিকভাবে কাজ করবে) =====
             function toggleFullscreen() {
-                const el = video.parentElement.parentElement; // .embed-responsive
-                if (!document.fullscreenElement && !document.webkitFullscreenElement) {
-                    if (el.requestFullscreen) {
-                        el.requestFullscreen().catch(() => {});
-                    } else if (el.webkitRequestFullscreen) {
-                        el.webkitRequestFullscreen();
+                // আমরা videoCol এলিমেন্টকে ফুলস্ক্রিন করব, কারণ এতে ভিডিও ও কন্ট্রোল দুটোই আছে
+                const elem = videoCol;
+                if (!document.fullscreenElement && !document.webkitFullscreenElement && !document.mozFullScreenElement) {
+                    // ফুলস্ক্রিনে যাও
+                    if (elem.requestFullscreen) {
+                        elem.requestFullscreen().catch(err => {
+                            // যদি ব্যর্থ হয়, তাহলে ভিডিও এলিমেন্টকে ফুলস্ক্রিন করার চেষ্টা
+                            if (video.requestFullscreen) {
+                                video.requestFullscreen().catch(() => {});
+                            }
+                        });
+                    } else if (elem.webkitRequestFullscreen) {
+                        elem.webkitRequestFullscreen();
+                    } else if (elem.mozRequestFullScreen) {
+                        elem.mozRequestFullScreen();
+                    } else if (video.requestFullscreen) {
+                        video.requestFullscreen().catch(() => {});
+                    } else if (video.webkitRequestFullscreen) {
+                        video.webkitRequestFullscreen();
                     }
                 } else {
+                    // ফুলস্ক্রিন থেকে বের হও
                     if (document.exitFullscreen) {
                         document.exitFullscreen().catch(() => {});
                     } else if (document.webkitExitFullscreen) {
                         document.webkitExitFullscreen();
+                    } else if (document.mozCancelFullScreen) {
+                        document.mozCancelFullScreen();
                     }
                 }
             }
@@ -1742,18 +1796,17 @@
                     const isNowFullscreen = !!(document.fullscreenElement ||
                         document.webkitFullscreenElement ||
                         document.mozFullScreenElement);
+                    isFullscreen = isNowFullscreen;
+                    updateFullscreenIcon();
                     if (isNowFullscreen) {
-                        isFullscreen = true;
                         if (video.paused && !video.ended) {
                             video.play().catch(() => {});
                         }
                     } else {
-                        isFullscreen = false;
                         if (video.paused && !video.ended) {
                             video.play().catch(() => {});
                         }
                     }
-                    updateFullscreenIcon();
                 };
 
                 document.addEventListener('fullscreenchange', onFullscreenChange);
@@ -2230,7 +2283,6 @@
                     toggleFullscreen();
                 });
 
-                // ইনিশিয়াল ভলিউম
                 video.volume = 1;
                 updateVolumeIcon();
                 updateTimeDisplay();
