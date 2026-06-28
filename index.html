@@ -1239,33 +1239,38 @@
             }];
 
             // ------ শ্রেণীবিভাগ ------
+            // বাংলাদেশি: G-Serise, Green tv, Peace tv Bangla, Desh Sampratik, Discovery Bangla, SRK TV
             const banglaNames = ['G-Serise', 'Green tv', 'Peace tv Bangla', 'Desh Sampratik', 'SRK TV'];
             const foreignChannels = newChannelList.filter(item => !banglaNames.includes(item.name));
             const banglaNew = newChannelList.filter(item => banglaNames.includes(item.name));
 
-            // বিদেশি চ্যানেল অর্ডার
+            // বিদেশি চ্যানেলগুলো অর্ডার: ইসলামিক (Madina, Saudi), তারপর ইন্ডিয়ান নিউজ, তারপর বাকি
             const islamic = ['Madina live', 'Saudi Quran', 'Discovery Bangla'];
             const indianNews = ['Republic Bangla', 'News18 Bangla News', 'TV9 Bangla'];
             const others = ['Star Jalsha HD', 'Zee Bangla HD', 'Zee Bangla Cinema', 'Colors Bangla', 'PBS Kids'];
 
             const orderedForeign = [];
+            // প্রথমে ইসলামিক
             islamic.forEach(name => {
                 const found = foreignChannels.find(c => c.name === name);
                 if (found) orderedForeign.push(found);
             });
+            // তারপর ইন্ডিয়ান নিউজ
             indianNews.forEach(name => {
                 const found = foreignChannels.find(c => c.name === name);
                 if (found) orderedForeign.push(found);
             });
+            // তারপর বাকি (others) যারা এখনও যোগ হয়নি
             others.forEach(name => {
                 const found = foreignChannels.find(c => c.name === name);
                 if (found && !orderedForeign.includes(found)) orderedForeign.push(found);
             });
+            // যদি কোনো বাকি থাকে (যেমন PBS Kids ইতিমধ্যে included)
             foreignChannels.forEach(c => {
                 if (!orderedForeign.includes(c)) orderedForeign.push(c);
             });
 
-            // ===== ফিফা বক্সের জন্য নতুন চ্যানেল লিস্ট =====
+            // ===== ফিফা বক্সের জন্য নতুন চ্যানেল লিস্ট (আপনার দেওয়া) =====
             const fifaNewChannels = [{
                 label: 'FIFA LIVE',
                 sub: 'Auto+HD',
@@ -1313,6 +1318,7 @@
             }];
 
             // ===== বিল্ড CHANNELS =====
+            // ফিফা বক্স: পুরনো চ্যানেল + নতুন চ্যানেল (নতুনগুলো প্রথমে)
             const fifaOldChannels = [{
                 label: 'BTV',
                 sub: '720p',
@@ -1422,6 +1428,7 @@
             const newsCol = document.getElementById('newsCol');
             const indianCol = document.getElementById('indianCol');
             const statusText = document.getElementById('statusText');
+            const playerWrapper = document.getElementById('playerWrapper');
 
             let currentStreamIndex = -1;
             let isPlaying = false;
@@ -1432,10 +1439,12 @@
             const firstCheckDone = new Set();
 
             // প্রতিটি চ্যানেলের জন্য retry state
-            const retryState = new Map();
+            const retryState = new Map(); // index -> { attempt: 0, timer: null }
 
             // ===== স্ট্যাটাস বার =====
             function setStatus(msg, type, channelName) {
+                const dot = statusText.querySelector('.live-dot');
+                const textSpan = statusText.querySelector('span:last-child') || statusText;
                 if (type === 'loading') {
                     statusText.className = 'status-text';
                     statusText.innerHTML =
@@ -1515,25 +1524,10 @@
                     player.on('error', function(e) {
                         const msg = e.message || 'প্লে করতে সমস্যা';
                         setStatus('❌ ' + msg, 'error');
-                        // স্বয়ংক্রিয় ফ্যালব্যাক চেষ্টা
                         if (currentStreamIndex >= 0) {
                             const stream = allStreams[currentStreamIndex];
                             if (stream && stream.urls && stream.urls.length > 1) {
                                 tryFallback(currentStreamIndex);
-                            } else {
-                                // একক URL থাকলে পুনরায় চেষ্টা
-                                setTimeout(() => {
-                                    if (currentStreamIndex >= 0 && player) {
-                                        const s = allStreams[currentStreamIndex];
-                                        if (s && s.urls && s.urls.length > 0) {
-                                            try {
-                                                player.load({ file: s.urls[0], type: 'hls' });
-                                                setTimeout(() => { try { player
-                                                    .play(); } catch (_) {} }, 500);
-                                            } catch (_) {}
-                                        }
-                                    }
-                                }, 3000);
                             }
                         }
                     });
@@ -1550,7 +1544,7 @@
                 }
             }
 
-            // ===== ফ্যালব্যাক =====
+            // ===== ফালব্যাক =====
             let fallbackAttempted = false;
 
             function tryFallback(index) {
@@ -1558,24 +1552,27 @@
                 const stream = allStreams[index];
                 if (!stream || !stream.urls || stream.urls.length < 2) return;
                 fallbackAttempted = true;
-                // পরবর্তী URL চেষ্টা
                 const url = stream.urls[1];
                 if (url) {
-                    setStatus('ফ্যালব্যাক চেষ্টা...', 'loading');
-                    try {
-                        player.load({ file: url, type: 'hls' });
-                        setTimeout(() => {
-                            try { player.play(); } catch (_) {}
-                        }, 500);
-                    } catch (_) {}
+                    setStatus('ফালব্যাক চেষ্টা...', 'loading');
+                    player.load({ file: url, type: 'hls' });
+                    setTimeout(() => {
+                        player.play();
+                    }, 500);
                 }
             }
 
-            // ===== স্ট্রিম লোড (সমস্ত URL চেষ্টা) =====
+            // ===== স্ট্রিম লোড =====
             function loadStream(index) {
                 const stream = allStreams[index];
                 if (!stream || !stream.urls || stream.urls.length === 0) {
                     setStatus('❌ স্ট্রিম পাওয়া যায়নি', 'error');
+                    return;
+                }
+
+                const url = stream.urls[0];
+                if (!url) {
+                    setStatus('❌ URL নেই', 'error');
                     return;
                 }
 
@@ -1585,18 +1582,11 @@
 
                 updateActiveButton();
 
-                // প্রথম URL লোড
-                const url = stream.urls[0];
-                if (!url) {
-                    setStatus('❌ URL নেই', 'error');
-                    return;
-                }
-
                 if (!player) {
                     initJWPlayer(url);
                     setTimeout(() => {
                         if (player) {
-                            try { player.play(); } catch (_) {}
+                            player.play();
                             setStatus('লোড হচ্ছে...', 'loading');
                         }
                     }, 400);
@@ -1609,14 +1599,9 @@
                     player.load({ file: url, type: 'hls' });
                     setTimeout(() => {
                         try { player.play(); } catch (_) {}
-                    }, 500);
+                    }, 400);
                 } catch (err) {
-                    // যদি লোড ব্যর্থ হয়, পরবর্তী URL চেষ্টা
-                    if (stream.urls.length > 1) {
-                        tryFallback(index);
-                    } else {
-                        setStatus('❌ লোড করতে সমস্যা', 'error');
-                    }
+                    setStatus('❌ লোড করতে সমস্যা', 'error');
                 }
             }
 
@@ -1639,12 +1624,8 @@
                 });
             }
 
-            // ================================================================
-            //  ★★★ উন্নত স্ট্যাটাস চেক — CORS-মুক্ত ★★★
-            //  ব্যবহার করে fetch + no-cors + timeout + GET (HEAD এর বদলে)
-            //  যাতে Chrome সহ সব ব্রাউজারে কাজ করে।
-            // ================================================================
-            function checkStreamRobust(stream) {
+            // ===== স্ট্যাটাস চেক (স্মার্ট রেট্রাই সহ) =====
+            function checkStreamSimple(stream) {
                 return new Promise((resolve) => {
                     if (!stream.urls || stream.urls.length === 0) {
                         resolve('off');
@@ -1655,108 +1636,37 @@
                         resolve('off');
                         return;
                     }
+                    const controller = new AbortController();
+                    const timeoutId = setTimeout(() => { controller.abort(); }, 6000);
 
-                    // পদ্ধতি ১: GET with no-cors (CORS ব্লক করে না)
-                    // no-cors-এ আমরা HTTP status পড়তে পারি না, কিন্তু network error হলে reject হয়।
-                    // তাই timeout দিয়ে check করি: যদি timeout না হয় = reachable (optimistic)
-                    let resolved = false;
-                    const timeoutId = setTimeout(() => {
-                        if (!resolved) {
-                            resolved = true;
-                            // timeout হলে আমরা 'checking' দেখাব, 'off' না — কারণ হতে পারে ধীর সংযোগ
-                            resolve('checking');
-                        }
-                    }, 5000); // 5 সেকেন্ড timeout
-
-                    // প্রথমে CORS মোডে চেষ্টা (যে সব সার্ভার CORS support করে)
                     fetch(url, {
-                        method: 'GET',
-                        mode: 'cors',
+                        method: 'HEAD',
+                        signal: controller.signal,
                         cache: 'no-store',
-                        headers: { 'Accept': 'application/vnd.apple.mpegurl, */*' }
+                        mode: 'cors'
                     }).then(resp => {
-                        if (!resolved) {
-                            resolved = true;
-                            clearTimeout(timeoutId);
-                            // যদি status ২০০-৩৯৯ হয় তাহলে on, নাহলে off
-                            if (resp.status >= 200 && resp.status < 400) {
-                                resolve('on');
-                            } else {
-                                // CORS GET ব্যর্থ হলে no-cors দিয়ে চেষ্টা
-                                tryNoCors();
-                            }
-                        }
+                        clearTimeout(timeoutId);
+                        resolve(resp.ok ? 'on' : 'off');
                     }).catch(() => {
-                        // CORS GET failed → no-cors fallback
-                        if (!resolved) {
-                            tryNoCors();
-                        }
-                    });
-
-                    function tryNoCors() {
-                        if (resolved) return;
-                        fetch(url, {
-                            method: 'GET',
-                            mode: 'no-cors',
-                            cache: 'no-store',
-                        }).then(() => {
-                            // no-cors সফল = network error হয়নি → stream reachable
-                            if (!resolved) {
-                                resolved = true;
-                                clearTimeout(timeoutId);
-                                resolve('on');
-                            }
-                        }).catch(() => {
-                            // no-cors ব্যর্থ = network error
-                            if (!resolved) {
-                                resolved = true;
-                                clearTimeout(timeoutId);
-                                // fallback: XHR দিয়ে চেষ্টা
-                                tryXhr();
-                            }
-                        });
-                    }
-
-                    function tryXhr() {
-                        if (resolved) return;
+                        clearTimeout(timeoutId);
                         try {
                             const xhr = new XMLHttpRequest();
-                            xhr.open('GET', url, true);
-                            xhr.timeout = 6000;
+                            xhr.open('HEAD', url, true);
+                            xhr.timeout = 7000;
                             xhr.onload = function() {
-                                if (!resolved) {
-                                    resolved = true;
-                                    clearTimeout(timeoutId);
-                                    resolve(xhr.status >= 200 && xhr.status < 400 ? 'on' : 'off');
-                                }
+                                resolve(xhr.status >= 200 && xhr.status < 300 ? 'on' : 'off');
                             };
-                            xhr.onerror = function() {
-                                if (!resolved) {
-                                    resolved = true;
-                                    clearTimeout(timeoutId);
-                                    resolve('off');
-                                }
-                            };
-                            xhr.ontimeout = function() {
-                                if (!resolved) {
-                                    resolved = true;
-                                    clearTimeout(timeoutId);
-                                    resolve('checking');
-                                }
-                            };
+                            xhr.onerror = function() { resolve('off'); };
+                            xhr.ontimeout = function() { resolve('off'); };
                             xhr.send();
                         } catch (_) {
-                            if (!resolved) {
-                                resolved = true;
-                                clearTimeout(timeoutId);
-                                resolve('off');
-                            }
+                            resolve('off');
                         }
-                    }
+                    });
                 });
             }
 
-            // ===== ডট আপডেট (রেট্রাই সহ) =====
+            // রেট্রাই লজিক: প্রথম ৩ বার ২ সেকেন্ড পরপর, তারপর ১ মিনিট পর
             async function updateDotStatus(index) {
                 const stream = allStreams[index];
                 if (!stream) return;
@@ -1765,12 +1675,13 @@
                 const dot = btn.querySelector('.status-dot');
                 if (!dot) return;
 
-                // রেট্রাই স্টেট
+                // রেট্রাই স্টেট ম্যানেজ
                 if (!retryState.has(index)) {
                     retryState.set(index, { attempt: 0, timer: null });
                 }
                 const state = retryState.get(index);
 
+                // চেক করার আগে ক্লিয়ার করে দিই
                 if (state.timer) {
                     clearTimeout(state.timer);
                     state.timer = null;
@@ -1782,42 +1693,35 @@
                     dot.innerHTML = '<span class="dot-label">⏳</span>';
                 }
 
-                const status = await checkStreamRobust(stream);
-
-                // 'checking' status মানে আমরা নিশ্চিত নই — কিন্তু 'off' দেখাব না
-                if (status === 'checking') {
-                    dot.className = 'status-dot checking';
-                    dot.innerHTML = '<span class="dot-label">⏳</span>';
-                    statusCache.set(index, { status: 'checking', checked: Date.now() });
-                    firstCheckDone.add(index);
-                    // ১০ সেকেন্ড পর আবার চেক
-                    const timer = setTimeout(() => { updateDotStatus(index); }, 10000);
-                    state.timer = timer;
-                    statusCheckTimers.push(timer);
-                    return;
-                }
-
+                const status = await checkStreamSimple(stream);
                 dot.className = `status-dot ${status}`;
                 dot.innerHTML = '<span class="dot-label">●</span>';
                 statusCache.set(index, { status, checked: Date.now() });
                 firstCheckDone.add(index);
 
-                // রেট্রাই ব্যবধান
-                let nextInterval = 60000;
+                // রেট্রাই লজিক
+                let nextInterval = 60000; // ডিফল্ট ১ মিনিট
+
                 if (status === 'off') {
+                    // অফ হলে ৩ বার ২ সেকেন্ড পরপর চেক
                     if (state.attempt < 3) {
                         state.attempt++;
-                        nextInterval = 3000;
+                        nextInterval = 2000;
                     } else {
-                        state.attempt = 0;
-                        nextInterval = 90000;
+                        // ৩ বার失败後 ১ মিনিট
+                        state.attempt = 0; // রিসেট
+                        nextInterval = 60000;
                     }
                 } else {
+                    // অন থাকলে ১ মিনিট
                     state.attempt = 0;
                     nextInterval = 60000;
                 }
 
-                const timer = setTimeout(() => { updateDotStatus(index); }, nextInterval);
+                // টাইমার সেট
+                const timer = setTimeout(() => {
+                    updateDotStatus(index);
+                }, nextInterval);
                 state.timer = timer;
                 statusCheckTimers.push(timer);
             }
@@ -1893,18 +1797,21 @@
                 container.appendChild(box);
             }
 
-            // ===== বিল্ড লেআউট =====
+            // ===== বিল্ড লেআউট — সব CHANNELS রেন্ডার করে =====
             function buildLayout() {
                 fifaCol.innerHTML = '';
                 newsCol.innerHTML = '';
                 indianCol.innerHTML = '';
 
+                // CHANNELS[0] → ফিফা
                 if (CHANNELS.length > 0) {
                     buildChannelBox(CHANNELS[0], fifaCol);
                 }
+                // CHANNELS[1] → বাংলাদেশি
                 if (CHANNELS.length > 1) {
                     buildChannelBox(CHANNELS[1], newsCol);
                 }
+                // CHANNELS[2] → আন্তর্জাতিক
                 if (CHANNELS.length > 2) {
                     buildChannelBox(CHANNELS[2], indianCol);
                 }
