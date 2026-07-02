@@ -891,10 +891,10 @@
             'use strict';
 
             // ============================================================
-            //  চ্যানেল ডেটা — সংশোধিত: বাংলাদেশি + আন্তর্জাতিক
+            //  চ্যানেল ডেটা
             // ============================================================
 
-            // ------ existing Bangladeshi streams (keep all) ------
+            // ------ existing Bangladeshi streams ------
             const existingBangladeshi = [{
                 label: 'Jamuna Tv',
                 sub: 'HD',
@@ -1123,7 +1123,7 @@
                 ]
             }];
 
-            // ------ নতুন চ্যানেল লিস্ট (user provided) ------
+            // ------ new channels from user ------
             const newChannelList = [{
                 "name": "G-Serise",
                 "icon": "📺",
@@ -1239,38 +1239,34 @@
             }];
 
             // ------ শ্রেণীবিভাগ ------
-            // বাংলাদেশি: G-Serise, Green tv, Peace tv Bangla, Desh Sampratik, Discovery Bangla, SRK TV
             const banglaNames = ['G-Serise', 'Green tv', 'Peace tv Bangla', 'Desh Sampratik', 'SRK TV'];
             const foreignChannels = newChannelList.filter(item => !banglaNames.includes(item.name));
             const banglaNew = newChannelList.filter(item => banglaNames.includes(item.name));
 
-            // বিদেশি চ্যানেলগুলো অর্ডার: ইসলামিক (Madina, Saudi), তারপর ইন্ডিয়ান নিউজ, তারপর বাকি
+            // বিদেশি চ্যানেল অর্ডার
             const islamic = ['Madina live', 'Saudi Quran', 'Discovery Bangla'];
             const indianNews = ['Republic Bangla', 'News18 Bangla News', 'TV9 Bangla'];
             const others = ['Star Jalsha HD', 'Zee Bangla HD', 'Zee Bangla Cinema', 'Colors Bangla', 'PBS Kids'];
 
             const orderedForeign = [];
-            // প্রথমে ইসলামিক
             islamic.forEach(name => {
                 const found = foreignChannels.find(c => c.name === name);
                 if (found) orderedForeign.push(found);
             });
-            // তারপর ইন্ডিয়ান নিউজ
             indianNews.forEach(name => {
                 const found = foreignChannels.find(c => c.name === name);
                 if (found) orderedForeign.push(found);
             });
-            // তারপর বাকি (others) যারা এখনও যোগ হয়নি
             others.forEach(name => {
                 const found = foreignChannels.find(c => c.name === name);
                 if (found && !orderedForeign.includes(found)) orderedForeign.push(found);
             });
-            // যদি কোনো বাকি থাকে (যেমন PBS Kids ইতিমধ্যে included)
             foreignChannels.forEach(c => {
                 if (!orderedForeign.includes(c)) orderedForeign.push(c);
             });
 
-            // ===== ফিফা বক্সের জন্য নতুন চ্যানেল লিস্ট (আপনার দেওয়া) =====
+            // ===== ফিফা চ্যানেল =====
+            // নতুন ফিফা চ্যানেল (user added)
             const fifaNewChannels = [{
                 label: 'FIFA LIVE',
                 sub: 'Auto+HD',
@@ -1279,203 +1275,172 @@
                     'https://cp11.adabmedia.com/hls2/sport.m3u8',
                     'https://edge22.776740.ir.cdn.ir/hls2/sport.m3u8'
                 ]
-            
             }];
 
-            const updatedChannels = [
-  // ===== পুরানো থেকে রাখা চ্যানেল =====
-  {
-    label: 'MASUN Sports',
-    sub: '720p',
-    icon: '🏏',
-    urls: ['https://andro.226503.xyz/checklist/androstreamlivebiraz1.m3u8']
-  },
-  {
-    label: 'MATCH TV',
-    sub: '1080p',
-    icon: '🏟️',
-    urls: [
-      'https://bl.video.matchtv.ru/media/playlist/free_d46d0cf1712c0542ec7fd4f0808f600a_hd/17_89756005/1080/e6bef86de8a133cd7b27deb040758a00/4796141934.m3u8',
-      'http://cdntv.online/low/9mlxywika2/48.m3u8'
-    ]
-  },
-  {
-    label: 'D Sports',
-    sub: 'Auto+HD',
-    icon: '🏀',
-    urls: [
-      'https://1nyaler.streamhostingcdn.top/stream/106/index.m3u8',
-      'http://cablemaxsigloxxi.com:8000/play/a0l4/index.m3u8'
-    ]
-  },
+            // পুরাতন ফিফা চ্যানেল (যেগুলো রাখা হয়েছে)
+            // এখানে updatedChannels থেকে নেওয়া হয়েছে
+            const fifaOldChannels = [{
+                label: 'MASUN Sports',
+                sub: '720p',
+                icon: '🏏',
+                urls: ['https://andro.226503.xyz/checklist/androstreamlivebiraz1.m3u8']
+            }, {
+                label: 'MATCH TV',
+                sub: '1080p',
+                icon: '🏟️',
+                urls: [
+                    'https://bl.video.matchtv.ru/media/playlist/free_d46d0cf1712c0542ec7fd4f0808f600a_hd/17_89756005/1080/e6bef86de8a133cd7b27deb040758a00/4796141934.m3u8',
+                    'http://cdntv.online/low/9mlxywika2/48.m3u8'
+                ]
+            }, {
+                label: 'D Sports',
+                sub: 'Auto+HD',
+                icon: '🏀',
+                urls: [
+                    'https://1nyaler.streamhostingcdn.top/stream/106/index.m3u8',
+                    'http://cablemaxsigloxxi.com:8000/play/a0l4/index.m3u8'
+                ]
+            }, {
+                label: 'Football WC 1',
+                sub: 'Auto',
+                icon: '📺',
+                urls: ['http://93.93.113.95:25461/live/TV-Berati/XtreamCodes/495.ts']
+            }, {
+                label: 'Football WC 2',
+                sub: 'Auto',
+                icon: '📺',
+                urls: ['http://198.195.239.50:8095/btv/tracks-v1a1/mono.m3u8']
+            }, {
+                label: 'Football WC 3',
+                sub: 'Auto',
+                icon: '📺',
+                urls: ['https://kazimmt.ami.bd/playlist/TF/TF-3.m3u8']
+            }, {
+                label: 'Football WC 4',
+                sub: 'Auto',
+                icon: '📺',
+                urls: ['https://kazimmt.ami.bd/playlist/TF/TF-2.m3u8']
+            }, {
+                label: 'Football WC 5',
+                sub: 'Auto',
+                icon: '📺',
+                urls: ['http://198.195.239.50:8095/tsports/tracks-v1a1/mono.m3u8']
+            }, {
+                label: 'Football WC 6',
+                sub: 'Auto',
+                icon: '📺',
+                urls: ['http://198.195.239.50:8095/tsports/tracks-v1/mono.m3u8']
+            }, {
+                label: 'Football WC 7',
+                sub: 'Auto',
+                icon: '📺',
+                urls: ['http://198.195.239.50:8095/somoyTv/tracks-v1a1/mono.m3u8']
+            }, {
+                label: 'Football WC 8',
+                sub: 'Auto',
+                icon: '📺',
+                urls: ['https://live.thebosstv.com:30443/dwlive/Somoy-TV/playlist.m3u8']
+            }, {
+                label: 'Football WC 9',
+                sub: 'Auto',
+                icon: '📺',
+                urls: ['http://198.195.239.50:8095/ptv/tracks-v1a1/mono.m3u8']
+            }, {
+                label: 'Football WC 10',
+                sub: 'Auto',
+                icon: '📺',
+                urls: ['http://198.195.239.50:8095/unt-s/video.m3u8']
+            }, {
+                label: 'Football WC 11',
+                sub: 'Auto',
+                icon: '📺',
+                urls: ['https://1nyaler.streamhostingcdn.top/stream/23/index.m3u8']
+            }, {
+                label: 'Football WC 13',
+                sub: 'Auto',
+                icon: '📺',
+                urls: ['https://cdn-tt.pages.dev/ch1.m3u8']
+            }, {
+                label: 'Football WC 14',
+                sub: 'Auto',
+                icon: '📺',
+                urls: ['https://cdn-tt.pages.dev/ch2.m3u8']
+            }, {
+                label: 'Football WC 15',
+                sub: 'Auto',
+                icon: '📺',
+                urls: ['https://cdn-tt.pages.dev/ch3.m3u8']
+            }, {
+                label: 'Football WC 16',
+                sub: 'Auto',
+                icon: '📺',
+                urls: ['https://cdn-tt.pages.dev/ch4.m3u8']
+            }, {
+                label: 'Football WC 17',
+                sub: 'Auto',
+                icon: '📺',
+                urls: ['https://kazimmt.ami.bd/playlist/TF/TF-1.m3u8']
+            }, {
+                label: 'T Sports',
+                sub: 'Auto',
+                icon: '📺',
+                urls: ['http://fastshare1.com:8080//live/25711345/late8airline/52500.ts']
+            }, {
+                label: 'Football WC 19',
+                sub: 'Auto',
+                icon: '📺',
+                urls: ['https://rgkkw.live:443/live/1Aoen7elp5/IgMJ60tmAa/98841.ts']
+            }, {
+                label: 'Football WC 4K 1',
+                sub: 'Auto',
+                icon: '📺',
+                urls: ['http://fastshare1.com:8080//live/25711345/late8airline/688287.ts']
+            }, {
+                label: 'Football WC 4K 2',
+                sub: 'Auto',
+                icon: '📺',
+                urls: ['http://fastshare1.com:8080//live/25711345/late8airline/745270.ts']
+            }, {
+                label: 'Football WC 4K bein',
+                sub: 'Auto',
+                icon: '📺',
+                urls: ['http://rgkkw.live/live/1Aoen7elp5/IgMJ60tmAa/747283.ts']
+            }, {
+                label: 'Football WC 4K 3',
+                sub: 'Auto',
+                icon: '📺',
+                urls: ['http://starhub.pro/live/farhat-3379/67897-913379/745269.ts']
+            }, {
+                label: 'SKY SPORTS 1',
+                sub: 'Auto',
+                icon: '📺',
+                urls: ['http://6zirt9yx.otttv.pw/iptv/HEGN4VXXQQSYCA/9289/index.m3u8']
+            }, {
+                label: 'SKY SPORTS 2',
+                sub: 'Auto',
+                icon: '📺',
+                urls: ['http://ytoxw6un.ottclub.xyz/iptv/KCUHA6DGYYVA8ZZFUPQV3KZH/9289/index.m3u8']
+            }, {
+                label: 'Somoy TV 1',
+                sub: 'Auto',
+                icon: '📺',
+                urls: ['https://owrcovcrpy.gpcdn.net/bpk-tv/1702/output/1702.m3u8']
+            }, {
+                label: 'Somoy TV 2',
+                sub: 'Auto',
+                icon: '📺',
+                urls: ['https://owrcovcrpy.gpcdn.net/bpk-tv/1702/output/index.m3u8']
+            }, {
+                label: 'Somoy News 1',
+                sub: 'Auto',
+                icon: '📺',
+                urls: ['http://fastshare1.com:8080//live/25711345/late8airline/422.ts']
+            }];
 
-  // ===== নতুন যুক্ত করা লিংক (প্রত্যেকটি আলাদা চ্যানেল) =====
-  {
-    label: 'Football WC 1',
-    sub: 'Auto',
-    icon: '📺',
-    urls: ['http://93.93.113.95:25461/live/TV-Berati/XtreamCodes/495.ts']
-  },
-  {
-    label: 'Football WC 2',
-    sub: 'Auto',
-    icon: '📺',
-    urls: ['http://198.195.239.50:8095/btv/tracks-v1a1/mono.m3u8']
-  },
-  {
-    label: 'Football WC 3',
-    sub: 'Auto',
-    icon: '📺',
-    urls: ['https://kazimmt.ami.bd/playlist/TF/TF-3.m3u8']
-  },
-  {
-    label: 'Football WC 4',
-    sub: 'Auto',
-    icon: '📺',
-    urls: ['https://kazimmt.ami.bd/playlist/TF/TF-2.m3u8']
-  },
-  {
-    label: 'Football WC 5',
-    sub: 'Auto',
-    icon: '📺',
-    urls: ['http://198.195.239.50:8095/tsports/tracks-v1a1/mono.m3u8']
-  },
-  {
-    label: 'Football WC 6',
-    sub: 'Auto',
-    icon: '📺',
-    urls: ['http://198.195.239.50:8095/tsports/tracks-v1/mono.m3u8']
-  },
-  {
-    label: 'Football WC 7',
-    sub: 'Auto',
-    icon: '📺',
-    urls: ['http://198.195.239.50:8095/somoyTv/tracks-v1a1/mono.m3u8']
-  },
-  {
-    label: 'Football WC 8',
-    sub: 'Auto',
-    icon: '📺',
-    urls: ['https://live.thebosstv.com:30443/dwlive/Somoy-TV/playlist.m3u8']
-  },
-  {
-    label: 'Football WC 9',
-    sub: 'Auto',
-    icon: '📺',
-    urls: ['http://198.195.239.50:8095/ptv/tracks-v1a1/mono.m3u8']
-  },
-  {
-    label: 'Football WC 10',
-    sub: 'Auto',
-    icon: '📺',
-    urls: ['http://198.195.239.50:8095/unt-s/video.m3u8']
-  },
-  {
-    label: 'Football WC 11',
-    sub: 'Auto',
-    icon: '📺',
-    urls: ['https://1nyaler.streamhostingcdn.top/stream/23/index.m3u8']
-  },
-  {
-    label: 'Football WC 13',
-    sub: 'Auto',
-    icon: '📺',
-    urls: ['https://cdn-tt.pages.dev/ch1.m3u8']
-  },
-  {
-    label: 'Football WC 14',
-    sub: 'Auto',
-    icon: '📺',
-    urls: ['https://cdn-tt.pages.dev/ch2.m3u8']
-  },
-  {
-    label: 'Football WC 15',
-    sub: 'Auto',
-    icon: '📺',
-    urls: ['https://cdn-tt.pages.dev/ch3.m3u8']
-  },
-  {
-    label: 'Football WC 16',
-    sub: 'Auto',
-    icon: '📺',
-    urls: ['https://cdn-tt.pages.dev/ch4.m3u8']
-  },
-  {
-    label: 'Football WC 17',
-    sub: 'Auto',
-    icon: '📺',
-    urls: ['https://kazimmt.ami.bd/playlist/TF/TF-1.m3u8']
-  },
-  {
-    label: 'T Sports',
-    sub: 'Auto',
-    icon: '📺',
-    urls: ['http://fastshare1.com:8080//live/25711345/late8airline/52500.ts']
-  },
-  {
-    label: 'Football WC 19',
-    sub: 'Auto',
-    icon: '📺',
-    urls: ['https://rgkkw.live:443/live/1Aoen7elp5/IgMJ60tmAa/98841.ts']
-  },
-  {
-    label: 'Football WC 4K 1',
-    sub: 'Auto',
-    icon: '📺',
-    urls: ['http://fastshare1.com:8080//live/25711345/late8airline/688287.ts']
-  },
-  {
-    label: 'Football WC 4K 2',
-    sub: 'Auto',
-    icon: '📺',
-    urls: ['http://fastshare1.com:8080//live/25711345/late8airline/745270.ts']
-  },
-  {
-    label: 'Football WC 4K bein',
-    sub: 'Auto',
-    icon: '📺',
-    urls: ['http://rgkkw.live/live/1Aoen7elp5/IgMJ60tmAa/747283.ts']
-  },
-  {
-    label: 'Football WC 4K 3',
-    sub: 'Auto',
-    icon: '📺',
-    urls: ['http://starhub.pro/live/farhat-3379/67897-913379/745269.ts']
-  },
-  {
-    label: 'SKY SPORTS 1',
-    sub: 'Auto',
-    icon: '📺',
-    urls: ['http://6zirt9yx.otttv.pw/iptv/HEGN4VXXQQSYCA/9289/index.m3u8']
-  },
-  {
-    label: 'SKY SPORTS 2',
-    sub: 'Auto',
-    icon: '📺',
-    urls: ['http://ytoxw6un.ottclub.xyz/iptv/KCUHA6DGYYVA8ZZFUPQV3KZH/9289/index.m3u8']
-  },
-  {
-    label: 'Somoy TV 1',
-    sub: 'Auto',
-    icon: '📺',
-    urls: ['https://owrcovcrpy.gpcdn.net/bpk-tv/1702/output/1702.m3u8']
-  },
-  {
-    label: 'Somoy TV 2',
-    sub: 'Auto',
-    icon: '📺',
-    urls: ['https://owrcovcrpy.gpcdn.net/bpk-tv/1702/output/index.m3u8']
-  },
-  {
-    label: 'Somoy News 1',
-    sub: 'Auto',
-    icon: '📺',
-    urls: ['http://fastshare1.com:8080//live/25711345/late8airline/422.ts']
-  }
-];
-            // ফিফা চ্যানেল: নতুন + পুরনো (নতুনগুলো প্রথমে)
+            // ফিফা স্ট্রিম = নতুন + পুরাতন (নতুন প্রথমে)
             const fifaStreams = fifaNewChannels.concat(fifaOldChannels);
 
+            // ===== CHANNELS =====
             const CHANNELS = [{
                 id: 'fifa',
                 name: 'FIFA LIVE TV',
@@ -1524,7 +1489,6 @@
             const newsCol = document.getElementById('newsCol');
             const indianCol = document.getElementById('indianCol');
             const statusText = document.getElementById('statusText');
-            const playerWrapper = document.getElementById('playerWrapper');
 
             let currentStreamIndex = -1;
             let isPlaying = false;
@@ -1533,9 +1497,7 @@
             // ===== স্ট্যাটাস ট্র্যাকিং =====
             const statusCache = new Map();
             const firstCheckDone = new Set();
-
-            // প্রতিটি চ্যানেলের জন্য retry state
-            const retryState = new Map(); // index -> { attempt: 0, timer: null }
+            const retryState = new Map();
 
             // ===== স্ট্যাটাস বার =====
             function setStatus(msg, type, channelName) {
@@ -1720,7 +1682,7 @@
                 });
             }
 
-            // ===== স্ট্যাটাস চেক (স্মার্ট রেট্রাই সহ) =====
+            // ===== স্ট্যাটাস চেক =====
             function checkStreamSimple(stream) {
                 return new Promise((resolve) => {
                     if (!stream.urls || stream.urls.length === 0) {
@@ -1762,7 +1724,6 @@
                 });
             }
 
-            // রেট্রাই লজিক: প্রথম ৩ বার ২ সেকেন্ড পরপর, তারপর ১ মিনিট পর
             async function updateDotStatus(index) {
                 const stream = allStreams[index];
                 if (!stream) return;
@@ -1771,13 +1732,11 @@
                 const dot = btn.querySelector('.status-dot');
                 if (!dot) return;
 
-                // রেট্রাই স্টেট ম্যানেজ
                 if (!retryState.has(index)) {
                     retryState.set(index, { attempt: 0, timer: null });
                 }
                 const state = retryState.get(index);
 
-                // চেক করার আগে ক্লিয়ার করে দিই
                 if (state.timer) {
                     clearTimeout(state.timer);
                     state.timer = null;
@@ -1795,26 +1754,20 @@
                 statusCache.set(index, { status, checked: Date.now() });
                 firstCheckDone.add(index);
 
-                // রেট্রাই লজিক
-                let nextInterval = 60000; // ডিফল্ট ১ মিনিট
-
+                let nextInterval = 60000;
                 if (status === 'off') {
-                    // অফ হলে ৩ বার ২ সেকেন্ড পরপর চেক
                     if (state.attempt < 3) {
                         state.attempt++;
                         nextInterval = 2000;
                     } else {
-                        // ৩ বার失败後 ১ মিনিট
-                        state.attempt = 0; // রিসেট
+                        state.attempt = 0;
                         nextInterval = 60000;
                     }
                 } else {
-                    // অন থাকলে ১ মিনিট
                     state.attempt = 0;
                     nextInterval = 60000;
                 }
 
-                // টাইমার সেট
                 const timer = setTimeout(() => {
                     updateDotStatus(index);
                 }, nextInterval);
@@ -1893,21 +1846,18 @@
                 container.appendChild(box);
             }
 
-            // ===== বিল্ড লেআউট — সব CHANNELS রেন্ডার করে =====
+            // ===== বিল্ড লেআউট =====
             function buildLayout() {
                 fifaCol.innerHTML = '';
                 newsCol.innerHTML = '';
                 indianCol.innerHTML = '';
 
-                // CHANNELS[0] → ফিফা
                 if (CHANNELS.length > 0) {
                     buildChannelBox(CHANNELS[0], fifaCol);
                 }
-                // CHANNELS[1] → বাংলাদেশি
                 if (CHANNELS.length > 1) {
                     buildChannelBox(CHANNELS[1], newsCol);
                 }
-                // CHANNELS[2] → আন্তর্জাতিক
                 if (CHANNELS.length > 2) {
                     buildChannelBox(CHANNELS[2], indianCol);
                 }
