@@ -1279,109 +1279,200 @@
                     'https://cp11.adabmedia.com/hls2/sport.m3u8',
                     'https://edge22.776740.ir.cdn.ir/hls2/sport.m3u8'
                 ]
-            }, {
-                label: 'Unite8 Sports',
-                sub: 'Sports',
-                icon: '⚽',
-                urls: [
-                    'https://s1.itcnbd.live/united-sports-2/tracks-v1a1/mono.m3u8?nocache=1782578588285',
-                    'https://s1.itcnbd.live/united-sports-2/tracks-v1a1/mono.m3u8?nocache=1782578588285'
-                
-                ]
-            }, {
-                label: 'T Sports',
-                sub: 'Sports',
-                icon: '⚽',
-                urls: [
-                    'https://tv.emnetbd.com/flussonic/Tsports1/tracks-v1a1/mono.m3u8?nocache=1782578566351'
-                ]
-            }, {
-                label: 'Somoy tv',
-                sub: 'Sports',
-                icon: '⚽',
-                urls: [
-                    'https://s1.itcnbd.live/1-somoy-tv/tracks-v1a1/mono.m3u8?nocache=1782578607115',
-                    'https://s1.itcnbd.live/1-somoy-tv/index.m3u8?nocache=1782578607115'
-                ]
-            }, {
-                label: 'Fox Sports',
-                sub: 'Auto+HD',
-                icon: '⚽',
-                urls: [
-                    'http://84.17.50.102/fox/index.m3u8',
-                    'http://84.17.50.102/fox/index.m3u8'
-                ]
-            }, {
-                label: 'CCTV 5',
-                sub: 'WORLD CUP',
-                icon: '⚽',
-                urls: [
-                    'http://107.150.60.122/live/cctv5hd.m3u8',
-                    'http://107.150.60.122/live/cctv5hd.m3u8'
-                ]
+            
             }];
 
-            // ===== বিল্ড CHANNELS =====
-            // ফিফা বক্স: পুরনো চ্যানেল + নতুন চ্যানেল (নতুনগুলো প্রথমে)
-            const fifaOldChannels = [{
-                label: 'BTV',
-                sub: '720p',
-                icon: '📰',
-                urls: [
-                    'http://198.195.239.50:8095/btv/tracks-v1a1/mono.m3u8',
-                    'http://198.195.239.50:8095/btv/tracks-v1a1/mono.m3u8'
-                ]
-            }, {
-                label: 'TOFFEE',
-                sub: 'Auto+HD',
-                icon: '🏆',
-                urls: [
-                    'https://prod-cdn01-live.toffeelive.com/live/FIFA-2026-4/1/master_1800.m3u8',
-                    'https://toffee-proxy.shahriar-diu64.workers.dev/https://prod-cdn01-live.toffeelive.com/live/FIFA-2026-4/0/master_2000.m3u8'
-                ]
-            }, {
-                label: 'Somoy TV',
-                sub: '720p',
-                icon: '📰',
-                urls: [
-                    'http://198.195.239.50:8095/somoyTv/tracks-v1a1/mono.m3u8',
-                    'https://live.thebosstv.com:30443/dwlive/Somoy-TV/chunks.m3u8'
-                ]
-            }, {
-                label: 'FOX Sports',
-                sub: '540p',
-                icon: '🦊',
-                urls: ['http://84.17.50.102/fox/index.m3u8']
-            }, {
-                label: 'MASUN Sports',
-                sub: '720p',
-                icon: '🏏',
-                urls: ['https://andro.226503.xyz/checklist/androstreamlivebiraz1.m3u8']
-            }, {
-                label: 'MATCH TV',
-                sub: '1080p',
-                icon: '🏟️',
-                urls: [
-                    'https://bl.video.matchtv.ru/media/playlist/free_d46d0cf1712c0542ec7fd4f0808f600a_hd/17_89756005/1080/e6bef86de8a133cd7b27deb040758a00/4796141934.m3u8',
-                    'http://cdntv.online/low/9mlxywika2/48.m3u8'
-                ]
-            }, {
-                label: 'D Sports',
-                sub: 'Auto+HD',
-                icon: '🏀',
-                urls: [
-                    'https://1nyaler.streamhostingcdn.top/stream/106/index.m3u8',
-                    'http://cablemaxsigloxxi.com:8000/play/a0l4/index.m3u8'
-                ]
-            }, {
-                label: 'GO LIVE',
-                sub: 'Auto',
-                icon: '📡',
-                urls: [
-                    'https://d1211whpimeups.cloudfront.net/smil:rtbgo/chunklist.m3u8'
-                ]
-            }];
+            const updatedChannels = [
+  // ===== পুরানো থেকে রাখা চ্যানেল =====
+  {
+    label: 'MASUN Sports',
+    sub: '720p',
+    icon: '🏏',
+    urls: ['https://andro.226503.xyz/checklist/androstreamlivebiraz1.m3u8']
+  },
+  {
+    label: 'MATCH TV',
+    sub: '1080p',
+    icon: '🏟️',
+    urls: [
+      'https://bl.video.matchtv.ru/media/playlist/free_d46d0cf1712c0542ec7fd4f0808f600a_hd/17_89756005/1080/e6bef86de8a133cd7b27deb040758a00/4796141934.m3u8',
+      'http://cdntv.online/low/9mlxywika2/48.m3u8'
+    ]
+  },
+  {
+    label: 'D Sports',
+    sub: 'Auto+HD',
+    icon: '🏀',
+    urls: [
+      'https://1nyaler.streamhostingcdn.top/stream/106/index.m3u8',
+      'http://cablemaxsigloxxi.com:8000/play/a0l4/index.m3u8'
+    ]
+  },
 
+  // ===== নতুন যুক্ত করা লিংক (প্রত্যেকটি আলাদা চ্যানেল) =====
+  {
+    label: 'Football WC 1',
+    sub: 'Auto',
+    icon: '📺',
+    urls: ['http://93.93.113.95:25461/live/TV-Berati/XtreamCodes/495.ts']
+  },
+  {
+    label: 'Football WC 2',
+    sub: 'Auto',
+    icon: '📺',
+    urls: ['http://198.195.239.50:8095/btv/tracks-v1a1/mono.m3u8']
+  },
+  {
+    label: 'Football WC 3',
+    sub: 'Auto',
+    icon: '📺',
+    urls: ['https://kazimmt.ami.bd/playlist/TF/TF-3.m3u8']
+  },
+  {
+    label: 'Football WC 4',
+    sub: 'Auto',
+    icon: '📺',
+    urls: ['https://kazimmt.ami.bd/playlist/TF/TF-2.m3u8']
+  },
+  {
+    label: 'Football WC 5',
+    sub: 'Auto',
+    icon: '📺',
+    urls: ['http://198.195.239.50:8095/tsports/tracks-v1a1/mono.m3u8']
+  },
+  {
+    label: 'Football WC 6',
+    sub: 'Auto',
+    icon: '📺',
+    urls: ['http://198.195.239.50:8095/tsports/tracks-v1/mono.m3u8']
+  },
+  {
+    label: 'Football WC 7',
+    sub: 'Auto',
+    icon: '📺',
+    urls: ['http://198.195.239.50:8095/somoyTv/tracks-v1a1/mono.m3u8']
+  },
+  {
+    label: 'Football WC 8',
+    sub: 'Auto',
+    icon: '📺',
+    urls: ['https://live.thebosstv.com:30443/dwlive/Somoy-TV/playlist.m3u8']
+  },
+  {
+    label: 'Football WC 9',
+    sub: 'Auto',
+    icon: '📺',
+    urls: ['http://198.195.239.50:8095/ptv/tracks-v1a1/mono.m3u8']
+  },
+  {
+    label: 'Football WC 10',
+    sub: 'Auto',
+    icon: '📺',
+    urls: ['http://198.195.239.50:8095/unt-s/video.m3u8']
+  },
+  {
+    label: 'Football WC 11',
+    sub: 'Auto',
+    icon: '📺',
+    urls: ['https://1nyaler.streamhostingcdn.top/stream/23/index.m3u8']
+  },
+  {
+    label: 'Football WC 13',
+    sub: 'Auto',
+    icon: '📺',
+    urls: ['https://cdn-tt.pages.dev/ch1.m3u8']
+  },
+  {
+    label: 'Football WC 14',
+    sub: 'Auto',
+    icon: '📺',
+    urls: ['https://cdn-tt.pages.dev/ch2.m3u8']
+  },
+  {
+    label: 'Football WC 15',
+    sub: 'Auto',
+    icon: '📺',
+    urls: ['https://cdn-tt.pages.dev/ch3.m3u8']
+  },
+  {
+    label: 'Football WC 16',
+    sub: 'Auto',
+    icon: '📺',
+    urls: ['https://cdn-tt.pages.dev/ch4.m3u8']
+  },
+  {
+    label: 'Football WC 17',
+    sub: 'Auto',
+    icon: '📺',
+    urls: ['https://kazimmt.ami.bd/playlist/TF/TF-1.m3u8']
+  },
+  {
+    label: 'T Sports',
+    sub: 'Auto',
+    icon: '📺',
+    urls: ['http://fastshare1.com:8080//live/25711345/late8airline/52500.ts']
+  },
+  {
+    label: 'Football WC 19',
+    sub: 'Auto',
+    icon: '📺',
+    urls: ['https://rgkkw.live:443/live/1Aoen7elp5/IgMJ60tmAa/98841.ts']
+  },
+  {
+    label: 'Football WC 4K 1',
+    sub: 'Auto',
+    icon: '📺',
+    urls: ['http://fastshare1.com:8080//live/25711345/late8airline/688287.ts']
+  },
+  {
+    label: 'Football WC 4K 2',
+    sub: 'Auto',
+    icon: '📺',
+    urls: ['http://fastshare1.com:8080//live/25711345/late8airline/745270.ts']
+  },
+  {
+    label: 'Football WC 4K bein',
+    sub: 'Auto',
+    icon: '📺',
+    urls: ['http://rgkkw.live/live/1Aoen7elp5/IgMJ60tmAa/747283.ts']
+  },
+  {
+    label: 'Football WC 4K 3',
+    sub: 'Auto',
+    icon: '📺',
+    urls: ['http://starhub.pro/live/farhat-3379/67897-913379/745269.ts']
+  },
+  {
+    label: 'SKY SPORTS 1',
+    sub: 'Auto',
+    icon: '📺',
+    urls: ['http://6zirt9yx.otttv.pw/iptv/HEGN4VXXQQSYCA/9289/index.m3u8']
+  },
+  {
+    label: 'SKY SPORTS 2',
+    sub: 'Auto',
+    icon: '📺',
+    urls: ['http://ytoxw6un.ottclub.xyz/iptv/KCUHA6DGYYVA8ZZFUPQV3KZH/9289/index.m3u8']
+  },
+  {
+    label: 'Somoy TV 1',
+    sub: 'Auto',
+    icon: '📺',
+    urls: ['https://owrcovcrpy.gpcdn.net/bpk-tv/1702/output/1702.m3u8']
+  },
+  {
+    label: 'Somoy TV 2',
+    sub: 'Auto',
+    icon: '📺',
+    urls: ['https://owrcovcrpy.gpcdn.net/bpk-tv/1702/output/index.m3u8']
+  },
+  {
+    label: 'Somoy News 1',
+    sub: 'Auto',
+    icon: '📺',
+    urls: ['http://fastshare1.com:8080//live/25711345/late8airline/422.ts']
+  }
+];
             // ফিফা চ্যানেল: নতুন + পুরনো (নতুনগুলো প্রথমে)
             const fifaStreams = fifaNewChannels.concat(fifaOldChannels);
 
