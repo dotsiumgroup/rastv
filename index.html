@@ -1449,7 +1449,8 @@
                     sub: 'Auto+HD',
                     icon: '📺',
                     playerType: 'P1',
-                    urls: ['https://live.thebosstv.com:30443/dwlive/Somoy-TV/playlist.m3u8',
+                    urls: ['https://owrcovcrpy.gpcdn.net/bpk-tv/1713/output/index.m3u8',
+                           'https://live.thebosstv.com:30443/dwlive/Somoy-TV/playlist.m3u8',
                           'https://live.thebosstv.com:30443/dwlive/Somoy-TV/chunks.m3u8',
                           'http://103.165.93.31:8095/somoyTv/tracks-v1a1/mono.m3u8']
                     
@@ -1746,11 +1747,11 @@
                     ]
                 }, {
                     label: 'Saudi Quran',
-                    sub: '',
+                    sub: 'https://go.skym3u.top/live/3b1f0d3d095a703d4b1e04170b4b00112b7d160248544d6c071f5e5f250e563e461b31310d5d1d0d0f1c021d2c274b0e41104c.m3u8',
                     icon: '📺',
                     playerType: 'P1',
                     urls: [
-                        'https://owrcovcrpy.gpcdn.net/bpk-tv/1713/output/index.m3u8'
+                        ''
                     ]
                     }, {
                     label: 'AL Jajeera',
@@ -1873,29 +1874,57 @@
                 
                 }]
             }, {
-                // ============================================================
-                // ৪. MOVIE BOX (নতুন)
-                // ============================================================
-                id: 'movie',
-                name: 'MOVIE BOX',
-                icon: '🎬',
-                streams: [{
-                    label: 'Kung Fu Panda 1',
-                    sub: '720p+FAST',
-                    icon: '🎬',
-                    playerType: 'P2',
-                    urls: [
-                        'https://play.movielinkbd.mom/watch/W94t3mrCT7TqLPI1.uOajskWkrHFEzxRWk525q71CQgns_-4ds47q4tBKWPOB4UgjlLOwtNpvFGlf_ixQSZccLlVIoYMm.HAHf_1UfL80kbvtuzkBvpA'
-                    ]
-                    }, {
-                    label: 'Kung Fu Panda 2',
-                    sub: '720p+Fast',
-                    icon: '📺',
-                    playerType: 'P2',
-                    urls: ['https://play.movielinkbd.mom/watch/v3ARdWn8XEo6blv6.zvDB43ZAZyrcHOXtxDe0-QMdDp4iibAX6eUDbxVzztOyVMTxVCEUj6tPlyHsvgqBCYaUdZ_bQwcJ.8S9vjyYHmvHs6dH4yShRng']
-                
-                }]
-            }];
+    id: 'movie',
+    name: 'MOVIE BOX',
+    icon: '🎬',
+    streams: [
+        {
+            label: 'Kung Fu Panda 1',
+            sub: 'HD',
+            icon: '🎬',
+            playerType: 'P2',
+            urls: [
+                'https://pub-f85680743e6f48c3b210af18613f778c.r2.dev/1c8f468b70eca496d0a7869405077675?t=1785855063&token=56c1aa94f0603d89bf4f5222f47fe00875e74ea12ee63c3ba1bfd264d83359a7'
+            ]
+        },
+        {
+            label: 'Kung Fu Panda 2',
+            sub: 'HD',
+            icon: '🎬',
+            playerType: 'P2',
+            urls: [
+                'https://pub-f85680743e6f48c3b210af18613f778c.r2.dev/657235d85ab313a90efe7410856f51ee?t=1785855103&token=25410248c05a3c8ac9c35439f11184e0a68946eae7451064528ded17c076717a'
+            ]
+        },
+        {
+            label: 'Kung Fu Panda 3',
+            sub: 'HD',
+            icon: '🎬',
+            playerType: 'P2',
+            urls: [
+                'https://pub-f85680743e6f48c3b210af18613f778c.r2.dev/0cf98ecc39ae6f26921432135964b65d?t=1785855193&token=617a4ff0310a56d8fc65a115f9e29bccb94d40294952fbfa56cabea9effe1f06'
+            ]
+        },
+        {
+            label: 'Kung Fu Panda 4',
+            sub: 'HD',
+            icon: '🎬',
+            playerType: 'P2',
+            urls: [
+                'https://pub-f85680743e6f48c3b210af18613f778c.r2.dev/68cb50a00e5d2187adf767382a9d3eec?t=1785855261&token=6fabff2a367800aa4ea3462fc0507dbec7d2a84e2bcb9e1556c8f5f192397a68'
+            ]
+        },
+        {
+            label: 'Spider Man Brand New Day',
+            sub: 'HD',
+            icon: '🎬',
+            playerType: 'P2',
+            urls: [
+                'https://pub-f85680743e6f48c3b210af18613f778c.r2.dev/84b02c14bdc6202ad60cdb4370559ae9?t=1785854633&token=abc4ab9a15429068b50499827f7d3f3e72a7ded4acf1eb92816ac2d907b45fc1'
+            ]
+        }
+    ]
+}];
 
             // ============================================================
             //  সবার জন্য একটি ফ্ল্যাট অ্যারে তৈরি করুন
@@ -1959,6 +1988,11 @@
 
             // P2 video element events refs (for cleanup)
             let p2EventListeners = [];
+
+            // ===== নতুন ফ্ল্যাগ (Fallback) =====
+            let currentOriginalPlayerType = null;
+            let fallbackAttempted = false;
+            let isFallbackMode = false;
 
             // ===== ইউনিফাইড এরর হ্যান্ডলিং =====
             function showErrorOverlay() {
@@ -2277,6 +2311,8 @@
                                 setStatus('চলছে', 'playing', stream.label);
                             }
                         }
+                        // Fallback সফল হলে রিসেট
+                        isFallbackMode = false;
                     });
 
                     player.on('pause', function() {
@@ -2313,10 +2349,32 @@
                         const msg = e.message || 'প্লে করতে সমস্যা';
                         console.warn('P1 JW Error:', msg);
                         clearLoadTimeout();
-                        if (!isPlaying) {
-                            setStatus('❌ ' + msg, 'error', '');
-                            showErrorOverlay();
+                        
+                        // Fallback logic for P1 streams
+                        if (!fallbackAttempted && currentOriginalPlayerType === 'P1') {
+                            fallbackAttempted = true;
+                            isFallbackMode = true;
+                            // destroy current player (P1)
+                            destroyCurrentPlayer();
+                            // get the same stream URL and try with P2
+                            const stream = allStreams[currentStreamIndex];
+                            if (stream && stream.urls && stream.urls.length > 0) {
+                                const fallbackUrl = stream.urls[0];
+                                // start player with P2
+                                startPlayer(fallbackUrl, 'P2', stream.label);
+                                return; // don't show error yet
+                            } else {
+                                // no URL, fallback impossible
+                                setStatus('❌ ' + msg, 'error', '');
+                                showErrorOverlay();
+                                isFallbackMode = false;
+                                return;
+                            }
                         }
+                        
+                        // যদি fallback already attempted অথবা original P2 হয়
+                        setStatus('❌ ' + msg, 'error', '');
+                        showErrorOverlay();
                         isBuffering = false;
                     });
 
@@ -2423,13 +2481,21 @@
                             }
                         }
                         setBufferingMode(false);
+                        // Fallback সফল হলে রিসেট
+                        isFallbackMode = false;
                     };
 
                     const onError = function(e) {
                         if (isDestroying) return;
                         console.warn('P2 Video error:', e);
                         clearLoadTimeout();
-                        if (!isPlaying) {
+                        // যদি fallback mode হয়, তাহলে error দেখাও
+                        if (isFallbackMode) {
+                            setStatus('❌ ভিডিও লোড হয়নি (P2 ফলব্যাক)', 'error', '');
+                            showErrorOverlay();
+                            isFallbackMode = false;
+                        } else {
+                            // original P2 error
                             setStatus('❌ ভিডিও লোড হয়নি', 'error', '');
                             showErrorOverlay();
                         }
@@ -2598,8 +2664,14 @@
                                 console.warn('hls.js fatal error:', data);
                                 clearLoadTimeout();
                                 if (!isPlaying) {
-                                    setStatus('❌ স্ট্রিম লোড হয়নি', 'error', '');
-                                    showErrorOverlay();
+                                    if (isFallbackMode) {
+                                        setStatus('❌ স্ট্রিম লোড হয়নি (P2 ফলব্যাক)', 'error', '');
+                                        showErrorOverlay();
+                                        isFallbackMode = false;
+                                    } else {
+                                        setStatus('❌ স্ট্রিম লোড হয়নি', 'error', '');
+                                        showErrorOverlay();
+                                    }
                                 }
                                 isBuffering = false;
                             } else if (data.type === 'networkError') {
@@ -2620,7 +2692,7 @@
                         setStatus('লোড হচ্ছে (Safari)', 'loading', '');
                         startPctSimulation();
                     } else {
-                        // MP4 বা অন্যান্য
+                        // MP4 বা অন্যান্য (সরাসরি ভিডিও লিংক)
                         v.src = url;
                         try { v.play(); } catch (_) {}
                         setStatus('লোড হচ্ছে...', 'loading', '');
@@ -2640,8 +2712,14 @@
                 } catch (err) {
                     console.error('P2 init error:', err);
                     if (!isDestroying) {
-                        setStatus('❌ প্লেয়ার লোড হয়নি', 'error', '');
-                        showErrorOverlay();
+                        if (isFallbackMode) {
+                            setStatus('❌ প্লেয়ার লোড হয়নি (P2 ফলব্যাক)', 'error', '');
+                            showErrorOverlay();
+                            isFallbackMode = false;
+                        } else {
+                            setStatus('❌ প্লেয়ার লোড হয়নি', 'error', '');
+                            showErrorOverlay();
+                        }
                     }
                     return null;
                 }
@@ -2684,7 +2762,7 @@
                 isPlaying = false;
                 isInitialLoad = true;
 
-                // স্ট্যাটাস রিসেট
+                // স্ট্যাটাস রিসেট (কিন্তু fallback ফ্ল্যাগ রিসেট করবেন না)
                 setStatus('প্রস্তুত', '');
                 loadPct.className = 'load-pct idle';
                 loadPct.textContent = '—';
@@ -2695,6 +2773,22 @@
                 hideErrorOverlay();
 
                 isDestroying = false;
+            }
+
+            // ===== Start Player (common entry for both P1 & P2) =====
+            function startPlayer(url, playerType, streamLabel) {
+                // Set status to loading
+                setStatus('লোড হচ্ছে...', 'loading', streamLabel);
+                startPctSimulation();
+                startLoadTimeout();
+
+                if (playerType === 'P1') {
+                    initP1Player(url);
+                } else if (playerType === 'P2') {
+                    initP2Player(url);
+                } else {
+                    initP1Player(url);
+                }
             }
 
             // ===== লোড স্ট্রিম =====
@@ -2714,7 +2808,7 @@
                 }
 
                 const url = validUrls[0];
-                const playerType = stream.playerType || 'P1';
+                const originalPlayerType = stream.playerType || 'P1';
 
                 // ব্যানার লুকান
                 hideBanner();
@@ -2725,6 +2819,9 @@
 
                 // স্টেট রিসেট
                 currentStreamIndex = index;
+                currentOriginalPlayerType = originalPlayerType;
+                fallbackAttempted = false;
+                isFallbackMode = false;
                 isPlaying = false;
                 isInitialLoad = true;
                 retryCount = 0;
@@ -2732,20 +2829,8 @@
 
                 updateActiveButton();
 
-                setStatus('লোড হচ্ছে...', 'loading', stream.label);
-                startPctSimulation();
-
-                // টাইমার শুরু
-                startLoadTimeout();
-
-                // নতুন প্লেয়ার ইনিশিয়ালাইজ
-                if (playerType === 'P1') {
-                    initP1Player(url);
-                } else if (playerType === 'P2') {
-                    initP2Player(url);
-                } else {
-                    initP1Player(url);
-                }
+                // Start player with original type
+                startPlayer(url, originalPlayerType, stream.label);
             }
 
             // ===== সুইচ =====
@@ -2774,6 +2859,9 @@
                 }
                 hideErrorOverlay();
                 const idx = currentStreamIndex;
+                // Reset fallback flags so we try P1 again if original is P1
+                fallbackAttempted = false;
+                isFallbackMode = false;
                 destroyCurrentPlayer();
                 currentStreamIndex = -1;
                 setTimeout(() => {
