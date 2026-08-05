@@ -1428,499 +1428,726 @@
             // ============================================================
             //  🚀 চ্যানেল ডেটা – প্রতিটি স্ট্রিমে playerType (P1 / P2) যুক্ত
             // ============================================================
-
-            const CHANNELS = [{
-                // ============================================================
-                // ২. বাংলাদেশি নিউজ চ্যানেল (Bangladeshi News Channels)
-                // ============================================================
-                id: 'bangladeshi',
-                name: 'Bangladeshi News Channels',
-                icon: '🇧🇩',
-                streams: [{
-                    label: 'Jamuna Tv',
-                    sub: 'HD',
-                    icon: '📺',
-                    playerType: 'P1',
-                    urls: ['https://owrcovcrpy.gpcdn.net/bpk-tv/1701/output/index.m3u8',
-                        'http://198.195.239.50:8095/jamunaTv/tracks-v1a1/mono.m3u8'
-                    ]
-                    }, {
-                    label: 'Somoy TV',
-                    sub: 'Auto+HD',
-                    icon: '📺',
-                    playerType: 'P1',
-                    urls: ['https://live.thebosstv.com:30443/dwlive/Somoy-TV/playlist.m3u8',
-                          'https://live.thebosstv.com:30443/dwlive/Somoy-TV/chunks.m3u8',
-                          'http://103.165.93.31:8095/somoyTv/tracks-v1a1/mono.m3u8']
-                    
-                }, {
-                    label: 'Bangla-Vision',
-                    sub: 'HD',
-                    icon: '📺',
-                    playerType: 'P1',
-                    urls: [
-                        'https://owrcovcrpy.gpcdn.net/bpk-tv/1715/output/index.m3u8',
-                        'http://198.195.239.50:8095/banglaVision/tracks-v1a1/mono.m3u8'
-                    ]
-                }, {
-                    label: 'Channel-i',
-                    sub: 'HD',
-                    icon: '📺',
-                    playerType: 'P1',
-                    urls: ['https://owrcovcrpy.gpcdn.net/bpk-tv/1723/output/index.m3u8',
-                        'http://198.195.239.50:8095/channelI/tracks-v1a1/mono.m3u8'
-                    ]
-                }, {
-                    label: 'ATN Bangla',
-                    sub: 'HD',
-                    icon: '📺',
-                    playerType: 'P1',
-                    urls: [
-                        'https://owrcovcrpy.gpcdn.net/bpk-tv/1722/output/index.m3u8',
-                        'http://198.195.239.50:8095/atnBangla/tracks-v1a1/mono.m3u8'
-                    ]
-                }, {
-                    label: 'Channel 24',
-                    sub: 'HD',
-                    icon: '📺',
-                    playerType: 'P1',
-                    urls: [
-                        'https://owrcovcrpy.gpcdn.net/bpk-tv/1703/output/index.m3u8',
-                        'http://198.195.239.50:8095/channel24/tracks-v1a1/mono.m3u8'
-                    ]
-                }, {
-                    label: 'N-TV',
-                    sub: 'HD',
-                    icon: '📺',
-                    playerType: 'P1',
-                    urls: ['https://owrcovcrpy.gpcdn.net/bpk-tv/1716/output/index.m3u8',
-                        'http://198.195.239.50:8095/ntv/tracks-v1a1/mono.m3u8'
-                    ]
-                }, {
-                    label: 'ATN News',
-                    sub: 'HD',
-                    icon: '📺',
-                    playerType: 'P1',
-                    urls: ['https://owrcovcrpy.gpcdn.net/bpk-tv/1706/output/index.m3u8',
-                        'http://198.195.239.50:8095/atnNews/tracks-v1a1/mono.m3u8'
-                    ]
-                }, {
-                    label: 'CANNEL 1',
-                    sub: 'HD',
-                    icon: '📺',
-                    playerType: 'P1',
-                    urls: [
-                        'https://owrcovcrpy.gpcdn.net/bpk-tv/1702/output/index.m3u8'
-                    ]
-                }, {
-                    label: 'Ekattor Tv',
-                    sub: 'HD',
-                    icon: '📺',
-                    playerType: 'P1',
-                    urls: [
-                        'https://owrcovcrpy.gpcdn.net/bpk-tv/1705/output/index.m3u8',
-                        'http://198.195.239.50:8095/ekattorTv/tracks-v1a1/mono.m3u8'
-                    ]
-                }, {
-                    label: 'DBC NEWS',
-                    sub: 'HD',
-                    icon: '📺',
-                    playerType: 'P1',
-                    urls: [
-                        'https://owrcovcrpy.gpcdn.net/bpk-tv/1728/output/index.m3u8'
-                    ]
-                }, {
-                    label: 'NEWS 24',
-                    sub: 'HD',
-                    icon: '📺',
-                    playerType: 'P1',
-                    urls: [
-                        'https://owrcovcrpy.gpcdn.net/bpk-tv/1708/output/index.m3u8'
-                    ]
-                }, {
-                    label: 'Ster News',
-                    sub: 'HD',
-                    icon: '📺',
-                    playerType: 'P1',
-                    urls: [
-                        'https://owrcovcrpy.gpcdn.net/bpk-tv/1710/output/index.m3u8'
-                    ]
-                }, {
-                    label: 'Depto Tv',
-                    sub: 'HD',
-                    icon: '📺',
-                    playerType: 'P1',
-                    urls: [
-                        'https://owrcovcrpy.gpcdn.net/bpk-tv/1711/output/index.m3u8'
-                    ]
-                }, {
-                    label: 'Shangshad',
-                    sub: 'HD',
-                    icon: '📺',
-                    playerType: 'P1',
-                    urls: [
-                        'https://owrcovcrpy.gpcdn.net/bpk-tv/1709/output/index.m3u8'
-                    ]
-                }, {
-                    label: 'Independence',
-                    sub: 'HD',
-                    icon: '📺',
-                    playerType: 'P1',
-                    urls: [
-                        'https://owrcovcrpy.gpcdn.net/bpk-tv/1704/output/index.m3u8'
-                    ]
-                }, {
-                    label: 'RTV',
-                    sub: 'HD',
-                    icon: '📺',
-                    playerType: 'P1',
-                    urls: [
-                        'https://app24.jagobd.com.bd/c3VydmVyX8RpbEU9Mi8xNy8yMFDEEHGcfRgzQ6NTAgdEoaeFzbF92YWxIZTO0U0ezN1IzMyfvcEdsEfeDeKiNkVN3PTOmdFseWRtaW51aiPhnPTI2/rtv-sg.stream/tracks-v1a1/mono.m3u8'
-                    ]
-                }, {
-                    label: 'GAZI TV',
-                    sub: 'HD',
-                    icon: '📺',
-                    playerType: 'P1',
-                    urls: [
-                        'https://app24.jagobd.com.bd/c3VydmVyX8RpbEU9Mi8xNy8yMFDEEHGcfRgzQ6NTAgdEoaeFzbF92YWxIZTO0U0ezN1IzMyfvcEdsEfeDeKiNkVN3PTOmdFseWRtaW51aiPhnPTI2/gazibdz.stream/tracks-v1a1/mono.m3u8'
-                    ]
-                }, {
-                    label: 'Desh TV',
-                    sub: 'HD',
-                    icon: '📺',
-                    playerType: 'P1',
-                    urls: [
-                        'https://app24.jagobd.com.bd/c3VydmVyX8RpbEU9Mi8xNy8yMFDEEHGcfRgzQ6NTAgdEoaeFzbF92YWxIZTO0U0ezN1IzMyfvcEdsEfeDeKiNkVN3PTOmdFseWRtaW51aiPhnPTI2/deshtv.stream/tracks-v1/mono.m3u8'
-                    ]
-                }, {
-                    label: 'MY TV HD',
-                    sub: 'HD',
-                    icon: '📺',
-                    playerType: 'P1',
-                    urls: [
-                        'https://app24.jagobd.com.bd/c3VydmVyX8RpbEU9Mi8xNy8yMFDEEHGcfRgzQ6NTAgdEoaeFzbF92YWxIZTO0U0ezN1IzMyfvcEdsEfeDeKiNkVN3PTOmdFseWRtaW51aiPhnPTI2/mytv-up-off.stream/tracks-v1a1/mono.m3u8'
-                    ]
-                }, {
-                    label: 'Green TV',
-                    sub: 'HD',
-                    icon: '📺',
-                    playerType: 'P1',
-                    urls: [
-                        'https://app.ncare.live/c3VydmVyX8RpbEU9Mi8xNy8yMDE0GIDU6RgzQ6NTAgdEoaeFzbF92YWxIZTO0U0ezN1IzMyfvcGVMZEJCTEFWeVN3PTOmdFsaWRtaW51aiPhnPTI2/greentv.stream/live-orgin/greentv.stream/chunks.m3u8'
-                    ]
-                }, {
-                    label: 'BOISHAKHI TV',
-                    sub: 'HD',
-                    icon: '📺',
-                    playerType: 'P1',
-                    urls: [
-                        'https://boishakhi.sonarbanglatv.com/boishakhi/boishakhitv/index.m3u8'
-                    ]
-                }, {
-                    label: 'Channel 9',
-                    sub: 'HD',
-                    icon: '📺',
-                    playerType: 'P1',
-                    urls: [
-                        'https://owrcovcrpy.gpcdn.net/bpk-tv/1729/output/index.m3u8'
-                    ]
-                }, {
-                    label: 'Maasranga Tv',
-                    sub: 'HD',
-                    icon: '📺',
-                    playerType: 'P1',
-                    urls: [
-                        'https://owrcovcrpy.gpcdn.net/bpk-tv/1722/output/index.m3u8'
-                    ]
-                }, {
-                    label: 'SATV',
-                    sub: 'HD',
-                    icon: '📺',
-                    playerType: 'P1',
-                    urls: [
-                        'https://owrcovcrpy.gpcdn.net/bpk-tv/1720/output/index.m3u8'
-                    ]
-                }, {
-                    label: 'Ekushey TV',
-                    sub: 'HD',
-                    icon: '📺',
-                    playerType: 'P1',
-                    urls: [
-                        'https://ekusheyserver.com/hls-live/livepkgr/_definst_/liveevent/livestream3.m3u8'
-                    ]
-                }, {
-                    label: 'NRB TV',
-                    sub: 'HD',
-                    icon: '📺',
-                    playerType: 'P1',
-                    urls: [
-                        'https://app.ncare.live/live-orgin/nrb-eu.stream/playlist.m3u8'
-                    ]
-                }, {
-                    label: 'Deshe Bideshe',
-                    sub: 'HD',
-                    icon: '📺',
-                    playerType: 'P1',
-                    urls: [
-                        'https://dbcanada.sonarbanglatv.com/deshebideshe/dbtv/index.m3u8'
-                    ]
-                }, {
-                    label: 'Channel S',
-                    sub: 'HD',
-                    icon: '📺',
-                    playerType: 'P1',
-                    urls: [
-                        'https://app.ncare.live/c3VydmVyX8RpbEU9Mi8xNy8yMDE0GIDU6RgzQ6NTAgdEoaeFzbF92YWxIZTO0U0ezN1IzMyfvcGVMZEJCTEFWeVN3PTOmdFsaWRtaW51aiPhnPTI/chsukoff.stream/playlist.m3u8'
-                    ]
-                }, {
-                    label: 'Deshi TV',
-                    sub: 'HD',
-                    icon: '📺',
-                    playerType: 'P1',
-                    urls: [
-                        'https://deshitv.deshitv24.net/live/myStream/playlist.m3u8'
-                    ]
-                }, {
-                    label: 'ME TV',
-                    sub: 'HD',
-                    icon: '📺',
-                    playerType: 'P1',
-                    urls: ['https://iptvbd.live/metv1080/1080.m3u8']
-                }, {
-                    label: 'Rongeen TV',
-                    sub: 'HD',
-                    icon: '📺',
-                    playerType: 'P1',
-                    urls: [
-                        'https://server.thelegitpro.in/rongeentv/rongeentv/tracks-v1a1/mono.m3u8'
-                    ]
-                }, {
-                    label: 'Amar Bangla',
-                    sub: 'HD',
-                    icon: '📺',
-                    playerType: 'P1',
-                    urls: [
-                        'https://app.ncare.live/c3VydmVyX8RpbEU9Mi8xNy8yMDE0GIDU6RgzQ6NTAgdEoaeFzbF92YWxIZTO0U0ezN1IzMyfvcGVMZEJCTEFWeVN3PTOmdFsaWRtaW51aiPhnPTI/amarbanglatv.stream/playlist.m3u8'
-                    ]
-                }, {
-                    label: 'G-Serise',
-                    sub: '',
-                    icon: '📺',
-                    playerType: 'P1',
-                    urls: [
-                        'https://vods2.aynaott.com/gseriesDrama/tracks-v1a1/mono.ts.m3u8'
-                    ]
-                }, {
-                    label: 'Peace tv Bangla',
-                    sub: '',
-                    icon: '📺',
-                    playerType: 'P1',
-                    urls: [
-                        'https://dzkyvlfyge.erbvr.com/PeaceTvBangla/tracks-v3a1/mono.m3u8'
-                    ]
-                }, {
-                    label: 'Desh Sampratik',
-                    sub: '',
-                    icon: '📺',
-                    playerType: 'P1',
-                    urls: [
-                        'https://owrcovcrpy.gpcdn.net/bpk-tv/1724/output/index.m3u8'
-                    ]
-                
-                }]
-            }, {
-                // ============================================================
-                // ৩. আন্তর্জাতিক চ্যানেল (International Channels)
-                // ============================================================
-                id: 'international',
-                name: 'International Channels',
-                icon: '🌍',
-                streams: [{
-                    label: 'Madina live',
-                    sub: '',
-                    icon: '📺',
-                    playerType: 'P1',
-                    urls: [
-                        'https://cdn-globecast.akamaized.net/live/eds/saudi_sunnah/hls_roku/index.m3u8'
-                    ]
-                }, {
-                    label: 'Saudi Quran',
-                    sub: '',
-                    icon: '📺',
-                    playerType: 'P1',
-                    urls: [
-                        'https://owrcovcrpy.gpcdn.net/bpk-tv/1713/output/index.m3u8'
-                    ]
-                    }, {
-                    label: 'AL Jajeera',
-                    sub: '',
-                    icon: '📺',
-                    playerType: 'P1',
-                    urls: [
-                        'https://owrcovcrpy.gpcdn.net/bpk-tv/1721/output/index.m3u8'
-                    ]
-                    }, {
-                    label: 'SRK TV',
-                    sub: '',
-                    icon: '📺',
-                    playerType: 'P1',
-                    urls: [
-                        'https://srknowapp.ncare.live/srktvhlswodrm/srktv.stream/tracks-v1a1/mono.m3u8'
-                    ]
-                }, {
-                    label: 'Discovery Bangla',
-                    sub: '',
-                    icon: '📺',
-                    playerType: 'P2',
-                    urls: [
-                      'http://180.94.28.28:8097//DISCOVERY-BANGLA/index.fmp4.m3u8'
-                     ]
-                }, {
-                    label: 'Republic Bangla',
-                    sub: '',
-                    icon: '📺',
-                    playerType: 'P1',
-                    urls: [
-                        'https://vg-republictvlive.akamaized.net/v1/manifest/611d79b11b77e2f571934fd80ca1413453772ac7/vglive-sk-456368/06e5afc2-a022-4e51-9131-4e33a6207c5c/1.m3u8'
-                    ]
-                }, {
-                    label: 'News18 Bangla',
-                    sub: '',
-                    icon: '📺',
-                    playerType: 'P1',
-                    urls: [
-                        'https://amg01448-samsungin-news18bangla-samsungin-ad-qy.amagi.tv/playlist/amg01448-samsungin-news18bangla-samsungin/playlist.m3u8'
-                    ]
-                }, {
-                    label: 'TV9 Bangla',
-                    sub: '',
-                    icon: '📺',
-                    playerType: 'P1',
-                    urls: [
-                        'https://amg01448-samsungin-tv9bangla-samsungin-9lgnh.amagi.tv/playlist/amg01448-samsungin-tv9bangla-samsungin/playlist.m3u8'
-                    ]
-                }, {
-                    label: 'Star Jalsha HD',
-                    sub: '',
-                    icon: '📺',
-                    playerType: 'P1',
-                    urls: [
-                        'https://yupptvcatchupire.yuppcdn.net/preview/starjalsha/1800.m3u8'
-                    ]
-                }, {
-                    label: 'Zee Bangla HD',
-                    sub: '',
-                    icon: '📺',
-                    playerType: 'P1',
-                    urls: [
-                        'https://yupptvcatchupire.yuppcdn.net/preview/zeebangla/2500.m3u8'
-                    ]
-                }, {
-                    label: 'Zee Bangla Cinema',
-                    sub: '',
-                    icon: '📺',
-                    playerType: 'P1',
-                    urls: [
-                        'https://d1g8wgjurz8via.cloudfront.net/bpk-tv/ColorsHD/default/ColorsHD.m3u8'
-                    ]
-                }, {
-                    label: 'Colors Bangla',
-                    sub: '',
-                    icon: '📺',
-                    playerType: 'P1',
-                    urls: [
-                        'https://yupptvcatchupire.yuppcdn.net/preview/colorsbanglahd/800.m3u8'
-                    ]
-                }, {
-                    label: 'PBS Kids',
-                    sub: '',
-                    icon: '📺',
-                    playerType: 'P1',
-                    urls: [
-                        'https://2-fss-2.streamhoster.com/pl_140/amlst:200914-1298290/playlist.m3u8'
-                    ]
-                    }, {
-                    label: 'Duranta',
-                    sub: '',
-                    icon: '📺',
-                    playerType: 'P1',
-                    urls: [
-                        'http://180.94.28.28:8097//Duronto-TV/index.fmp4.m3u8'
-                    ]
-                }, {
-                    label: 'Gopal Bhar TV',
-                    sub: '',
-                    icon: '📺',
-                    playerType: 'P1',
-                    urls: [
-                        'https://live20.bozztv.com/giatvplayout7/giatv-209611/tracks-v1a1/mono.ts.m3u8',
-                        'https://live20.bozztv.com/giatvplayout7/giatv-209611/index.m3u8'
-                    ]
-                    }, {
-                    label: 'Being Sports',
-                    sub: 'Auto+HD',
-                    icon: '📺',
-                    playerType: 'P1',
-                    urls: ['https://1nyaler.streamhostingcdn.top/stream/23/index.m3u8']
-                   
-                    }, {
-                    label: 'Sony Ahath',
-                    sub: '',
-                    icon: '📺',
-                    playerType: 'P1',
-                    urls: ['http://180.94.28.28:8097//SONY-AATH/index.m3u8']
-                
-                }]
-            }, {
-                // ============================================================
-                // ৪. MOVIE BOX (নতুন ডেটা)
-                // ============================================================
-                id: 'movie',
-                name: 'MOVIE BOX',
-                icon: '🎬',
-                streams: [{
-                    label: 'Kung Fu Panda 1',
-                    sub: 'HD',
-                    icon: '🎬',
-                    playerType: 'P2',
-                    urls: [
-                        'https://pub-f85680743e6f48c3b210af18613f778c.r2.dev/1c8f468b70eca496d0a7869405077675?t=1785855063&token=56c1aa94f0603d89bf4f5222f47fe00875e74ea12ee63c3ba1bfd264d83359a7'
-                    ]
-                }, {
-                    label: 'Kung Fu Panda 2',
-                    sub: 'HD',
-                    icon: '🎬',
-                    playerType: 'P2',
-                    urls: [
-                        'https://pub-f85680743e6f48c3b210af18613f778c.r2.dev/657235d85ab313a90efe7410856f51ee?t=1785855103&token=25410248c05a3c8ac9c35439f11184e0a68946eae7451064528ded17c076717a'
-                    ]
-                }, {
-                    label: 'Kung Fu Panda 3',
-                    sub: 'HD',
-                    icon: '🎬',
-                    playerType: 'P2',
-                    urls: [
-                        'https://pub-f85680743e6f48c3b210af18613f778c.r2.dev/0cf98ecc39ae6f26921432135964b65d?t=1785855193&token=617a4ff0310a56d8fc65a115f9e29bccb94d40294952fbfa56cabea9effe1f06'
-                    ]
-                }, {
-                    label: 'Kung Fu Panda 4',
-                    sub: 'HD',
-                    icon: '🎬',
-                    playerType: 'P2',
-                    urls: [
-                        'https://pub-f85680743e6f48c3b210af18613f778c.r2.dev/68cb50a00e5d2187adf767382a9d3eec?t=1785855261&token=6fabff2a367800aa4ea3462fc0507dbec7d2a84e2bcb9e1556c8f5f192397a68'
-                    ]
-                }, {
-                    label: 'Spider Man Brand New Day',
-                    sub: 'HD',
-                    icon: '🎬',
-                    playerType: 'P2',
-                    urls: [
-                        'https://pub-f85680743e6f48c3b210af18613f778c.r2.dev/84b02c14bdc6202ad60cdb4370559ae9?t=1785854633&token=abc4ab9a15429068b50499827f7d3f3e72a7ded4acf1eb92816ac2d907b45fc1'
-                    ]
-                }]
-            }];
+             const CHANNELS = [{
+    // ============================================================
+    // ১. বাংলাদেশি নিউজ চ্যানেল (Bangladeshi News Channels)
+    // ============================================================
+    id: 'bangladeshi',
+    name: 'Bangladeshi News Channels',
+    icon: '🇧🇩',
+    streams: [{
+        label: 'Jamuna Tv',
+        sub: 'HD',
+        icon: '📺',
+        playerType: 'P1',
+        urls: [
+            'https://owrcovcrpy.gpcdn.net/bpk-tv/1701/output/index.m3u8',
+            'http://198.195.239.50:8095/jamunaTv/tracks-v1a1/mono.m3u8',
+            'https://toffee-obiramtv.emonsa4.workers.dev/05.m3u8'
+        ]
+    }, {
+        label: 'Somoy TV',
+        sub: 'Auto+HD',
+        icon: '📺',
+        playerType: 'P1',
+        urls: [
+            'https://owrcovcrpy.gpcdn.net/bpk-tv/1713/output/index.m3u8', // Saudi Quran link moved here
+            'https://live.thebosstv.com:30443/dwlive/Somoy-TV/playlist.m3u8',
+            'https://live.thebosstv.com:30443/dwlive/Somoy-TV/chunks.m3u8',
+            'http://103.165.93.31:8095/somoyTv/tracks-v1a1/mono.m3u8',
+            'https://toffee-obiramtv.emonsa4.workers.dev/04.m3u8'
+        ]
+    }, {
+        label: 'Bangla-Vision',
+        sub: 'HD',
+        icon: '📺',
+        playerType: 'P1',
+        urls: [
+            'https://owrcovcrpy.gpcdn.net/bpk-tv/1715/output/index.m3u8',
+            'http://198.195.239.50:8095/banglaVision/tracks-v1a1/mono.m3u8',
+            'https://biostartvworld.pages.dev/api/key/aHR0cHM6Ly9vd3Jjb3ZjcnB5LmdwY2RuLm5ldC9icGstdHYvMTcxNS9vdXRwdXQvMTcxNS1hdWRpb18xMTM0NTJfZW5nPTExMzIwMC12aWRlbz0yMjAyODAwLm0zdTh8fHx8fHx7ImVkZ2UtcG9saWN5IjoiZXlKVGRHRjBaVzFsYm5RaU9sdDdJbEpsYzI5MWNtTmxJam9pYUhSMGNITTZMeTl2ZDNKamIzWmpjbkI1TG1kd1kyUnVMbTVsZEM5aWNHc3RkSFl2TVRjeE5TOXZkWFJ3ZFhRdktpSXNJa052Ym1ScGRHbHZiaUk2ZXlKRVlYUmxUR1Z6YzFSb1lXNGlPbnNpUldSblpWUnBiV1VpT2pFM09EVTVNREkwTkRsOWZYMWRmUSIsImVkZ2Utc2lnbmF0dXJlIjoiT2d-TXlvRGxUN1MwR1prUDNjeXFUejhpZzZqckRwTXdyS0x1a1dFeUlESSJ9/1715-audio_113452_eng=113200-video=2202800.m3u8'
+        ]
+    }, {
+        label: 'Channel-i',
+        sub: 'HD',
+        icon: '📺',
+        playerType: 'P1',
+        urls: [
+            'https://owrcovcrpy.gpcdn.net/bpk-tv/1723/output/index.m3u8',
+            'http://198.195.239.50:8095/channelI/tracks-v1a1/mono.m3u8',
+            'https://tvsen3.b-cdn.net/qUud8Nxs/tracks-v1a1/mono.ts.m3u8'
+        ]
+    }, {
+        label: 'ATN Bangla',
+        sub: 'HD',
+        icon: '📺',
+        playerType: 'P1',
+        urls: [
+            'https://owrcovcrpy.gpcdn.net/bpk-tv/1722/output/index.m3u8',
+            'http://198.195.239.50:8095/atnBangla/tracks-v1a1/mono.m3u8',
+            'https://tvsen5.aynaott.com/P3y2URgG7LDe/tracks-v1a1/mono.ts.m3u8'
+        ]
+    }, {
+        label: 'Channel 24',
+        sub: 'HD',
+        icon: '📺',
+        playerType: 'P1',
+        urls: [
+            'https://owrcovcrpy.gpcdn.net/bpk-tv/1703/output/index.m3u8',
+            'http://198.195.239.50:8095/channel24/tracks-v1a1/mono.m3u8',
+            'https://biostartvworld.pages.dev/api/key/aHR0cHM6Ly9vd3Jjb3ZjcnB5LmdwY2RuLm5ldC9icGstdHYvMTcwMy9vdXRwdXQvMTcwMy1hdWRpb18xMTMzMzJfZW5nPTExMzIwMC12aWRlbz0yMjAyODAwLm0zdTh8fHx8fHx7ImVkZ2UtcG9saWN5IjoiZXlKVGRHRjBaVzFsYm5RaU9sdDdJbEpsYzI5MWNtTmxJam9pYUhSMGNITTZMeTl2ZDNKamIzWmpjbkI1TG1kd1kyUnVMbTVsZEM5aWNHc3RkSFl2TVRjd015OXZkWFJ3ZFhRdktpSXNJa052Ym1ScGRHbHZiaUk2ZXlKRVlYUmxUR1Z6YzFSb1lXNGlPbnNpUldSblpWUnBiV1VpT2pFM09EVTVNREkwTkRkOWZYMWRmUSIsImVkZ2Utc2lnbmF0dXJlIjoiWG5GOXVUfm04QjhjZWFQNmIwdms3eEpZVExyWHZpYnNQRmtMcExJam9jcyJ9/1703-audio_113332_eng=113200-video=2202800.m3u8'
+        ]
+    }, {
+        label: 'N-TV',
+        sub: 'HD',
+        icon: '📺',
+        playerType: 'P1',
+        urls: [
+            'https://owrcovcrpy.gpcdn.net/bpk-tv/1716/output/index.m3u8',
+            'http://198.195.239.50:8095/ntv/tracks-v1a1/mono.m3u8',
+            'https://toffee-obiramtv.emonsa4.workers.dev/08.m3u8'
+        ]
+    }, {
+        label: 'ATN News',
+        sub: 'HD',
+        icon: '📺',
+        playerType: 'P1',
+        urls: [
+            'https://owrcovcrpy.gpcdn.net/bpk-tv/1706/output/index.m3u8',
+            'http://198.195.239.50:8095/atnNews/tracks-v1a1/mono.m3u8',
+            'https://biostartvworld.pages.dev/api/key/aHR0cHM6Ly9vd3Jjb3ZjcnB5LmdwY2RuLm5ldC9icGstdHYvMTcwNi9vdXRwdXQvMTcwNi1hdWRpb18xMTMzNjJfZW5nPTExMzIwMC12aWRlbz0yMjAyODAwLm0zdTh8fHx8fHx7ImVkZ2UtcG9saWN5IjoiZXlKVGRHRjBaVzFsYm5RaU9sdDdJbEpsYzI5MWNtTmxJam9pYUhSMGNITTZMeTl2ZDNKamIzWmpjbkI1TG1kd1kyUnVMbTVsZEM5aWNHc3RkSFl2TVRjd05pOXZkWFJ3ZFhRdktpSXNJa052Ym1ScGRHbHZiaUk2ZXlKRVlYUmxUR1Z6YzFSb1lXNGlPbnNpUldSblpWUnBiV1VpT2pFM09EVTVNREkwTkRoOWZYMWRmUSIsImVkZ2Utc2lnbmF0dXJlIjoiUmZMd2hrckp4MjFkUXl0NmhZOFZSeWtrcWlzN2w3Q0M3dzk2WXNZdlFsQSJ9/1706-audio_113362_eng=113200-video=2202800.m3u8'
+        ]
+    }, {
+        label: 'CHANNEL 1',
+        sub: 'HD',
+        icon: '📺',
+        playerType: 'P1',
+        urls: [
+            'https://owrcovcrpy.gpcdn.net/bpk-tv/1702/output/index.m3u8',
+            'https://stream.ottplus.live/live/channel_1_hd_abr/live/channel_1_hd_720/chunks.m3u8?'
+        ]
+    }, {
+        label: 'Ekattor Tv',
+        sub: 'HD',
+        icon: '📺',
+        playerType: 'P1',
+        urls: [
+            'https://owrcovcrpy.gpcdn.net/bpk-tv/1705/output/index.m3u8',
+            'http://198.195.239.50:8095/ekattorTv/tracks-v1a1/mono.m3u8',
+            'https://biostartvworld.pages.dev/api/key/aHR0cHM6Ly9vd3Jjb3ZjcnB5LmdwY2RuLm5ldC9icGstdHYvMTcwNS9vdXRwdXQvMTcwNS1hdWRpb18xMTMzNTJfZW5nPTExMzIwMC12aWRlbz0yMjAyODAwLm0zdTh8fHx8fHx7ImVkZ2UtcG9saWN5IjoiZXlKVGRHRjBaVzFsYm5RaU9sdDdJbEpsYzI5MWNtTmxJam9pYUhSMGNITTZMeTl2ZDNKamIzWmpjbkI1TG1kd1kyUnVMbTVsZEM5aWNHc3RkSFl2TVRjd05TOXZkWFJ3ZFhRdktpSXNJa052Ym1ScGRHbHZiaUk2ZXlKRVlYUmxUR1Z6YzFSb1lXNGlPbnNpUldSblpWUnBiV1VpT2pFM09EVTVNREkwTkRkOWZYMWRmUSIsImVkZ2Utc2lnbmF0dXJlIjoiYlA3VHZUSThtNFZVbTdGa1hOUjhBZnB4SUxSTnFadlZOaXhPalB2QzZjNCJ9/1705-audio_113352_eng=113200-video=2202800.m3u8'
+        ]
+    }, {
+        label: 'DBC NEWS',
+        sub: 'HD',
+        icon: '📺',
+        playerType: 'P1',
+        urls: [
+            'https://owrcovcrpy.gpcdn.net/bpk-tv/1728/output/index.m3u8',
+            'https://biostartvworld.pages.dev/api/key/aHR0cHM6Ly9vd3Jjb3ZjcnB5LmdwY2RuLm5ldC9icGstdHYvMTcyOC9vdXRwdXQvMTcyOC1hdWRpb18xMTM1ODJfZW5nPTExMzIwMC12aWRlbz0zMjI0ODAwLm0zdTh8fHx8fHx7ImVkZ2UtcG9saWN5IjoiZXlKVGRHRjBaVzFsYm5RaU9sdDdJbEpsYzI5MWNtTmxJam9pYUhSMGNITTZMeTl2ZDNKamIzWmpjbkI1TG1kd1kyUnVMbTVsZEM5aWNHc3RkSFl2TVRjeU9DOXZkWFJ3ZFhRdktpSXNJa052Ym1ScGRHbHZiaUk2ZXlKRVlYUmxUR1Z6YzFSb1lXNGlPbnNpUldSblpWUnBiV1VpT2pFM09EVTVNREkwTkRkOWZYMWRmUSIsImVkZ2Utc2lnbmF0dXJlIjoiU2FXd1VJeGYwMnRrTDUxVWJKd0RMbVRCWlZhUmIyaThYaS1hYU1KWGhNWSJ9/1728-audio_113582_eng=113200-video=3224800.m3u8'
+        ]
+    }, {
+        label: 'NEWS 24',
+        sub: 'HD',
+        icon: '📺',
+        playerType: 'P1',
+        urls: [
+            'https://owrcovcrpy.gpcdn.net/bpk-tv/1708/output/index.m3u8',
+            'https://biostartvworld.pages.dev/api/key/aHR0cHM6Ly9vd3Jjb3ZjcnB5LmdwY2RuLm5ldC9icGstdHYvMTcwOC9vdXRwdXQvMTcwOC1hdWRpb18xMTMzODJfZW5nPTExMzIwMC12aWRlbz0zMjI0ODAwLm0zdTh8fHx8fHx7ImVkZ2UtcG9saWN5IjoiZXlKVGRHRjBaVzFsYm5RaU9sdDdJbEpsYzI5MWNtTmxJam9pYUhSMGNITTZMeTl2ZDNKamIzWmpjbkI1TG1kd1kyUnVMbTVsZEM5aWNHc3RkSFl2TVRjd09DOXZkWFJ3ZFhRdktpSXNJa052Ym1ScGRHbHZiaUk2ZXlKRVlYUmxUR1Z6YzFSb1lXNGlPbnNpUldSblpWUnBiV1VpT2pFM09EVTVNREkwTkRsOWZYMWRmUSIsImVkZ2Utc2lnbmF0dXJlIjoiMGxMeVNUQm9TTXl3RkJnbDdPRFNpV1V3c3RsTVpxWUx0cWFwNFZKVk8xWSJ9/1708-audio_113382_eng=113200-video=3224800.m3u8'
+        ]
+    }, {
+        label: 'Star News',
+        sub: 'HD',
+        icon: '📺',
+        playerType: 'P1',
+        urls: [
+            'https://owrcovcrpy.gpcdn.net/bpk-tv/1710/output/index.m3u8',
+            'https://biostartvworld.pages.dev/api/key/aHR0cHM6Ly9vd3Jjb3ZjcnB5LmdwY2RuLm5ldC9icGstdHYvMTcxMC9vdXRwdXQvMTcxMC1hdWRpb18xMTM0MDJfZW5nPTExMzIwMC12aWRlbz0zMjI0ODAwLm0zdTh8fHx8fHx7ImVkZ2UtcG9saWN5IjoiZXlKVGRHRjBaVzFsYm5RaU9sdDdJbEpsYzI5MWNtTmxJam9pYUhSMGNITTZMeTl2ZDNKamIzWmpjbkI1TG1kd1kyUnVMbTVsZEM5aWNHc3RkSFl2TVRjeE1DOXZkWFJ3ZFhRdktpSXNJa052Ym1ScGRHbHZiaUk2ZXlKRVlYUmxUR1Z6YzFSb1lXNGlPbnNpUldSblpWUnBiV1VpT2pFM09EVTVNREkwTlRCOWZYMWRmUSIsImVkZ2Utc2lnbmF0dXJlIjoiSTViWklNNFJLNjlLNWpjVmxra3VjaXZOMnV-aThTSjJjUW9WUjdBT1dNRSJ9/1710-audio_113402_eng=113200-video=3224800.m3u8'
+        ]
+    }, {
+        label: 'Depto Tv',
+        sub: 'HD',
+        icon: '📺',
+        playerType: 'P1',
+        urls: [
+            'https://owrcovcrpy.gpcdn.net/bpk-tv/1711/output/index.m3u8',
+            'https://byphdgllyk.gpcdn.net/hls/DeeptoTV/0_1/index.m3u8?sessId=1551305'
+        ]
+    }, {
+        label: 'Shangshad',
+        sub: 'HD',
+        icon: '📺',
+        playerType: 'P1',
+        urls: [
+            'https://owrcovcrpy.gpcdn.net/bpk-tv/1709/output/index.m3u8'
+        ]
+    }, {
+        label: 'Independence',
+        sub: 'HD',
+        icon: '📺',
+        playerType: 'P1',
+        urls: [
+            'https://owrcovcrpy.gpcdn.net/bpk-tv/1704/output/index.m3u8',
+            'https://biostartvworld.pages.dev/api/key/aHR0cHM6Ly9vd3Jjb3ZjcnB5LmdwY2RuLm5ldC9icGstdHYvMTcwNC9vdXRwdXQvMTcwNC1hdWRpb18xMTMzNDJfZW5nPTExMzIwMC12aWRlbz0xNjkyMDAwLm0zdTh8fHx8fHx7ImVkZ2UtcG9saWN5IjoiZXlKVGRHRjBaVzFsYm5RaU9sdDdJbEpsYzI5MWNtTmxJam9pYUhSMGNITTZMeTl2ZDNKamIzWmpjbkI1TG1kd1kyUnVMbTVsZEM5aWNHc3RkSFl2TVRjd05DOXZkWFJ3ZFhRdktpSXNJa052Ym1ScGRHbHZiaUk2ZXlKRVlYUmxUR1Z6YzFSb1lXNGlPbnNpUldSblpWUnBiV1VpT2pFM09EVTVNREkwTkRaOWZYMWRmUSIsImVkZ2Utc2lnbmF0dXJlIjoiY0xCNW1kLXo1Nm9CY09-THdIUWRzOEhEa1FJNWhSRG0zUDVMenAwVTdsOCJ9/1704-audio_113342_eng=113200-video=1692000.m3u8'
+        ]
+    }, {
+        label: 'RTV',
+        sub: 'HD',
+        icon: '📺',
+        playerType: 'P1',
+        urls: [
+            'https://app24.jagobd.com.bd/c3VydmVyX8RpbEU9Mi8xNy8yMFDEEHGcfRgzQ6NTAgdEoaeFzbF92YWxIZTO0U0ezN1IzMyfvcEdsEfeDeKiNkVN3PTOmdFseWRtaW51aiPhnPTI2/rtv-sg.stream/tracks-v1a1/mono.m3u8'
+        ]
+    }, {
+        label: 'GAZI TV',
+        sub: 'HD',
+        icon: '📺',
+        playerType: 'P1',
+        urls: [
+            'https://app24.jagobd.com.bd/c3VydmVyX8RpbEU9Mi8xNy8yMFDEEHGcfRgzQ6NTAgdEoaeFzbF92YWxIZTO0U0ezN1IzMyfvcEdsEfeDeKiNkVN3PTOmdFseWRtaW51aiPhnPTI2/gazibdz.stream/tracks-v1a1/mono.m3u8'
+        ]
+    }, {
+        label: 'Desh TV',
+        sub: 'HD',
+        icon: '📺',
+        playerType: 'P1',
+        urls: [
+            'https://app24.jagobd.com.bd/c3VydmVyX8RpbEU9Mi8xNy8yMFDEEHGcfRgzQ6NTAgdEoaeFzbF92YWxIZTO0U0ezN1IzMyfvcEdsEfeDeKiNkVN3PTOmdFseWRtaW51aiPhnPTI2/deshtv.stream/tracks-v1/mono.m3u8',
+            'https://tvex.easypecker.com/DeshTV/tracks-v1a1/mono.m3u8',
+            'https://owrcovcrpy.gpcdn.net/bpk-tv/1724/output/1724-audio_113542_eng=113200-video=2022000.m3u8?nocache=1785339521962'
+        ]
+    }, {
+        label: 'MY TV HD',
+        sub: 'HD',
+        icon: '📺',
+        playerType: 'P1',
+        urls: [
+            'https://app24.jagobd.com.bd/c3VydmVyX8RpbEU9Mi8xNy8yMFDEEHGcfRgzQ6NTAgdEoaeFzbF92YWxIZTO0U0ezN1IzMyfvcEdsEfeDeKiNkVN3PTOmdFseWRtaW51aiPhnPTI2/mytv-up-off.stream/tracks-v1a1/mono.m3u8'
+        ]
+    }, {
+        label: 'Green TV',
+        sub: 'HD',
+        icon: '📺',
+        playerType: 'P1',
+        urls: [
+            'https://app.ncare.live/c3VydmVyX8RpbEU9Mi8xNy8yMDE0GIDU6RgzQ6NTAgdEoaeFzbF92YWxIZTO0U0ezN1IzMyfvcGVMZEJCTEFWeVN3PTOmdFsaWRtaW51aiPhnPTI2/greentv.stream/live-orgin/greentv.stream/chunks.m3u8'
+        ]
+    }, {
+        label: 'BOISHAKHI TV',
+        sub: 'HD',
+        icon: '📺',
+        playerType: 'P1',
+        urls: [
+            'https://boishakhi.sonarbanglatv.com/boishakhi/boishakhitv/index.m3u8'
+        ]
+    }, {
+        label: 'Channel 9',
+        sub: 'HD',
+        icon: '📺',
+        playerType: 'P1',
+        urls: [
+            'https://owrcovcrpy.gpcdn.net/bpk-tv/1729/output/index.m3u8',
+            'https://biostartvworld.pages.dev/api/key/aHR0cHM6Ly9vd3Jjb3ZjcnB5LmdwY2RuLm5ldC9icGstdHYvMTcyOS9vdXRwdXQvMTcyOS1hdWRpb18xMTM1OTJfZW5nPTExMzIwMC12aWRlbz0yMjAyODAwLm0zdTh8fHx8fHx7ImVkZ2UtcG9saWN5IjoiZXlKVGRHRjBaVzFsYm5RaU9sdDdJbEpsYzI5MWNtTmxJam9pYUhSMGNITTZMeTl2ZDNKamIzWmpjbkI1TG1kd1kyUnVMbTVsZEM5aWNHc3RkSFl2TVRjeU9TOXZkWFJ3ZFhRdktpSXNJa052Ym1ScGRHbHZiaUk2ZXlKRVlYUmxUR1Z6YzFSb1lXNGlPbnNpUldSblpWUnBiV1VpT2pFM09EVTVNREkwTkRoOWZYMWRmUSIsImVkZ2Utc2lnbmF0dXJlIjoiTVJDOHotOUFzbURBV2RyVnBFVkpHbzB6WH56b0FYa1Z-UDM2MDlYTy1YRSJ9/1729-audio_113592_eng=113200-video=2202800.m3u8'
+        ]
+    }, {
+        label: 'Maasranga Tv',
+        sub: 'HD',
+        icon: '📺',
+        playerType: 'P1',
+        urls: [
+            'https://owrcovcrpy.gpcdn.net/bpk-tv/1722/output/index.m3u8',
+            'https://mtv.sunplex.live/MAASRANGA/tracks-v1a1/mono.m3u8'
+        ]
+    }, {
+        label: 'SATV',
+        sub: 'HD',
+        icon: '📺',
+        playerType: 'P1',
+        urls: [
+            'https://owrcovcrpy.gpcdn.net/bpk-tv/1720/output/index.m3u8'
+        ]
+    }, {
+        label: 'Ekushey TV',
+        sub: 'HD',
+        icon: '📺',
+        playerType: 'P1',
+        urls: [
+            'https://ekusheyserver.com/hls-live/livepkgr/_definst_/liveevent/livestream3.m3u8'
+        ]
+    }, {
+        label: 'NRB TV',
+        sub: 'HD',
+        icon: '📺',
+        playerType: 'P1',
+        urls: [
+            'https://app.ncare.live/live-orgin/nrb-eu.stream/playlist.m3u8'
+        ]
+    }, {
+        label: 'Deshe Bideshe',
+        sub: 'HD',
+        icon: '📺',
+        playerType: 'P1',
+        urls: [
+            'https://dbcanada.sonarbanglatv.com/deshebideshe/dbtv/index.m3u8'
+        ]
+    }, {
+        label: 'Channel S',
+        sub: 'HD',
+        icon: '📺',
+        playerType: 'P1',
+        urls: [
+            'https://app.ncare.live/c3VydmVyX8RpbEU9Mi8xNy8yMDE0GIDU6RgzQ6NTAgdEoaeFzbF92YWxIZTO0U0ezN1IzMyfvcGVMZEJCTEFWeVN3PTOmdFsaWRtaW51aiPhnPTI/chsukoff.stream/playlist.m3u8'
+        ]
+    }, {
+        label: 'Deshi TV',
+        sub: 'HD',
+        icon: '📺',
+        playerType: 'P1',
+        urls: [
+            'https://deshitv.deshitv24.net/live/myStream/playlist.m3u8'
+        ]
+    }, {
+        label: 'ME TV',
+        sub: 'HD',
+        icon: '📺',
+        playerType: 'P1',
+        urls: [
+            'https://iptvbd.live/metv1080/1080.m3u8'
+        ]
+    }, {
+        label: 'Rongeen TV',
+        sub: 'HD',
+        icon: '📺',
+        playerType: 'P1',
+        urls: [
+            'https://server.thelegitpro.in/rongeentv/rongeentv/tracks-v1a1/mono.m3u8'
+        ]
+    }, {
+        label: 'Amar Bangla',
+        sub: 'HD',
+        icon: '📺',
+        playerType: 'P1',
+        urls: [
+            'https://app.ncare.live/c3VydmVyX8RpbEU9Mi8xNy8yMDE0GIDU6RgzQ6NTAgdEoaeFzbF92YWxIZTO0U0ezN1IzMyfvcGVMZEJCTEFWeVN3PTOmdFsaWRtaW51aiPhnPTI/amarbanglatv.stream/playlist.m3u8'
+        ]
+    }, {
+        label: 'G-Serise',
+        sub: '',
+        icon: '📺',
+        playerType: 'P1',
+        urls: [
+            'https://vods2.aynaott.com/gseriesDrama/tracks-v1a1/mono.ts.m3u8'
+        ]
+    }, {
+        label: 'Peace tv Bangla',
+        sub: '',
+        icon: '📺',
+        playerType: 'P1',
+        urls: [
+            'https://dzkyvlfyge.erbvr.com/PeaceTvBangla/tracks-v3a1/mono.m3u8'
+        ]
+    }, {
+        label: 'Desh Sampratik',
+        sub: '',
+        icon: '📺',
+        playerType: 'P1',
+        urls: [
+            'https://owrcovcrpy.gpcdn.net/bpk-tv/1724/output/index.m3u8'
+        ]
+    }, {
+        label: 'Ekhon TV',
+        sub: '',
+        icon: '📺',
+        playerType: 'P1',
+        urls: [
+            'https://stream.ottplus.live/live/ekhon_tv_abr/live/ekhon_tv_hd_720/chunks.m3u8'
+        ]
+    }, {
+        label: 'Mohona Tv',
+        sub: '',
+        icon: '📺',
+        playerType: 'P1',
+        urls: [
+            'https://biostartvworld.pages.dev/api/key/aHR0cHM6Ly9ibGRjbXByb2QtY2RuLnRvZmZlZWxpdmUuY29tL2Nkbi9saXZlL21vaG9uYV90di8uLi9zbGFuZy9tb2hvbmFfdHZfNTc2L21vaG9uYV90dl81NzYubTN1OD9iaXRyYXRlPTEwMDAwMDAmY2hhbm5lbD1tb2hvbmFfdHZfNTc2JmdwX2lkPXx8fFRvZmZlZSAoTGludXg7QW5kcm9pZCAxNCl8fHx7ImNvb2tpZSI6IkVkZ2UtQ2FjaGUtQ29va2llPVVSTFByZWZpeD1hSFIwY0hNNkx5OWliR1JqYlhCeWIyUXRZMlJ1TG5SdlptWmxaV3hwZG1VdVkyOXQ6RXhwaXJlcz0xNzg2MDUzODg2OktleU5hbWU9cHJvZF9saW5lYXI6U2lnbmF0dXJlPTQtSHYwNmNGUU13TmZVMHc0LTNSUXgxRWYxcEFJV3hvTkV0c28xSVBnbnlhaVBKdzJoejY1aXpqUndKSDhoUnRCd2RSY0dRQnBENnlZV1Rfb1NwVUJRIn0/mohona_tv_576.m3u8'
+        ]
+    }, {
+        label: 'BTV LIVE',
+        sub: '',
+        icon: '📺',
+        playerType: 'P1',
+        urls: [
+            'https://biostartvworld.pages.dev/api/key/aHR0cHM6Ly9vd3Jjb3ZjcnB5LmdwY2RuLm5ldC9icGstdHYvMTcyNS9vdXRwdXQvMTcyNS1hdWRpb18xMTM1NTJfZW5nPTExMzIwMC12aWRlbz0yMjAyODAwLm0zdTh8fHx8fHx7ImVkZ2UtcG9saWN5IjoiZXlKVGRHRjBaVzFsYm5RaU9sdDdJbEpsYzI5MWNtTmxJam9pYUhSMGNITTZMeTl2ZDNKamIzWmpjbkI1TG1kd1kyUnVMbTVsZEM5aWNHc3RkSFl2TVRjeU5TOXZkWFJ3ZFhRdktpSXNJa052Ym1ScGRHbHZiaUk2ZXlKRVlYUmxUR1Z6YzFSb1lXNGlPbnNpUldSblpWUnBiV1VpT2pFM09EVTVNREkwTkRkOWZYMWRmUSIsImVkZ2Utc2lnbmF0dXJlIjoiWUJvdFhvbkNmUWJHU0hEWW16Vko4T1NXaTRiaERsQjVNRkVHekhSZG85dyJ9/1725-audio_113552_eng=113200-video=2202800.m3u8'
+        ]
+    }, {
+        label: 'T Sports',
+        sub: 'HD',
+        icon: '🏏',
+        playerType: 'P1',
+        urls: [
+            'https://aboxbdix.ryvox-tb-8ae.workers.dev/live/tsports.m3u8?token=2030bc7c592fbbc2077f83c83d6c5b33&time=1785815442&link_index=0',
+            'https://tvsen5.aynaott.com/TnMn5kZz8aLm/tracks-v1a1/mono.ts.m3u8'
+        ]
+    }]
+}, {
+    // ============================================================
+    // ২. আন্তর্জাতিক চ্যানেল (International Channels)
+    // ============================================================
+    id: 'international',
+    name: 'International Channels',
+    icon: '🌍',
+    streams: [{
+        label: 'Madina live',
+        sub: '',
+        icon: '📺',
+        playerType: 'P1',
+        urls: [
+            'https://cdn-globecast.akamaized.net/live/eds/saudi_sunnah/hls_roku/index.m3u8'
+        ]
+    }, {
+        label: 'AL Jajeera',
+        sub: '',
+        icon: '📺',
+        playerType: 'P1',
+        urls: [
+            'https://owrcovcrpy.gpcdn.net/bpk-tv/1721/output/index.m3u8'
+        ]
+    }, {
+        label: 'SRK TV',
+        sub: '',
+        icon: '📺',
+        playerType: 'P1',
+        urls: [
+            'https://srknowapp.ncare.live/srktvhlswodrm/srktv.stream/tracks-v1a1/mono.m3u8'
+        ]
+    }, {
+        label: 'Discovery Bangla',
+        sub: '',
+        icon: '📺',
+        playerType: 'P2',
+        urls: [
+            'http://180.94.28.28:8097//DISCOVERY-BANGLA/index.fmp4.m3u8',
+            'https://biostartvworld.pages.dev/api/key/aHR0cHM6Ly9ibGRjbXByb2QtY2RuLnRvZmZlZWxpdmUuY29tL2Nkbi9saXZlL2Rpc2NvdmVyeV9zZC8uLi9zbGFuZy9kaXNjb3Zlcnlfc2RfNTc2L2Rpc2NvdmVyeV9zZF81NzYubTN1OD9iaXRyYXRlPTEwMDAwMDAmY2hhbm5lbD1kaXNjb3Zlcnlfc2RfNTc2JmdwX2lkPXx8fFRvZmZlZSAoTGludXg7QW5kcm9pZCAxNCl8fHx7ImNvb2tpZSI6IkVkZ2UtQ2FjaGUtQ29va2llPVVSTFByZWZpeD1hSFIwY0hNNkx5OWliR1JqYlhCeWIyUXRZMlJ1TG5SdlptWmxaV3hwZG1VdVkyOXQ6RXhwaXJlcz0xNzg2MDUzOTA2OktleU5hbWU9cHJvZF9saW5lYXI6U2lnbmF0dXJlPXBrNjF3c04xM19EeHVXaUhkdUFaSEdLR19fWGhDT3M5SmwxSERibGRGb0FpMFI4RmcyUEp5XzRERXpTRFJ1ajc4bG1HcUx4aHFYZm82cWRBU3MwQkN3In0/discovery_sd_576.m3u8'
+        ]
+    }, {
+        label: 'Republic Bangla',
+        sub: '',
+        icon: '📺',
+        playerType: 'P1',
+        urls: [
+            'https://vg-republictvlive.akamaized.net/v1/manifest/611d79b11b77e2f571934fd80ca1413453772ac7/vglive-sk-456368/06e5afc2-a022-4e51-9131-4e33a6207c5c/1.m3u8'
+        ]
+    }, {
+        label: 'News18 Bangla',
+        sub: '',
+        icon: '📺',
+        playerType: 'P1',
+        urls: [
+            'https://amg01448-samsungin-news18bangla-samsungin-ad-qy.amagi.tv/playlist/amg01448-samsungin-news18bangla-samsungin/playlist.m3u8'
+        ]
+    }, {
+        label: 'TV9 Bangla',
+        sub: '',
+        icon: '📺',
+        playerType: 'P1',
+        urls: [
+            'https://amg01448-samsungin-tv9bangla-samsungin-9lgnh.amagi.tv/playlist/amg01448-samsungin-tv9bangla-samsungin/playlist.m3u8',
+            'https://dyjmyiv3bp2ez.cloudfront.net/pub-iotv9banaen8yq/liveabr/pub-iotv9banaen8yq/live_480p/chunks.m3u8'
+        ]
+    }, {
+        label: 'Star Jalsha HD',
+        sub: '',
+        icon: '📺',
+        playerType: 'P1',
+        urls: [
+            'https://yupptvcatchupire.yuppcdn.net/preview/starjalsha/1800.m3u8',
+            'https://s3outflanktv.workers.dev/server-4/stream/aHR0cDovLzE3Mi4xOS4xNy4yMzA6ODA5MC9obHMvU3RhckphbHNoYUhELm0zdTg.m3u8'
+        ]
+    }, {
+        label: 'Zee Bangla HD',
+        sub: '',
+        icon: '📺',
+        playerType: 'P1',
+        urls: [
+            'https://yupptvcatchupire.yuppcdn.net/preview/zeebangla/2500.m3u8',
+            'https://live.bdixbd.net/api/proxy/stream.m3u8?url=http%3A%2F%2F103.151.61.12%2FZ_BANGLA%2Ftracks-v1a1%2Fmono.m3u8%3Ftoken%3Di7bZaZWaFrSIE0'
+        ]
+    }, {
+        label: 'Zee Bangla Cinema',
+        sub: '',
+        icon: '📺',
+        playerType: 'P1',
+        urls: [
+            'https://d1g8wgjurz8via.cloudfront.net/bpk-tv/ColorsHD/default/ColorsHD.m3u8'
+        ]
+    }, {
+        label: 'Colors Bangla',
+        sub: '',
+        icon: '📺',
+        playerType: 'P1',
+        urls: [
+            'https://yupptvcatchupire.yuppcdn.net/preview/colorsbanglahd/800.m3u8',
+            'https://live.bdixbd.net/api/proxy/stream.m3u8?url=http%3A%2F%2F103.151.61.12%2FCOLORS_BANHLA%2Ftracks-v1a1%2Fmono.m3u8%3Ftoken%3Di7bZaZWaFrSIE0'
+        ]
+    }, {
+        label: 'PBS Kids',
+        sub: '',
+        icon: '📺',
+        playerType: 'P1',
+        urls: [
+            'https://2-fss-2.streamhoster.com/pl_140/amlst:200914-1298290/playlist.m3u8'
+        ]
+    }, {
+        label: 'Duranta',
+        sub: '',
+        icon: '📺',
+        playerType: 'P1',
+        urls: [
+            'http://180.94.28.28:8097//Duronto-TV/index.fmp4.m3u8',
+            'https://tvsen6.aynaott.com/6xyZ3N4oHv2KBJdB6W4p/tracks-v1a1/mono.ts.m3u8'
+        ]
+    }, {
+        label: 'Gopal Bhar TV',
+        sub: '',
+        icon: '📺',
+        playerType: 'P1',
+        urls: [
+            'https://live20.bozztv.com/giatvplayout7/giatv-209611/tracks-v1a1/mono.ts.m3u8',
+            'https://live20.bozztv.com/giatvplayout7/giatv-209611/index.m3u8'
+        ]
+    }, {
+        label: 'Being Sports',
+        sub: 'Auto+HD',
+        icon: '📺',
+        playerType: 'P1',
+        urls: [
+            'https://1nyaler.streamhostingcdn.top/stream/23/index.m3u8'
+        ]
+    }, {
+        label: 'Sony Ahath',
+        sub: '',
+        icon: '📺',
+        playerType: 'P1',
+        urls: [
+            'http://180.94.28.28:8097//SONY-AATH/index.m3u8',
+            'https://live.bdixbd.net/api/proxy/stream.m3u8?url=http%3A%2F%2F103.151.61.12%2FSONY_AATH%2Ftracks-v1a1%2Fmono.m3u8%3Ftoken%3Di7bZaZWaFrSIE0'
+        ]
+    }, {
+        label: 'Star Plus',
+        sub: '',
+        icon: '📺',
+        playerType: 'P1',
+        urls: [
+            'https://live.bdixbd.net/api/proxy/stream.m3u8?url=https://yowaimo.in/Sflex-ArtlPVT0719/STAR_PLUS_HD.m3u8'
+        ]
+    }, {
+        label: 'Zee Cinema HD',
+        sub: '',
+        icon: '📺',
+        playerType: 'P1',
+        urls: [
+            'https://stream.ottplus.bd/live/zee_cinema_hd_abr/live/zee_cinema_hd_720/chunks.m3u8'
+        ]
+    }, {
+        label: 'Z Bangla Sonar',
+        sub: '',
+        icon: '📺',
+        playerType: 'P1',
+        urls: [
+            'https://d1g8wgjurz8via.cloudfront.net/bpk-tv/ColorsHD/default/ColorsHD-video=2137600.m3u8'
+        ]
+    }, {
+        label: 'Sony Max',
+        sub: '',
+        icon: '📺',
+        playerType: 'P1',
+        urls: [
+            'https://stream.ottplus.bd/live/max_hd_abr/live/max_hd_720/chunks.m3u8'
+        ]
+    }, {
+        label: 'AAKASH AATH',
+        sub: '',
+        icon: '📺',
+        playerType: 'P1',
+        urls: [
+            'https://live.thebosstv.com:30443/dwlive/AAKAASH-AATH/chunks.m3u8'
+        ]
+    }, {
+        label: 'Sun Bangla',
+        sub: '',
+        icon: '📺',
+        playerType: 'P1',
+        urls: [
+            'https://live.bdixbd.net/api/proxy/stream.m3u8?url=http%3A%2F%2F103.151.61.12%2FSUN_BANGLA%2Ftracks-v1a1%2Fmono.m3u8%3Ftoken%3Di7bZaZWaFrSIE0'
+        ]
+    }, {
+        label: 'Enter 10 Bangla',
+        sub: '',
+        icon: '📺',
+        playerType: 'P1',
+        urls: [
+            'https://biostartvworld.pages.dev/api/key/aHR0cHM6Ly9saXZlLWJhbmdsYS5ha2FtYWl6ZWQubmV0L2xpdmVhYnIvcHViLWlvYmFuZ2xha3Azc2ZmL2xpdmVfNzIwcC9jaHVua3MubTN1OHx8fHx8fHt9/chunks.m3u8'
+        ]
+    }, {
+        label: 'Jalsha Movie',
+        sub: '',
+        icon: '📺',
+        playerType: 'P1',
+        urls: [
+            'https://live.bdixbd.net/api/proxy/stream.m3u8?url=http%3A%2F%2F103.151.61.12%2FJalsha_Movie%2Ftracks-v1a1%2Fmono.m3u8%3Ftoken%3Di7bZaZWaFrSIE0'
+        ]
+    }, {
+        label: 'India Today',
+        sub: '',
+        icon: '📺',
+        playerType: 'P1',
+        urls: [
+            'https://indiatodaylive.akamaized.net/hls/live/2014320/indiatoday/indiatodaylive/live_720p/chunks.m3u8'
+        ]
+    }, {
+        label: 'BBC News',
+        sub: '',
+        icon: '📺',
+        playerType: 'P1',
+        urls: [
+            'https://dash2.antik.sk/live/test_bbc_world/playlist.m3u8'
+        ]
+    }, {
+        label: 'ZB Cartoon TV',
+        sub: '',
+        icon: '📺',
+        playerType: 'P1',
+        urls: [
+            'https://live.bdixbd.net/api/proxy/stream.m3u8?url=http%3A%2F%2F103.151.61.12%2Fzbcatun%2Ftracks-v1a1%2Fmono.m3u8%3Ftoken%3Di7bZaZWaFrSIE0'
+        ]
+    }, {
+        label: 'Sangeet Bangla',
+        sub: '',
+        icon: '📺',
+        playerType: 'P1',
+        urls: [
+            'https://biostartvworld.pages.dev/api/key/aHR0cHM6Ly9jZG4tNC5waXNob3cudHYvbGl2ZS8xMTQzLzExNDNfMS5tM3U4fHx8fHx8e30/1143_1.m3u8'
+        ]
+    }, {
+        label: '9XM Music',
+        sub: '',
+        icon: '📺',
+        playerType: 'P1',
+        urls: [
+            'https://9xjio.wiseplayout.com/9XM/HD720/HD720.m3u8?nocache=1784939471635'
+        ]
+    }, {
+        label: 'ZOOM Music',
+        sub: '',
+        icon: '📺',
+        playerType: 'P1',
+        urls: [
+            'https://d2esfk1pb9cdob.cloudfront.net/chunklist_1.m3u8'
+        ]
+    }, {
+        label: 'Nicktoons',
+        sub: '',
+        icon: '📺',
+        playerType: 'P1',
+        urls: [
+            'https://stmv2.srvif.com/nicktoons/nicktoons/playlist.m3u8'
+        ]
+    }, {
+        label: 'Goldmines SD',
+        sub: '',
+        icon: '📺',
+        playerType: 'P1',
+        urls: [
+            'https://cdn-2.pishow.tv/live/1459/master.m3u8'
+        ]
+    }, {
+        label: 'Animal Planet',
+        sub: '',
+        icon: '📺',
+        playerType: 'P1',
+        urls: [
+            'https://live.bdixbd.net/api/proxy/stream.m3u8?url=http%3A%2F%2F103.151.61.12%2FAnimal_Planet%2Ftracks-v1a1%2Fmono.m3u8%3Ftoken%3Di7bZaZWaFrSIE0'
+        ]
+    }, {
+        label: '9X Tashan',
+        sub: '',
+        icon: '📺',
+        playerType: 'P1',
+        urls: [
+            'https://wiselp.wiseplayout.com/9X_Tashan/HD1080/HD1080.m3u8'
+        ]
+    }, {
+        label: 'Sony Pix',
+        sub: '',
+        icon: '📺',
+        playerType: 'P1',
+        urls: [
+            'https://aboxbdix.ryvox-tb-8ae.workers.dev/live/SONY-PIX.m3u8?token=8ba77e3c5817266d77d6c2949c278741&time=1785815880&link_index=0'
+        ]
+    }, {
+        label: 'Sony YAY',
+        sub: '',
+        icon: '📺',
+        playerType: 'P1',
+        urls: [
+            'https://biostartvworld.pages.dev/api/key/aHR0cHM6Ly9ibGRjbXByb2QtY2RuLnRvZmZlZWxpdmUuY29tL2Nkbi9saXZlL3Nvbnl5YXkvLi4vc2xhbmcvc29ueXlheV81NzYvc29ueXlheV81NzYubTN1OD9iaXRyYXRlPTEwMDAwMDAmY2hhbm5lbD1zb255eWF5XzU3NiZncF9pZD18fHxUb2ZmZWUgKExpbnV4O0FuZHJvaWQgMTQpfHx8eyJjb29raWUiOiJFZGdlLUNhY2hlLUNvb2tpZT1VUkxQcmVmaXg9YUhSMGNITTZMeTlpYkdSamJYQnliMlF0WTJSdUxuUnZabVpsWld4cGRtVXVZMjl0OkV4cGlyZXM9MTc4NjA1MzkxMzpLZXlOYW1lPXByb2RfbGluZWFyOlNpZ25hdHVyZT1udU1kanpmYzRIVnpiS0VlUGZmNVZzbnFFaS01Y2RrRTRMUWE4b3BqQlpBcTAtYUJFLWpWTDFaR0dGRUV3X1Z6Zl9fTUxENEU2MHZ4c1owM1M2Zk9CZyJ9/sonyyay_576.m3u8'
+        ]
+    }, {
+        label: 'Cartoon Network',
+        sub: '',
+        icon: '📺',
+        playerType: 'P1',
+        urls: [
+            'https://biostartvworld.pages.dev/api/key/aHR0cHM6Ly9ibGRjbXByb2QtY2RuLnRvZmZlZWxpdmUuY29tL2Nkbi9saXZlL2NhcnRvb25fbmV0d29ya19oZC8uLi9zbGFuZy9jYXJ0b29uX25ldHdvcmtfaGRfNTc2L2NhcnRvb25fbmV0d29ya19oZF81NzYubTN1OD9iaXRyYXRlPTEwMDAwMDAmY2hhbm5lbD1jYXJ0b29uX25ldHdvcmtfaGRfNTc2JmdwX2lkPXx8fFRvZmZlZSAoTGludXg7QW5kcm9pZCAxNCl8fHx7ImNvb2tpZSI6IkVkZ2UtQ2FjaGUtQ29va2llPVVSTFByZWZpeD1hSFIwY0hNNkx5OWliR1JqYlhCeWIyUXRZMlJ1TG5SdlptWmxaV3hwZG1VdVkyOXQ6RXhwaXJlcz0xNzg2MDUzOTA2OktleU5hbWU9cHJvZF9saW5lYXI6U2lnbmF0dXJlPXBrNjF3c04xM19EeHVXaUhkdUFaSEdLR19fWGhDT3M5SmwxSERibGRGb0FpMFI4RmcyUEp5XzRERXpTRFJ1ajc4bG1HcUx4aHFYZm82cWRBU3MwQkN3In0/cartoon_network_hd_576.m3u8'
+        ]
+    }]
+}, {
+    // ============================================================
+    // ৩. MOVIE BOX
+    // ============================================================
+    id: 'movie',
+    name: 'MOVIE BOX',
+    icon: '🎬',
+    streams: [{
+        label: 'Kung Fu Panda 1',
+        sub: 'HD',
+        icon: '🎬',
+        playerType: 'P2',
+        urls: [
+            'https://pub-f85680743e6f48c3b210af18613f778c.r2.dev/1c8f468b70eca496d0a7869405077675?t=1785855063&token=56c1aa94f0603d89bf4f5222f47fe00875e74ea12ee63c3ba1bfd264d83359a7'
+        ]
+    }, {
+        label: 'Kung Fu Panda 2',
+        sub: 'HD',
+        icon: '🎬',
+        playerType: 'P2',
+        urls: [
+            'https://pub-f85680743e6f48c3b210af18613f778c.r2.dev/657235d85ab313a90efe7410856f51ee?t=1785855103&token=25410248c05a3c8ac9c35439f11184e0a68946eae7451064528ded17c076717a'
+        ]
+    }, {
+        label: 'Kung Fu Panda 3',
+        sub: 'HD',
+        icon: '🎬',
+        playerType: 'P2',
+        urls: [
+            'https://pub-f85680743e6f48c3b210af18613f778c.r2.dev/0cf98ecc39ae6f26921432135964b65d?t=1785855193&token=617a4ff0310a56d8fc65a115f9e29bccb94d40294952fbfa56cabea9effe1f06'
+        ]
+    }, {
+        label: 'Kung Fu Panda 4',
+        sub: 'HD',
+        icon: '🎬',
+        playerType: 'P2',
+        urls: [
+            'https://pub-f85680743e6f48c3b210af18613f778c.r2.dev/68cb50a00e5d2187adf767382a9d3eec?t=1785855261&token=6fabff2a367800aa4ea3462fc0507dbec7d2a84e2bcb9e1556c8f5f192397a68'
+        ]
+    }, {
+        label: 'Spider Man Brand New Day',
+        sub: 'HD',
+        icon: '🎬',
+        playerType: 'P2',
+        urls: [
+            'https://pub-f85680743e6f48c3b210af18613f778c.r2.dev/84b02c14bdc6202ad60cdb4370559ae9?t=1785854633&token=abc4ab9a15429068b50499827f7d3f3e72a7ded4acf1eb92816ac2d907b45fc1'
+        ]
+    }]
+}];
 
             // ============================================================
             //  সবার জন্য একটি ফ্ল্যাট অ্যারে তৈরি করুন
