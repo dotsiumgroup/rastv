@@ -727,7 +727,6 @@
                 try {
                     localStorage.setItem(KEY.PHOTO, dataUrl);
                 } catch (e) {
-                    // quota exceeded etc.
                     console.warn('Could not save photo to localStorage:', e);
                 }
             }
@@ -749,7 +748,6 @@
                     status.textContent = 'দয়া করে একটি ছবি নির্বাচন করুন।';
                     return;
                 }
-                // max ~5MB
                 if (file.size > 5 * 1024 * 1024) {
                     status.textContent = 'ছবির সাইজ ৫MB এর কম হতে হবে।';
                     return;
@@ -772,7 +770,6 @@
                 if (file) {
                     handlePhotoFile(file);
                 }
-                // reset so same file can be re-selected
                 photoInput.value = '';
             });
 
@@ -787,35 +784,46 @@
                 el.addEventListener('change', updateCard);
             });
 
+            // ---------- FAST RENDER with timeout ----------
+            async function renderCard(scale) {
+                updateCard();
+                const card = document.getElementById('idCard');
+
+                // Preload all images with a timeout (max 3 sec)
+                const images = card.querySelectorAll('img');
+                await Promise.all(Array.from(images).map(img => {
+                    if (img.complete && img.naturalWidth) return Promise.resolve();
+                    return new Promise((resolve) => {
+                        const timer = setTimeout(resolve, 3000);
+                        img.onload = () => { clearTimeout(timer);
+                            resolve(); };
+                        img.onerror = () => { clearTimeout(timer);
+                            resolve(); };
+                        // if already complete but naturalWidth is 0 (broken)
+                        if (img.complete) {
+                            clearTimeout(timer);
+                            resolve();
+                        }
+                    });
+                }));
+
+                // Render with html2canvas — scale 2 is fast and still HD
+                return await html2canvas(card, {
+                    scale: scale || 2,
+                    useCORS: true,
+                    allowTaint: false,
+                    backgroundColor: null,
+                    logging: false,
+                    width: 540,
+                    height: 336
+                });
+            }
+
             // ---------- helpers ----------
             function safeFileName(name) {
                 return (name || 'Student')
                     .replace(/[\\/:*?"<>|]/g, '')
                     .trim() || 'Student';
-            }
-
-            async function waitForImages(container) {
-                const images = Array.from(container.querySelectorAll('img'));
-                await Promise.all(images.map(img => {
-                    if (img.complete && img.naturalWidth) return Promise.resolve();
-                    return new Promise(resolve => {
-                        img.onload = resolve;
-                        img.onerror = resolve;
-                    });
-                }));
-            }
-
-            async function renderCard(scale) {
-                updateCard();
-                const card = document.getElementById('idCard');
-                await waitForImages(card);
-                return await html2canvas(card, {
-                    scale: scale,
-                    useCORS: true,
-                    allowTaint: false,
-                    backgroundColor: null,
-                    logging: false
-                });
             }
 
             // ---------- download PDF ----------
@@ -831,7 +839,7 @@
                 status.textContent = 'PDF তৈরি হচ্ছে...';
 
                 try {
-                    const canvas = await renderCard(4);
+                    const canvas = await renderCard(2.5); // 2.5x for crisp PDF
                     const imgData = canvas.toDataURL('image/png', 1.0);
 
                     const { jsPDF } = window.jspdf;
@@ -842,22 +850,12 @@
                         compress: true
                     });
 
-                    pdf.addImage(
-                        imgData,
-                        'PNG',
-                        0,
-                        0,
-                        135,
-                        85,
-                        undefined,
-                        'FAST'
-                    );
-
+                    pdf.addImage(imgData, 'PNG', 0, 0, 135, 85, undefined, 'FAST');
                     pdf.save(`DAKHIL-27_ID_CARD_${safeFileName(nameInput.value)}.pdf`);
                     status.textContent = 'PDF সফলভাবে তৈরি হয়েছে।';
                 } catch (error) {
                     console.error(error);
-                    status.textContent = 'PDF তৈরি করতে সমস্যা হয়েছে।';
+                    status.textContent = 'PDF তৈরি করতে সমস্যা হয়েছে। আবার চেষ্টা করুন।';
                 } finally {
                     pdfBtn.disabled = false;
                     pngBtn.disabled = false;
@@ -877,7 +875,7 @@
                 status.textContent = 'HD PNG তৈরি হচ্ছে...';
 
                 try {
-                    const canvas = await renderCard(5);
+                    const canvas = await renderCard(2.5); // 2.5x is fast and looks great
                     const link = document.createElement('a');
                     link.download = `DAKHIL-27_ID_CARD_${safeFileName(nameInput.value)}.png`;
                     link.href = canvas.toDataURL('image/png', 1.0);
@@ -887,7 +885,7 @@
                     status.textContent = 'HD PNG সফলভাবে তৈরি হয়েছে।';
                 } catch (error) {
                     console.error(error);
-                    status.textContent = 'HD PNG তৈরি করতে সমস্যা হয়েছে।';
+                    status.textContent = 'HD PNG তৈরি করতে সমস্যা হয়েছে। আবার চেষ্টা করুন।';
                 } finally {
                     pdfBtn.disabled = false;
                     pngBtn.disabled = false;
