@@ -1,80 +1,907 @@
 <!DOCTYPE html>
 <html lang="bn">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DAKHIL-27 — Student ID Card</title>
 
-  <title>Video Player</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js">
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js">
+    </script>
 
-  <style>
-    * {
-      box-sizing: border-box;
-    }
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-    body {
-      margin: 0;
-      min-height: 100vh;
-      background: #0b0b0b;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      padding: 15px;
-      font-family: Arial, sans-serif;
-    }
+        :root {
+            --primary: #6c63ff;
+            --primary2: #8e85ff;
+            --dark: #07152e;
+            --dark2: #0d2345;
+            --gold: #d8b34a;
+            --gold2: #f6d365;
+            --text: #2d3436;
+            --muted: #636e72;
+            --border: #dfe6e9;
+            --shadow: 0 18px 45px rgba(0, 0, 0, .14);
+        }
 
-    .player-box {
-      width: 100%;
-      max-width: 1000px;
-      background: #111;
-      border-radius: 14px;
-      overflow: hidden;
-      box-shadow: 0 10px 40px rgba(0,0,0,.5);
-    }
+        html,
+        body {
+            min-height: 100%;
+            background: #f4f6fb;
+            font-family: 'Poppins', sans-serif;
+            color: var(--text);
+        }
 
-    video {
-      width: 100%;
-      display: block;
-      background: #000;
-    }
-  </style>
+        body {
+            padding: 20px;
+        }
+
+        .page {
+            width: 100%;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .topbar {
+            text-align: center;
+            margin-bottom: 18px;
+        }
+
+        .topbar h1 {
+            font-size: 1.45rem;
+            margin-bottom: 4px;
+        }
+
+        .topbar p {
+            color: var(--muted);
+            font-size: .86rem;
+        }
+
+        .card-wrap {
+            display: flex;
+            justify-content: center;
+            overflow: auto;
+            padding: 12px 0 20px;
+        }
+
+        /* ============================================================
+           ID CARD — fixed 540×336
+           ============================================================ */
+        .id-card {
+            width: 540px;
+            height: 336px;
+            min-width: 540px;
+            position: relative;
+            overflow: hidden;
+            border-radius: 18px;
+            background: linear-gradient(135deg, #07152e 0%, #0d2345 45%, #07152e 100%);
+            color: #fff;
+            font-family: Poppins, sans-serif;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, .35);
+        }
+
+        /* decorative circles (kept from original) */
+        .id-card::before {
+            content: "";
+            position: absolute;
+            width: 260px;
+            height: 260px;
+            border-radius: 50%;
+            border: 1px solid rgba(212, 175, 55, .20);
+            right: -90px;
+            top: -100px;
+            z-index: 1;
+        }
+
+        .id-card::after {
+            content: "";
+            position: absolute;
+            width: 220px;
+            height: 220px;
+            border-radius: 50%;
+            border: 1px solid rgba(212, 175, 55, .12);
+            left: -110px;
+            bottom: -120px;
+            z-index: 1;
+        }
+
+        /* ===== WATERMARK REMOVED ===== */
+
+        /* ============================================================
+           CARD HEADER
+           ============================================================ */
+        .id-card-header {
+            position: absolute;
+            top: 22px;
+            left: 28px;
+            right: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            z-index: 4;
+        }
+
+        /* circular logo — now contains an image */
+        .id-card-logo {
+            width: 55px;
+            height: 55px;
+            border-radius: 50%;
+            border: 2px solid var(--gold);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255, 255, 255, .04);
+            flex-shrink: 0;
+            overflow: hidden;
+        }
+
+        .id-card-logo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .id-card-title {
+            flex: 1;
+            margin-left: 14px;
+        }
+
+        .id-card-title .institution {
+            font-size: 18px;
+            font-weight: 800;
+            letter-spacing: .4px;
+            line-height: 1.15;
+        }
+
+        .id-card-title .subtitle {
+            font-size: 9px;
+            color: var(--gold);
+            letter-spacing: 1.2px;
+            margin-top: 4px;
+            font-weight: 600;
+        }
+
+        .id-card-badge {
+            border: 1px solid var(--gold);
+            color: var(--gold2);
+            padding: 5px 9px;
+            border-radius: 20px;
+            font-size: 8px;
+            font-weight: 700;
+            letter-spacing: .5px;
+        }
+
+        /* ============================================================
+           CARD CONTENT
+           ============================================================ */
+        .id-card-content {
+            position: absolute;
+            top: 100px;
+            left: 28px;
+            right: 28px;
+            bottom: 26px;
+            display: flex;
+            gap: 20px;
+            z-index: 4;
+        }
+
+        /* photo box — now shows uploaded image or fallback icon */
+        .id-card-photo {
+            width: 112px;
+            height: 140px;
+            border-radius: 9px;
+            border: 2px solid var(--gold);
+            background: linear-gradient(135deg, #172d50, #0b1c36);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .id-card-photo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .id-card-photo .photo-fallback {
+            font-size: 48px;
+            color: rgba(255, 255, 255, .25);
+        }
+
+        .id-card-info {
+            padding-top: 2px;
+            flex: 1;
+        }
+
+        .id-field {
+            margin-bottom: 10px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .id-field-label {
+            color: var(--gold);
+            font-size: 7px;
+            letter-spacing: 1px;
+            font-weight: 700;
+            margin-bottom: 2px;
+        }
+
+        .id-field-value {
+            font-size: 13px;
+            font-weight: 600;
+            color: #fff;
+            word-break: break-word;
+        }
+
+        .id-card-footer {
+            position: absolute;
+            left: 28px;
+            right: 28px;
+            bottom: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 5;
+            font-size: 7px;
+            color: rgba(255, 255, 255, .65);
+            letter-spacing: .4px;
+        }
+
+        .id-card-footer .signature {
+            color: var(--gold);
+            font-weight: 700;
+        }
+
+        /* ============================================================
+           CONTROLS
+           ============================================================ */
+        .controls {
+            background: #fff;
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 16px;
+            box-shadow: var(--shadow);
+        }
+
+        .controls-grid {
+            display: grid;
+            grid-template-columns: 1.5fr 1fr 1fr;
+            gap: 10px;
+        }
+
+        .input-group label {
+            display: block;
+            font-size: .74rem;
+            color: var(--muted);
+            margin-bottom: 5px;
+            font-weight: 600;
+        }
+
+        .input-group input,
+        .input-group select {
+            width: 100%;
+            padding: 11px 12px;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            outline: none;
+            font-family: 'Poppins', sans-serif;
+            background: #fff;
+            color: var(--text);
+        }
+
+        .input-group input:focus,
+        .input-group select:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(108, 99, 255, .10);
+        }
+
+        /* photo upload row */
+        .photo-upload-row {
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .photo-upload-row .upload-label {
+            font-size: .74rem;
+            font-weight: 600;
+            color: var(--muted);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .photo-upload-row .upload-label i {
+            color: var(--primary);
+        }
+
+        .file-input-wrapper {
+            position: relative;
+            display: inline-block;
+        }
+
+        .file-input-wrapper input[type="file"] {
+            position: absolute;
+            left: 0;
+            top: 0;
+            opacity: 0;
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+        }
+
+        .file-input-wrapper .file-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 9px 18px;
+            border-radius: 10px;
+            border: 1px solid var(--border);
+            background: #f8f9fc;
+            font-weight: 600;
+            font-size: .8rem;
+            color: var(--text);
+            cursor: pointer;
+            transition: .2s;
+        }
+
+        .file-input-wrapper .file-btn:hover {
+            background: #eef0f5;
+            border-color: var(--primary);
+        }
+
+        .file-input-wrapper .file-btn i {
+            color: var(--primary);
+        }
+
+        .photo-preview-thumb {
+            width: 44px;
+            height: 44px;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #f4f6fb;
+            flex-shrink: 0;
+        }
+
+        .photo-preview-thumb img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .photo-preview-thumb .thumb-fallback {
+            color: #b0b8c4;
+            font-size: 18px;
+        }
+
+        .photo-upload-row .remove-photo-btn {
+            background: none;
+            border: none;
+            color: #e74c3c;
+            font-size: .75rem;
+            font-weight: 600;
+            cursor: pointer;
+            padding: 4px 8px;
+            border-radius: 6px;
+            transition: .2s;
+            display: none;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .photo-upload-row .remove-photo-btn:hover {
+            background: #fde8e8;
+        }
+
+        .photo-upload-row .remove-photo-btn.visible {
+            display: inline-flex;
+        }
+
+        /* buttons */
+        .buttons {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 14px;
+        }
+
+        .btn {
+            border: none;
+            border-radius: 11px;
+            padding: 11px 18px;
+            color: #fff;
+            font-weight: 700;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: .2s;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, .10);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .btn:disabled {
+            opacity: .6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--primary2));
+        }
+
+        .btn-green {
+            background: linear-gradient(135deg, #2ecc71, #27ae60);
+        }
+
+        .status {
+            text-align: center;
+            min-height: 22px;
+            margin-top: 10px;
+            font-size: .82rem;
+            color: var(--muted);
+        }
+
+        /* responsive */
+        @media(max-width:700px) {
+            body {
+                padding: 10px;
+            }
+            .topbar h1 {
+                font-size: 1.2rem;
+            }
+            .card-wrap {
+                justify-content: flex-start;
+            }
+            .controls-grid {
+                grid-template-columns: 1fr;
+            }
+            .id-card {
+                transform-origin: top left;
+            }
+            .photo-upload-row {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 10px;
+            }
+            .photo-upload-row .upload-label {
+                justify-content: center;
+            }
+            .file-input-wrapper {
+                align-self: center;
+            }
+            .photo-preview-thumb {
+                align-self: center;
+            }
+            .photo-upload-row .remove-photo-btn {
+                align-self: center;
+            }
+        }
+
+        /* hidden render target (unchanged) */
+        #renderArea {
+            position: fixed;
+            left: -10000px;
+            top: 0;
+            width: 540px;
+            height: 336px;
+            overflow: hidden;
+            pointer-events: none;
+        }
+    </style>
 </head>
 
 <body>
+    <div class="page">
 
-  <div class="player-box">
-    <video
-      id="videoPlayer"
-      controls
-      autoplay
-      playsinline
-      preload="auto"
-      controlsList="nodownload"
-      oncontextmenu="return false;"
-    >
-      <source
-        src="https://pub-538edaef4a1246c989cd0c69ae08ce40.r2.dev/96f2e3e29585871607dbaa0696266efe?token=1786622400-91ae094c9d8a5d26ba90d5ca94c55debc6c80a64"
-        type="video/mp4"
-      >
+        <div class="topbar">
+            <h1><i class="fas fa-id-card" style="color:#6c63ff;"></i> DAKHIL-27 Student ID Card</h1>
+            <p>আপনার তথ্য সেট করে PDF অথবা HD PNG ডাউনলোড করুন</p>
+        </div>
 
-      আপনার ব্রাউজার ভিডিও প্লেব্যাক সাপোর্ট করে না।
-    </video>
-  </div>
+        <div class="card-wrap">
+            <div class="id-card" id="idCard">
 
-  <script>
-    const video = document.getElementById("videoPlayer");
+                <!-- WATERMARK REMOVED -->
 
-    // Autoplay চেষ্টা
-    window.addEventListener("load", () => {
-      video.play().catch(() => {
-        // Browser autoplay block করলে controls থেকে Play করা যাবে
-      });
-    });
+                <div class="id-card-header">
+                    <div class="id-card-logo">
+                        <!-- logo image instead of icon -->
+                        <img src="https://i.postimg.cc/d0PLTTZF/file-0000000094dc820b878ff001f81b43d8.png"
+                        alt="BOM Logo"
+                        crossorigin="anonymous"
+                        id="logoImg">
+                    </div>
 
-    // Right-click বন্ধ
-    video.addEventListener("contextmenu", e => {
-      e.preventDefault();
-    });
-  </script>
+                    <div class="id-card-title">
+                        <div class="institution">BANGLADESH ONLINE MADRASA</div>
+                        <div class="subtitle">DIGITAL STUDENT IDENTIFICATION CARD</div>
+                    </div>
+
+                    <div class="id-card-badge">DAKHIL-27</div>
+                </div>
+
+                <div class="id-card-content">
+                    <div class="id-card-photo" id="photoContainer">
+                        <!-- student photo will be injected here -->
+                        <img id="studentPhoto" src="" alt="Student Photo" style="display:none; width:100%; height:100%; object-fit:cover;">
+                        <i class="fas fa-user photo-fallback" id="photoFallback"></i>
+                    </div>
+
+                    <div class="id-card-info">
+                        <div class="id-field">
+                            <div class="id-field-label">NAME</div>
+                            <div class="id-field-value" id="cardName">STUDENT NAME</div>
+                        </div>
+
+                        <div class="id-field">
+                            <div class="id-field-label">INSTITUTION</div>
+                            <div class="id-field-value">BANGLADESH ONLINE MADRASA</div>
+                        </div>
+
+                        <div class="id-field">
+                            <div class="id-field-label">GENDER</div>
+                            <div class="id-field-value" id="cardGender">STUDENT</div>
+                        </div>
+
+                        <div class="id-field">
+                            <div class="id-field-label">BATCH</div>
+                            <div class="id-field-value">DAKHIL-27</div>
+                        </div>
+
+                        <div class="id-field">
+                            <div class="id-field-label">BOM STUDENT ID</div>
+                            <div class="id-field-value" id="cardStudentId">BOM-D27-000000</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="id-card-footer">
+                    <span>STUDENT IDENTITY CARD</span>
+                    <span class="signature">~ BOM ~</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="controls">
+            <div class="controls-grid">
+                <div class="input-group">
+                    <label>NAME</label>
+                    <input type="text" id="nameInput" placeholder="Student Name">
+                </div>
+
+                <div class="input-group">
+                    <label>GENDER</label>
+                    <select id="genderInput">
+                        <option value="STUDENT">STUDENT</option>
+                        <option value="MALE">MALE</option>
+                        <option value="FEMALE">FEMALE</option>
+                    </select>
+                </div>
+
+                <div class="input-group">
+                    <label>BOM STUDENT ID</label>
+                    <input type="text" id="studentIdInput" placeholder="BOM-D27-000000">
+                </div>
+            </div>
+
+            <!-- PHOTO UPLOAD ROW -->
+            <div class="photo-upload-row">
+                <span class="upload-label">
+                    <i class="fas fa-camera"></i> Student Photo
+                </span>
+
+                <div class="file-input-wrapper">
+                    <button class="file-btn" type="button">
+                        <i class="fas fa-cloud-upload-alt"></i> Choose Photo
+                    </button>
+                    <input type="file" id="photoInput" accept="image/*">
+                </div>
+
+                <div class="photo-preview-thumb" id="photoThumb">
+                    <i class="fas fa-user thumb-fallback"></i>
+                </div>
+
+                <button class="remove-photo-btn" id="removePhotoBtn">
+                    <i class="fas fa-times"></i> Remove
+                </button>
+            </div>
+
+            <div class="buttons">
+                <button class="btn btn-primary" id="pdfBtn">
+                    <i class="fas fa-file-pdf"></i>
+                    PDF Download
+                </button>
+
+                <button class="btn btn-green" id="pngBtn">
+                    <i class="fas fa-image"></i>
+                    HD Image Download
+                </button>
+            </div>
+
+            <div class="status" id="status"></div>
+        </div>
+    </div>
+
+    <script>
+        (function() {
+            'use strict';
+
+            const KEY = {
+                NAME: 'dakhil27_id_name',
+                GENDER: 'dakhil27_id_gender',
+                ID: 'dakhil27_id_student_id',
+                PHOTO: 'dakhil27_id_photo'
+            };
+
+            // DOM refs
+            const nameInput = document.getElementById('nameInput');
+            const genderInput = document.getElementById('genderInput');
+            const studentIdInput = document.getElementById('studentIdInput');
+
+            const cardName = document.getElementById('cardName');
+            const cardGender = document.getElementById('cardGender');
+            const cardStudentId = document.getElementById('cardStudentId');
+
+            const photoInput = document.getElementById('photoInput');
+            const studentPhoto = document.getElementById('studentPhoto');
+            const photoFallback = document.getElementById('photoFallback');
+            const photoThumb = document.getElementById('photoThumb');
+            const removePhotoBtn = document.getElementById('removePhotoBtn');
+
+            const pdfBtn = document.getElementById('pdfBtn');
+            const pngBtn = document.getElementById('pngBtn');
+            const status = document.getElementById('status');
+
+            let currentPhotoData = null; // data URL
+
+            // ---------- load saved data ----------
+            function loadData() {
+                nameInput.value = localStorage.getItem(KEY.NAME) || '';
+                genderInput.value = localStorage.getItem(KEY.GENDER) || 'STUDENT';
+                studentIdInput.value = localStorage.getItem(KEY.ID) || 'BOM-D27-000000';
+
+                const savedPhoto = localStorage.getItem(KEY.PHOTO);
+                if (savedPhoto) {
+                    setPhoto(savedPhoto);
+                }
+
+                updateCard();
+            }
+
+            // ---------- update card text ----------
+            function updateCard() {
+                const name = nameInput.value.trim() || 'STUDENT NAME';
+                const gender = genderInput.value || 'STUDENT';
+                const sid = studentIdInput.value.trim() || 'BOM-D27-000000';
+
+                cardName.textContent = name;
+                cardGender.textContent = gender;
+                cardStudentId.textContent = sid;
+
+                localStorage.setItem(KEY.NAME, nameInput.value.trim());
+                localStorage.setItem(KEY.GENDER, gender);
+                localStorage.setItem(KEY.ID, studentIdInput.value.trim());
+            }
+
+            // ---------- photo handling ----------
+            function setPhoto(dataUrl) {
+                currentPhotoData = dataUrl;
+                // show in card
+                studentPhoto.src = dataUrl;
+                studentPhoto.style.display = 'block';
+                photoFallback.style.display = 'none';
+                // show in thumb
+                photoThumb.innerHTML = `<img src="${dataUrl}" alt="photo">`;
+                // show remove btn
+                removePhotoBtn.classList.add('visible');
+                // store
+                try {
+                    localStorage.setItem(KEY.PHOTO, dataUrl);
+                } catch (e) {
+                    // quota exceeded etc.
+                    console.warn('Could not save photo to localStorage:', e);
+                }
+            }
+
+            function clearPhoto() {
+                currentPhotoData = null;
+                studentPhoto.src = '';
+                studentPhoto.style.display = 'none';
+                photoFallback.style.display = 'flex';
+                photoThumb.innerHTML = `<i class="fas fa-user thumb-fallback"></i>`;
+                removePhotoBtn.classList.remove('visible');
+                localStorage.removeItem(KEY.PHOTO);
+            }
+
+            // handle file selection
+            function handlePhotoFile(file) {
+                if (!file) return;
+                if (!file.type.startsWith('image/')) {
+                    status.textContent = 'দয়া করে একটি ছবি নির্বাচন করুন।';
+                    return;
+                }
+                // max ~5MB
+                if (file.size > 5 * 1024 * 1024) {
+                    status.textContent = 'ছবির সাইজ ৫MB এর কম হতে হবে।';
+                    return;
+                }
+
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const dataUrl = e.target.result;
+                    setPhoto(dataUrl);
+                    status.textContent = 'ছবি আপলোড সফল হয়েছে।';
+                };
+                reader.onerror = function() {
+                    status.textContent = 'ছবি পড়তে সমস্যা হয়েছে।';
+                };
+                reader.readAsDataURL(file);
+            }
+
+            photoInput.addEventListener('change', function(e) {
+                const file = e.target.files && e.target.files[0];
+                if (file) {
+                    handlePhotoFile(file);
+                }
+                // reset so same file can be re-selected
+                photoInput.value = '';
+            });
+
+            removePhotoBtn.addEventListener('click', function() {
+                clearPhoto();
+                status.textContent = 'ছবি সরানো হয়েছে।';
+            });
+
+            // ---------- sync inputs to card ----------
+            [nameInput, genderInput, studentIdInput].forEach(el => {
+                el.addEventListener('input', updateCard);
+                el.addEventListener('change', updateCard);
+            });
+
+            // ---------- helpers ----------
+            function safeFileName(name) {
+                return (name || 'Student')
+                    .replace(/[\\/:*?"<>|]/g, '')
+                    .trim() || 'Student';
+            }
+
+            async function waitForImages(container) {
+                const images = Array.from(container.querySelectorAll('img'));
+                await Promise.all(images.map(img => {
+                    if (img.complete && img.naturalWidth) return Promise.resolve();
+                    return new Promise(resolve => {
+                        img.onload = resolve;
+                        img.onerror = resolve;
+                    });
+                }));
+            }
+
+            async function renderCard(scale) {
+                updateCard();
+                const card = document.getElementById('idCard');
+                await waitForImages(card);
+                return await html2canvas(card, {
+                    scale: scale,
+                    useCORS: true,
+                    allowTaint: false,
+                    backgroundColor: null,
+                    logging: false
+                });
+            }
+
+            // ---------- download PDF ----------
+            async function downloadPDF() {
+                if (!nameInput.value.trim()) {
+                    status.textContent = 'প্রথমে NAME লিখুন।';
+                    nameInput.focus();
+                    return;
+                }
+
+                pdfBtn.disabled = true;
+                pngBtn.disabled = true;
+                status.textContent = 'PDF তৈরি হচ্ছে...';
+
+                try {
+                    const canvas = await renderCard(4);
+                    const imgData = canvas.toDataURL('image/png', 1.0);
+
+                    const { jsPDF } = window.jspdf;
+                    const pdf = new jsPDF({
+                        orientation: 'landscape',
+                        unit: 'mm',
+                        format: [135, 85],
+                        compress: true
+                    });
+
+                    pdf.addImage(
+                        imgData,
+                        'PNG',
+                        0,
+                        0,
+                        135,
+                        85,
+                        undefined,
+                        'FAST'
+                    );
+
+                    pdf.save(`DAKHIL-27_ID_CARD_${safeFileName(nameInput.value)}.pdf`);
+                    status.textContent = 'PDF সফলভাবে তৈরি হয়েছে।';
+                } catch (error) {
+                    console.error(error);
+                    status.textContent = 'PDF তৈরি করতে সমস্যা হয়েছে।';
+                } finally {
+                    pdfBtn.disabled = false;
+                    pngBtn.disabled = false;
+                }
+            }
+
+            // ---------- download PNG ----------
+            async function downloadPNG() {
+                if (!nameInput.value.trim()) {
+                    status.textContent = 'প্রথমে NAME লিখুন।';
+                    nameInput.focus();
+                    return;
+                }
+
+                pdfBtn.disabled = true;
+                pngBtn.disabled = true;
+                status.textContent = 'HD PNG তৈরি হচ্ছে...';
+
+                try {
+                    const canvas = await renderCard(5);
+                    const link = document.createElement('a');
+                    link.download = `DAKHIL-27_ID_CARD_${safeFileName(nameInput.value)}.png`;
+                    link.href = canvas.toDataURL('image/png', 1.0);
+                    document.body.appendChild(link);
+                    link.click();
+                    link.remove();
+                    status.textContent = 'HD PNG সফলভাবে তৈরি হয়েছে।';
+                } catch (error) {
+                    console.error(error);
+                    status.textContent = 'HD PNG তৈরি করতে সমস্যা হয়েছে।';
+                } finally {
+                    pdfBtn.disabled = false;
+                    pngBtn.disabled = false;
+                }
+            }
+
+            pdfBtn.addEventListener('click', downloadPDF);
+            pngBtn.addEventListener('click', downloadPNG);
+
+            // ---------- init ----------
+            loadData();
+
+        })();
+    </script>
 
 </body>
 </html>
