@@ -1,6 +1,7 @@
 {
   "name": "RAS TELEVISION",
   "short_name": "RAS TV",
+  "id": "/rastv/",
   "start_url": "/rastv/",
   "scope": "/rastv/",
   "display": "standalone",
