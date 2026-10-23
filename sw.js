@@ -1,8 +1,8 @@
 /* BT Service Worker — সম্পূর্ণ ও চূড়ান্ত সংস্করণ
    নিয়ম: HTML সবসময় আগে সার্ভার থেকে আনে, না পেলে ক্যাশ থেকে দেখায়। Pull-to-Refresh সাপোর্টেড। */
-const CACHE_NAME = 'bt-cache-v10'; // v8/v9 থেকে v10 করা হলো, যাতে পুরোনো ক্যাশ মুছে যায়
-const SCOPE_PATH = '/bt/';
-const PRECACHE = ['/bt/', '/bt/index.html', '/bt/manifest.json', '/bt/LOGO-icon-192.png', '/bt/LOGO-icon-512.png'];
+const CACHE_NAME = 'rastv-cache-v10'; // প্রোজেক্টের নাম bt → rastv, তাই ক্যাশ নামও বদলানো হলো (পুরোনো ক্যাশ অটো মুছে যাবে)
+const SCOPE_PATH = '/rastv/';
+const PRECACHE = ['/rastv/', '/rastv/index.html', '/rastv/manifest.json', '/rastv/icon-192.png', '/rastv/icon-512.png'];
 
 // ১. ইনস্টল ইভেন্ট: নতুন ক্যাশ তৈরি করে ফাইল ডাউনলোড করে রাখে
 self.addEventListener('install', (event) => {
@@ -89,8 +89,8 @@ self.addEventListener('fetch', (event) => {
 
       // সার্ভার থেকে না পেলে ক্যাশ থেকে দেখাবে (অফলাইন সাপোর্ট)
       const cached = (await caches.match(req, { ignoreSearch: true })) ||
-                     (await caches.match('/bt/index.html')) ||
-                     (await caches.match('/bt/'));
+                     (await caches.match('/rastv/index.html')) ||
+                     (await caches.match('/rastv/'));
       return cached || new Response('অফলাইন — ইন্টারনেট চালু করে আবার চেষ্টা করুন',
         { status: 503, headers: { 'Content-Type': 'text/plain; charset=utf-8' } });
     })());
